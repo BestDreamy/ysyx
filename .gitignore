@@ -2,3 +2,4 @@
 /nvboard/
 build/
 .cache/
+/.hdl_checker/
