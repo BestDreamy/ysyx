@@ -41,4 +41,9 @@ endef
 _default:
 	@echo "Please run 'make' under subprojects."
 
-.PHONY: .git_commit .clean_index _default
+git:
+	git add .
+	git commit -m "update digital logic"
+	git push origin pa0
+
+.PHONY: .git_commit .clean_index _default git

@@ -6,7 +6,7 @@ static TOP_NAME dut;
 // Function declare 
 void nvboard_bind_all_pins(TOP_NAME* dut);
 
-static void single_cycle() {
+void single_cycle() {
     dut.clk = 0; dut.eval();
     dut.clk = 1; dut.eval();
 }
