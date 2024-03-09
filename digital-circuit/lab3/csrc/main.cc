@@ -1,9 +1,9 @@
 #include <nvboard.h>
-#include "Vtop.h"
+#include "Valu.h"
 
-static Vtop dut;
+static Valu dut;
 
-void nvboard_bind_all_pins(Vtop*);
+void nvboard_bind_all_pins(Valu*);
 
 void single_cycle() {
     dut.eval();

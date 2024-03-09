@@ -1,5 +1,5 @@
-TOPNAME = top # top module's name 
-NXDC_FILES = encoder.nxdc
+TOPNAME = alu # top module's name 
+NXDC_FILES = alu.nxdc
 INC_PATH ?=
 
 VERILATOR = verilator

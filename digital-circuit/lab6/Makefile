@@ -1,5 +1,6 @@
-TOPNAME = top # top module's name 
-NXDC_FILES = encoder.nxdc
+# top module's name 
+TOPNAME = top 
+NXDC_FILES = shift.nxdc
 INC_PATH ?=
 
 VERILATOR = verilator
@@ -17,9 +18,10 @@ SRC_AUTO_BIND = $(abspath $(BUILD_DIR)/auto_bind.cpp)
 $(SRC_AUTO_BIND): $(NXDC_FILES)
 	python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py $^ $@
 
-VSRCS = $(shell find $(abspath ./) -name "*.v")
-CSRCS = $(shell find $(abspath ./) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
+VSRCS = $(shell find $(abspath ./vsrc) -name "*.v")
+CSRCS = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
 CSRCS += $(SRC_AUTO_BIND)
+VSRCS += $(shell find $(abspath ../lab2/vsrc) -name "seg.v")
 
 include $(NVBOARD_HOME)/scripts/nvboard.mk
 
