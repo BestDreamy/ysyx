@@ -43,7 +43,7 @@ _default:
 
 git:
 	git add .
-	git commit -m "update digital logic"
-	git push origin pa0
+	git commit -m "update pa1"
+	git push origin pa1
 
 .PHONY: .git_commit .clean_index _default git
