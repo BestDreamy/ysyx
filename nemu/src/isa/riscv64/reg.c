@@ -14,29 +14,18 @@
 ***************************************************************************************/
 
 #include <isa.h>
-#include <memory/paddr.h>
+#include "local-include/reg.h"
 
-// this is not consistent with uint8_t
-// but it is ok since we do not access the array directly
-static const uint32_t img [] = {
-  0x800002b7,  // lui t0,0x80000
-  0x0002a023,  // sw  zero,0(t0)
-  0x0002a503,  // lw  a0,0(t0)
-  0x00100073,  // ebreak (used as nemu_trap)
+const char *regs[] = {
+  "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
+  "s0", "s1", "a0", "a1", "a2", "a3", "a4", "a5",
+  "a6", "a7", "s2", "s3", "s4", "s5", "s6", "s7",
+  "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"
 };
 
-static void restart() {
-  /* Set the initial program counter. */
-  cpu.pc = RESET_VECTOR;
-
-  /* The zero register is always 0. */
-  cpu.gpr[0] = 0;
+void isa_reg_display() {
 }
 
-void init_isa() {
-  /* Load built-in image. */
-  memcpy(guest_to_host(RESET_VECTOR), img, sizeof(img));
-
-  /* Initialize this virtual computer system. */
-  restart();
+word_t isa_reg_str2val(const char *s, bool *success) {
+  return 0;
 }

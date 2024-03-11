@@ -13,30 +13,21 @@
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
 
-#include <isa.h>
-#include <memory/paddr.h>
+#ifndef __RISCV64_REG_H__
+#define __RISCV64_REG_H__
 
-// this is not consistent with uint8_t
-// but it is ok since we do not access the array directly
-static const uint32_t img [] = {
-  0x800002b7,  // lui t0,0x80000
-  0x0002a023,  // sw  zero,0(t0)
-  0x0002a503,  // lw  a0,0(t0)
-  0x00100073,  // ebreak (used as nemu_trap)
-};
+#include <common.h>
 
-static void restart() {
-  /* Set the initial program counter. */
-  cpu.pc = RESET_VECTOR;
-
-  /* The zero register is always 0. */
-  cpu.gpr[0] = 0;
+static inline int check_reg_idx(int idx) {
+  IFDEF(CONFIG_RT_CHECK, assert(idx >= 0 && idx < 32));
+  return idx;
 }
 
-void init_isa() {
-  /* Load built-in image. */
-  memcpy(guest_to_host(RESET_VECTOR), img, sizeof(img));
+#define gpr(idx) (cpu.gpr[check_reg_idx(idx)])
 
-  /* Initialize this virtual computer system. */
-  restart();
+static inline const char* reg_name(int idx, int width) {
+  extern const char* regs[];
+  return regs[check_reg_idx(idx)];
 }
+
+#endif
