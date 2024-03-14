@@ -83,6 +83,12 @@ static int cmd_x(char *args) {
   return 0;
 }
 
+static int cmd_p(char *args) {
+  bool *success = NULL;
+  expr(args, success);
+  return 0;
+}
+
 static struct {
   const char *name;
   const char *description;
@@ -96,7 +102,9 @@ static struct {
 
   { "s", "Step the instructions one by one", cmd_s },
   { "info", "Display information about register(r) or break(b)", cmd_info},
+  { "i", "Display information about register(r) or break(b)", cmd_info},
   { "x", "Output consecutive N 4bytes hex", cmd_x },
+  { "p", "Caculate the regular expression", cmd_p},
 };
 
 #define NR_CMD ARRLEN(cmd_table)
@@ -157,7 +165,10 @@ void sdb_mainloop() {
     int i;
     for (i = 0; i < NR_CMD; i ++) {
       if (strcmp(cmd, cmd_table[i].name) == 0) {
-        if (cmd_table[i].handler(args) < 0) { return; }
+        if (cmd_table[i].handler(args) < 0) {
+            nemu_state.state = NEMU_QUIT;
+            return; 
+        }
         break;
       }
     }

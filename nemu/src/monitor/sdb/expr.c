@@ -21,8 +21,11 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
-
+  TK_NOTYPE = 256, 
+  TK_EQ,
+  TK_DEC,
+  TK_HEX,
+  TK_REG,
   /* TODO: Add more token types */
 
 };
@@ -35,10 +38,18 @@ static struct rule {
   /* TODO: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
-
-  {" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // plus
-  {"==", TK_EQ},        // equal
+  // {"pattern builded by regular expression, real charactor"}
+  {" +",                TK_NOTYPE},    // spaces
+  {"\\+",               '+'},          // plus (Because '+' is a metacharacter, convert it to str by '\')
+  {"\\*",               '*'},
+  {"/",                 '/'},
+  {"\\(",               '('},
+  {"\\)",               ')'},
+  {"-",                 '-'},
+  {"==",                TK_EQ},        // equal
+  {"[0-9]+",            TK_DEC},
+  {"0x[0-9a-fA-F]",     TK_HEX},
+  {"\\$[a-z][a-z0-9]+", TK_REG}
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -52,8 +63,8 @@ void init_regex() {
   int i;
   char error_msg[128];
   int ret;
-
   for (i = 0; i < NR_REGEX; i ++) {
+    // Convert string to regex_t
     ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
     if (ret != 0) {
       regerror(ret, &re[i], error_msg, 128);
@@ -80,6 +91,7 @@ static bool make_token(char *e) {
   while (e[position] != '\0') {
     /* Try all rules one by one. */
     for (i = 0; i < NR_REGEX; i ++) {
+      // Matching string(e + position) with pattern re[i]
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
@@ -89,13 +101,20 @@ static bool make_token(char *e) {
 
         position += substr_len;
 
-        /* TODO: Now a new token is recognized with rules[i]. Add codes
-         * to record the token in the array `tokens'. For certain types
-         * of tokens, some extra actions should be performed.
-         */
-
         switch (rules[i].token_type) {
-          default: TODO();
+          case TK_NOTYPE: {
+            break;
+          }
+          case TK_DEC: // Special expression
+          case TK_HEX:
+          case TK_REG: {
+            tokens[nr_token].type = rules[i].token_type;
+            sprintf(tokens[nr_token ++].str, "%s", substr_start);
+            break;
+          }
+          default: { // Common one character
+            tokens[nr_token ++].type = rules[i].token_type;
+          }
         }
 
         break;
