@@ -19,6 +19,7 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
+#include "memory/paddr.h"
 
 enum {
   TK_NOTYPE = 256, 
@@ -26,8 +27,8 @@ enum {
   TK_DEC,
   TK_HEX,
   TK_REG,
-  /* TODO: Add more token types */
-
+  TK_DEREF,
+  TK_NEG,
 };
 
 static struct rule {
@@ -97,8 +98,8 @@ static bool make_token(char *e) {
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
-        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-            i, rules[i].regex, position, substr_len, substr_len, substr_start);
+        // Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
+        //     i, rules[i].regex, position, substr_len, substr_len, substr_start);
 
         position += substr_len;
 
@@ -131,44 +132,71 @@ static bool make_token(char *e) {
   return true;
 }
 
-bool check_parentheses(uint32_t l, uint32_t r) {
-  if (tokens[l].type != '(' || tokens[r].type != ')') {
-    return false;
-  }
-  uint32_t pars = 0;
-  for (uint32_t i = l + 1; i < r; i ++) {
-    if (tokens[i].type == '(') pars ++;
-    else if (tokens[i].type == ')') pars --;
+// bool check_parentheses(uint32_t l, uint32_t r) {
+//   if (tokens[l].type != '(' || tokens[r].type != ')') {
+//     return false;
+//   }
+//   uint32_t pars = 0;
+//   for (uint32_t i = l + 1; i < r; i ++) {
+//     if (tokens[i].type == '(') pars ++;
+//     else if (tokens[i].type == ')') pars --;
     
-    if (pars < 0) return false;
-  }
-  return pars == 0;
-}
+//     if (pars < 0) return false;
+//   }
+//   return pars == 0;
+// }
 
+#define PRIOR(a) token_prior(a)
 int token_prior (int type) { //LUT
   switch (type) {
     case '+':
     case '-': {
-      return 5;
+      return 1;
     }
     case '*':
     case '/': {
-      return 6;
+      return 2;
+    }
+    case TK_DEREF:
+    case TK_NEG: {
+      return 3;
+    }
+    default: {
+      return 99;
     }
   }
 }
 
-uint32_t major_pos(uint32_t l, uint32_t r) {
+bool isUnaryOp(int);
+uint32_t major_pos(uint32_t l, uint32_t r, bool *success) {
   uint32_t pars = 0, pos = -1;
+  int minn_prior = 99;
   for (uint32_t i = l; i <= r ; i ++) {
+    int type = tokens[i].type;
+    if (type == '(') {
+      pars ++;
+    }
+    else if (type == ')') {
+      pars --;
+      if (pars < 0) {
+        *success = false;
+        return 0;
+      }
+    }
+    
+    if (PRIOR(type) == 99 || pars) continue;
+    if (minn_prior > PRIOR(type) || (!isUnaryOp(type) && minn_prior == PRIOR(type))) {
+      minn_prior = PRIOR(type);
+      pos = i;
+    }
+  }
 
-  } 
+  if (pos == -1) *success = false;
+  return pos;
 }
 
 word_t eval(uint32_t l, uint32_t r, bool *success) {
-  if (*success == false) {
-    return 0;
-  }
+  if (*success == false) return 0;
 
   if (l > r) {
     *success = false;
@@ -177,13 +205,13 @@ word_t eval(uint32_t l, uint32_t r, bool *success) {
   else if (l == r) {
     switch (tokens[l].type) {
       case TK_DEC: {
-        return strtoul(token[l].str, NULL, 10);
+        return strtoul(tokens[l].str, NULL, 10);
       }
       case TK_HEX: {
-        return strtoul(token[l].str, NULL, 16);
+        return strtoul(tokens[l].str, NULL, 16);
       }
       case TK_REG: {
-        return isa_reg_str2val(token[l].str, success);
+        return isa_reg_str2val(tokens[l].str, success);
       }
       default: {
         *success = false;
@@ -191,16 +219,33 @@ word_t eval(uint32_t l, uint32_t r, bool *success) {
       }
     }
   }
-  else if (check_parentheses(l, r) == true) {
-    return eval(p + 1, q - 1, success);
+  else if (tokens[l].type == '(' && tokens[r].type == ')') {
+    return eval(l + 1, r - 1, success);
   }
   else {
-    uint32_t mid = major_pos(l, r);
+    uint32_t mid = major_pos(l, r, success);
+
+    int type = tokens[mid].type;
+    if (type == TK_NEG || type == TK_DEREF) {
+      word_t ans = eval(mid + 1, r, success);
+      switch (type) {
+        case TK_NEG: {
+          return -ans;
+        }
+        case TK_DEREF: {
+          return paddr_read(ans, 8);
+        }
+        default: {
+          *success = false;
+          return 0;
+        }
+      }
+    }
 
     word_t res1 = eval(l, mid - 1, success);
     word_t res2 = eval(mid + 1, r, success);
 
-    switch (tokens[mid].type) {
+    switch (type) {
       case '+': return res1 + res2;
       case '-': return res1 - res2;
       case '*': return res1 * res2;
@@ -219,13 +264,35 @@ word_t eval(uint32_t l, uint32_t r, bool *success) {
   }
 }
 
+bool isNum(int);
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
     return 0;
   }
   
+  for (int i = 0; i < nr_token; i ++) {
+    if (tokens[i].type == '-') {
+      if (i == 0 || !(isNum(tokens[i - 1].type) || tokens[i - 1].type == ')')) {
+        tokens[i].type = TK_NEG;
+      }
+    }
+    else if(tokens[i].type == '*') {
+      if (i == 0 || !(isNum(tokens[i - 1].type) || tokens[i - 1].type == ')')) {
+        tokens[i].type = TK_DEREF;
+      }
+    }
+  }
+
   word_t ans = eval(0, nr_token - 1, success);
 
   return ans;
+}
+
+bool isNum(int type) {
+  return type == TK_DEC || type == TK_HEX || type == TK_REG;
+}
+
+bool isUnaryOp(int type) {
+  return type == TK_DEREF || type == TK_NEG;
 }

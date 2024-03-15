@@ -88,8 +88,10 @@ static int cmd_x(char *args) {
 }
 
 static int cmd_p(char *args) {
-  bool *success = true;
+  bool *success = &(bool){true};
   word_t ans = expr(args, success);
+  printf("%ld\n", ans);
+  if (*success == false) assert(0);
   return 0;
 }
 
