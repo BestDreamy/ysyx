@@ -65,7 +65,11 @@ static int cmd_s(char *args) {
 
 static int cmd_info(char *args) {
   // isa/rv64/reg.c
-  isa_reg_display();
+  bool info_r = strcmp(args, "r") || strcmp(args, "reg") || strcmp(args, "regs") || 
+                strcmp(args, "register") || strcmp(args, "registers");
+  if (info_r) {
+    isa_reg_display();
+  }
   return 0;
 }
 
@@ -84,8 +88,8 @@ static int cmd_x(char *args) {
 }
 
 static int cmd_p(char *args) {
-  bool *success = NULL;
-  expr(args, success);
+  bool *success = true;
+  word_t ans = expr(args, success);
   return 0;
 }
 

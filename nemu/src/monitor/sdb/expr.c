@@ -40,6 +40,7 @@ static struct rule {
    */
   // {"pattern builded by regular expression, real charactor"}
   {" +",                TK_NOTYPE},    // spaces
+  // {"--",                TK_NOTYPE},
   {"\\+",               '+'},          // plus (Because '+' is a metacharacter, convert it to str by '\')
   {"\\*",               '*'},
   {"/",                 '/'},
@@ -47,9 +48,9 @@ static struct rule {
   {"\\)",               ')'},
   {"-",                 '-'},
   {"==",                TK_EQ},        // equal
+  {"0x[0-9a-fA-F]+",    TK_HEX},
   {"[0-9]+",            TK_DEC},
-  {"0x[0-9a-fA-F]",     TK_HEX},
-  {"\\$[a-z][a-z0-9]+", TK_REG}
+  {"\\$[a-z][a-z0-9]+", TK_REG},
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -130,15 +131,101 @@ static bool make_token(char *e) {
   return true;
 }
 
+bool check_parentheses(uint32_t l, uint32_t r) {
+  if (tokens[l].type != '(' || tokens[r].type != ')') {
+    return false;
+  }
+  uint32_t pars = 0;
+  for (uint32_t i = l + 1; i < r; i ++) {
+    if (tokens[i].type == '(') pars ++;
+    else if (tokens[i].type == ')') pars --;
+    
+    if (pars < 0) return false;
+  }
+  return pars == 0;
+}
+
+int token_prior (int type) { //LUT
+  switch (type) {
+    case '+':
+    case '-': {
+      return 5;
+    }
+    case '*':
+    case '/': {
+      return 6;
+    }
+  }
+}
+
+uint32_t major_pos(uint32_t l, uint32_t r) {
+  uint32_t pars = 0, pos = -1;
+  for (uint32_t i = l; i <= r ; i ++) {
+
+  } 
+}
+
+word_t eval(uint32_t l, uint32_t r, bool *success) {
+  if (*success == false) {
+    return 0;
+  }
+
+  if (l > r) {
+    *success = false;
+    return 0;
+  }
+  else if (l == r) {
+    switch (tokens[l].type) {
+      case TK_DEC: {
+        return strtoul(token[l].str, NULL, 10);
+      }
+      case TK_HEX: {
+        return strtoul(token[l].str, NULL, 16);
+      }
+      case TK_REG: {
+        return isa_reg_str2val(token[l].str, success);
+      }
+      default: {
+        *success = false;
+        return 0;
+      }
+    }
+  }
+  else if (check_parentheses(l, r) == true) {
+    return eval(p + 1, q - 1, success);
+  }
+  else {
+    uint32_t mid = major_pos(l, r);
+
+    word_t res1 = eval(l, mid - 1, success);
+    word_t res2 = eval(mid + 1, r, success);
+
+    switch (tokens[mid].type) {
+      case '+': return res1 + res2;
+      case '-': return res1 - res2;
+      case '*': return res1 * res2;
+      case '/': {
+        if (res2 == 0) {
+          *success = false;
+          return 0;
+        }
+        return res1 / res2;
+      }
+      default: {
+        *success = false;
+        return 0;
+      }
+    }
+  }
+}
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
     return 0;
   }
+  
+  word_t ans = eval(0, nr_token - 1, success);
 
-  /* TODO: Insert codes to evaluate the expression. */
-  TODO();
-
-  return 0;
+  return ans;
 }
