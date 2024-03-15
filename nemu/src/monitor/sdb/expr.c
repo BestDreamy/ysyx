@@ -22,7 +22,12 @@
 #include "memory/paddr.h"
 
 enum {
-  TK_NOTYPE = 256, 
+  TK_NOTYPE = 256,
+  TK_NEQ,
+  TK_GEQ,
+  TK_LEQ,
+  TK_AND,
+  TK_OR,
   TK_EQ,
   TK_DEC,
   TK_HEX,
@@ -48,11 +53,53 @@ static struct rule {
   {"\\(",               '('},
   {"\\)",               ')'},
   {"-",                 '-'},
+  {"!",                 '!'},
+  {"!=",                TK_NEQ},
   {"==",                TK_EQ},        // equal
+  {">=",                TK_GEQ},
+  {"<=",                TK_LEQ},
+  {"&&",                TK_AND},
+  {"\\|\\|",            TK_OR},
   {"0x[0-9a-fA-F]+",    TK_HEX},
   {"[0-9]+",            TK_DEC},
   {"\\$[a-z][a-z0-9]+", TK_REG},
 };
+
+#define PRIOR(a) token_prior(a)
+int token_prior (int type) { //LUT
+  switch (type) {
+    case TK_GEQ:
+    case TK_LEQ: {
+      return 6;
+    }
+    case TK_EQ:
+    case TK_NEQ: {
+      return 7;
+    }
+    case TK_AND: {
+      return 8;
+    }
+    case TK_OR: {
+      return 9;
+    }
+    case '+':
+    case '-': {
+      return 4;
+    }
+    case '*':
+    case '/': {
+      return 3;
+    }
+    case '!':
+    case TK_DEREF:
+    case TK_NEG: {
+      return 2;
+    }
+    default: {
+      return 99;
+    }
+  }
+}
 
 #define NR_REGEX ARRLEN(rules)
 
@@ -146,27 +193,6 @@ static bool make_token(char *e) {
 //   return pars == 0;
 // }
 
-#define PRIOR(a) token_prior(a)
-int token_prior (int type) { //LUT
-  switch (type) {
-    case '+':
-    case '-': {
-      return 1;
-    }
-    case '*':
-    case '/': {
-      return 2;
-    }
-    case TK_DEREF:
-    case TK_NEG: {
-      return 3;
-    }
-    default: {
-      return 99;
-    }
-  }
-}
-
 bool isUnaryOp(int);
 uint32_t major_pos(uint32_t l, uint32_t r, bool *success) {
   uint32_t pars = 0, pos = -1;
@@ -185,7 +211,8 @@ uint32_t major_pos(uint32_t l, uint32_t r, bool *success) {
     }
     
     if (PRIOR(type) == 99 || pars) continue;
-    if (minn_prior > PRIOR(type) || (!isUnaryOp(type) && minn_prior == PRIOR(type))) {
+    // The more priority is high level, the more PRIOR(type) is small
+    if (minn_prior < PRIOR(type) || (!isUnaryOp(type) && minn_prior == PRIOR(type))) {
       minn_prior = PRIOR(type);
       pos = i;
     }
@@ -226,7 +253,7 @@ word_t eval(uint32_t l, uint32_t r, bool *success) {
     uint32_t mid = major_pos(l, r, success);
 
     int type = tokens[mid].type;
-    if (type == TK_NEG || type == TK_DEREF) {
+    if (isUnaryOp(type)) {
       word_t ans = eval(mid + 1, r, success);
       switch (type) {
         case TK_NEG: {
@@ -234,6 +261,9 @@ word_t eval(uint32_t l, uint32_t r, bool *success) {
         }
         case TK_DEREF: {
           return paddr_read(ans, 8);
+        }
+        case '!': {
+          return !ans;
         }
         default: {
           *success = false;
@@ -255,6 +285,24 @@ word_t eval(uint32_t l, uint32_t r, bool *success) {
           return 0;
         }
         return res1 / res2;
+      }
+      case TK_EQ: {
+        return res1 == res2;
+      }
+      case TK_NEG: {
+        return res1 != res2;
+      }
+      case TK_GEQ: {
+        return res1 >= res2;
+      }
+      case TK_LEQ: {
+        return res1 <= res2;
+      }
+      case TK_AND: {
+        return res1 && res2;
+      }
+      case TK_OR: {
+        return res1 || res2;
       }
       default: {
         *success = false;
@@ -294,5 +342,5 @@ bool isNum(int type) {
 }
 
 bool isUnaryOp(int type) {
-  return type == TK_DEREF || type == TK_NEG;
+  return type == TK_DEREF || type == TK_NEG || type == '!';
 }
