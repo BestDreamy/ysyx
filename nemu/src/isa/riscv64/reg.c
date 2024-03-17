@@ -24,6 +24,7 @@ const char *regs[] = {
 };
 
 void isa_reg_display() {
+  printf("Dsiplat registers:\n");
   for (int i = 0; i < ARRLEN(regs); i ++) {
     int idx = check_reg_idx(i);
     printf("%s\t0x%lx(%ld)\n", regs[idx], gpr(idx), gpr(idx));

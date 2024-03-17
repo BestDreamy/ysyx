@@ -64,11 +64,14 @@ static int cmd_s(char *args) {
 }
 
 static int cmd_info(char *args) {
-  // isa/rv64/reg.c
-  bool info_r = strcmp(args, "r") || strcmp(args, "reg") || strcmp(args, "regs") || 
-                strcmp(args, "register") || strcmp(args, "registers");
-  if (info_r) {
+  bool info_r = strcmp(args, "r") && strcmp(args, "reg") && strcmp(args, "regs") && 
+                strcmp(args, "register") && strcmp(args, "registers");
+  bool info_w = strcmp(args, "watchpoint") && strcmp(args, "wp") && strcmp(args, "w");
+  if (info_r == 0) {
     isa_reg_display();
+  }
+  else if (info_w == 0) {
+    wp_display();
   }
   return 0;
 }
@@ -125,6 +128,7 @@ static struct {
   { "x", "Output consecutive N 4bytes hex", cmd_x },
   { "p", "Caculate the regular expression", cmd_p},
   { "w", "Set a watch point to monitor a variety", cmd_w},
+  { "d", "Delete a watch point from pool", cmd_d},
 };
 
 #define NR_CMD ARRLEN(cmd_table)
