@@ -95,6 +95,19 @@ static int cmd_p(char *args) {
   return 0;
 }
 
+static int cmd_w(char *args) {
+  bool *success = &(bool){true}; 
+  new_wp(args, success);
+  if (*success == false) assert(0);
+  return 0;
+}
+
+static int cmd_d(char *args) {
+  int no = strtol(args, NULL, 10);
+  free_wp(no);
+  return 0;
+}
+
 static struct {
   const char *name;
   const char *description;
@@ -111,6 +124,7 @@ static struct {
   { "i", "Display information about register(r) or break(b)", cmd_info},
   { "x", "Output consecutive N 4bytes hex", cmd_x },
   { "p", "Caculate the regular expression", cmd_p},
+  { "w", "Set a watch point to monitor a variety", cmd_w},
 };
 
 #define NR_CMD ARRLEN(cmd_table)

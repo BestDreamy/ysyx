@@ -196,7 +196,7 @@ static bool make_token(char *e) {
 bool isUnaryOp(int);
 uint32_t major_pos(uint32_t l, uint32_t r, bool *success) {
   uint32_t pars = 0, pos = -1;
-  int minn_prior = 99;
+  int minn_prior = -1;
   for (uint32_t i = l; i <= r ; i ++) {
     int type = tokens[i].type;
     if (type == '(') {
@@ -286,24 +286,12 @@ word_t eval(uint32_t l, uint32_t r, bool *success) {
         }
         return res1 / res2;
       }
-      case TK_EQ: {
-        return res1 == res2;
-      }
-      case TK_NEG: {
-        return res1 != res2;
-      }
-      case TK_GEQ: {
-        return res1 >= res2;
-      }
-      case TK_LEQ: {
-        return res1 <= res2;
-      }
-      case TK_AND: {
-        return res1 && res2;
-      }
-      case TK_OR: {
-        return res1 || res2;
-      }
+      case TK_EQ:  return res1 == res2;
+      case TK_NEG: return res1 != res2;
+      case TK_GEQ: return res1 >= res2;
+      case TK_LEQ: return res1 <= res2;
+      case TK_AND: return res1 && res2;
+      case TK_OR:  return res1 || res2;
       default: {
         *success = false;
         return 0;
