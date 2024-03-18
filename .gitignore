@@ -6,3 +6,9 @@ build/
 *.fst
 /am-kernels
 /fceux-am
+/abstract-machine/
+/digital-circuit/
+/npc/
+/nvboard_tst/
+/verilator_tst/
+

@@ -1,9 +1,0 @@
-top = alu
-
-srcA_i (SW3, SW2, SW1, SW0)
-srcB_i (SW7, SW6, SW5, SW4)
-sel_i  (SW10, SW9, SW8)
-res_o  (LD3, LD2, LD1, LD0)
-zf_o   (LD4)
-of_o   (LD5)
-cf_o   (LD6)

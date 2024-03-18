@@ -1,7 +1,0 @@
-top = top 
-
-clk (BTNC)
-bcd1 (LD7, LD6, LD5, LD4)
-bcd0 (LD3, LD2, LD1, LD0)
-hex0_o (SEG0G, SEG0F, SEG0E, SEG0D, SEG0C, SEG0B, SEG0A)
-hex1_o (SEG1G, SEG1F, SEG1E, SEG1D, SEG1C, SEG1B, SEG1A)
