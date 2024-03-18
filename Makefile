@@ -43,7 +43,7 @@ _default:
 
 git:
 	git add .
-	git commit -m "update nemu"
-	git push origin pa1
+	git commit -m "Update nemu"
+	git push origin pa2
 
 .PHONY: .git_commit .clean_index _default git

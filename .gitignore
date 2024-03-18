@@ -1,14 +1,13 @@
-/nvboard/
+*
+!.gitignore
+!Makefile
+!README.md
+!init.sh
 build/
 .cache/
 /.hdl_checker/
-*.vcd
-*.fst
-/am-kernels
-/fceux-am
-/abstract-machine/
-/digital-circuit/
-/npc/
-/nvboard_tst/
-/verilator_tst/
 
+!/nemu/
+!/nemu/**
+!/am-kernels/
+!/am-kernels/**
