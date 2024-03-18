@@ -11,3 +11,4 @@ build/
 !/nemu/**
 !/am-kernels/
 !/am-kernels/**
+/am-kernels
