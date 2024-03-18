@@ -83,6 +83,10 @@ static int cmd_x(char *args) {
   int64_t n = strtol(str, NULL, 10);
 
   str = strtok(NULL, delim);
+  if (str == NULL) {
+    printf("Please input x N expr");
+    return 0;
+  }
   paddr_t addr = expr(str, success);
   if (*success == false) assert(0);
   for (int i = 0; i < n; i ++) {
@@ -125,6 +129,7 @@ static struct {
   /* TODO: Add more commands */
 
   { "s", "Step the instructions one by one", cmd_s },
+  { "si", "Step the instructions one by one", cmd_s },
   { "info", "Display information about register(r) or break(b)", cmd_info},
   { "i", "Display information about register(r) or break(b)", cmd_info},
   { "x", "Output consecutive N 4bytes hex", cmd_x },

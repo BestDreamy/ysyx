@@ -25,6 +25,7 @@ const char *regs[] = {
 
 void isa_reg_display() {
   printf("Dsiplat registers:\n");
+  printf("pc\t0x%lx(%ld)\n", cpu.pc, cpu.pc);
   for (int i = 0; i < ARRLEN(regs); i ++) {
     int idx = check_reg_idx(i);
     printf("%s\t0x%lx(%ld)\n", regs[idx], gpr(idx), gpr(idx));
@@ -32,6 +33,10 @@ void isa_reg_display() {
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
+  if (strcmp(s, "pc") && strcmp(s, "$pc") && strcmp(s, "PC") && strcmp(s, "$PC")) {
+    return cpu.pc;
+  }
+
   word_t ans = 0;
   int i = 0;
   for (; i < ARRLEN(regs); i ++) {
