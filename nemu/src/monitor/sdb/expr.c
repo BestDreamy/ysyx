@@ -63,6 +63,7 @@ static struct rule {
   {"0x[0-9a-fA-F]+",    TK_HEX},
   {"[0-9]+",            TK_DEC},
   {"\\$[a-z][a-z0-9]+", TK_REG},
+  {"[a-z][a-z0-9]+",    TK_REG},
 };
 
 #define PRIOR(a) token_prior(a)

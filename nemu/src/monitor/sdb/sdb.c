@@ -79,10 +79,12 @@ static int cmd_info(char *args) {
 static int cmd_x(char *args) {
   const char* delim = " ";
   char *str = strtok(args, delim);
+  bool *success = &(bool){true};
   int64_t n = strtol(str, NULL, 10);
 
   str = strtok(NULL, delim);
-  paddr_t addr = strtol(str, NULL, 16);
+  paddr_t addr = expr(str, success);
+  if (*success == false) assert(0);
   for (int i = 0; i < n; i ++) {
     word_t data = paddr_read(addr + i * 4, 8); 
     printf("0x%x:\t0x%lx(%ld)\n", addr + i * 4, data, data);

@@ -81,3 +81,17 @@ void wp_display() {
     }
   }
 }
+
+void scan_wp() {
+  for (WP *p = head; p != NULL; p = p->next) {
+    bool *success = &(bool){true};
+    word_t new_val = expr(p->expr, success);
+    if (*success == false) assert(0);
+    if (p->old_val != new_val) {
+      nemu_state.state = NEMU_STOP;
+      p->old_val = new_val;
+      printf("watchpoint %d has triggered !\n", p->NO);
+      break;
+    }
+  }
+}

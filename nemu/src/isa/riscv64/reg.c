@@ -35,7 +35,7 @@ word_t isa_reg_str2val(const char *s, bool *success) {
   word_t ans = 0;
   int i = 0;
   for (; i < ARRLEN(regs); i ++) {
-    if (strcmp(s, regs[i])) {
+    if (strcmp(s + 1, regs[i]) == 0 || strcmp(s, regs[i]) == 0) {
       ans = gpr(i);
       break;
     }
