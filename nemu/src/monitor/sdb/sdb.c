@@ -82,7 +82,7 @@ static int cmd_x(char *args) {
   bool *success = &(bool){true};
   int64_t n = strtol(str, NULL, 10);
 
-  str = strtok(NULL, delim);
+  str = strtok(NULL, "");
   if (str == NULL) {
     printf("Please input x N expr");
     return 0;
@@ -90,7 +90,7 @@ static int cmd_x(char *args) {
   paddr_t addr = expr(str, success);
   if (*success == false) assert(0);
   for (int i = 0; i < n; i ++) {
-    word_t data = vaddr_read(addr + i * 4, 8); 
+    word_t data = vaddr_read(addr + i * 4, 4); 
     printf("0x%x:\t0x%lx(%ld)\n", addr + i * 4, data, data);
   }
   return 0;
@@ -99,7 +99,7 @@ static int cmd_x(char *args) {
 static int cmd_p(char *args) {
   bool *success = &(bool){true};
   word_t ans = expr(args, success);
-  printf("%ld\n", ans);
+  printf("0x%lx(%ld)\n", ans, ans);
   if (*success == false) assert(0);
   return 0;
 }

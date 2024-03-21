@@ -23,17 +23,17 @@
 
 enum {
   TK_NOTYPE = 256,
-  TK_NEQ,
-  TK_GEQ,
-  TK_LEQ,
-  TK_AND,
-  TK_OR,
-  TK_EQ,
-  TK_DEC,
-  TK_HEX,
-  TK_REG,
-  TK_DEREF,
-  TK_NEG,
+  TK_NEQ    = 257,
+  TK_GEQ    = 258,
+  TK_LEQ    = 259,
+  TK_AND    = 260,
+  TK_OR     = 261,
+  TK_EQ     = 262,
+  TK_DEC    = 263,
+  TK_HEX    = 264,
+  TK_REG    = 265,
+  TK_DEREF  = 266,
+  TK_NEG    = 267,
 };
 
 static struct rule {
@@ -158,8 +158,8 @@ static bool make_token(char *e) {
           case TK_DEC: // Special expression
           case TK_HEX:
           case TK_REG: {
-            tokens[nr_token].type = rules[i].token_type;
-            sprintf(tokens[nr_token ++].str, "%s", substr_start);
+            strncpy(tokens[nr_token].str, substr_start, substr_len);
+            tokens[nr_token ++].type = rules[i].token_type;
             break;
           }
           default: { // Common one character
@@ -176,7 +176,6 @@ static bool make_token(char *e) {
       return false;
     }
   }
-
   return true;
 }
 
@@ -285,7 +284,7 @@ word_t eval(uint32_t l, uint32_t r, bool *success) {
           *success = false;
           return 0;
         }
-        return res1 / res2;
+        return (sword_t)res1 / (sword_t)res2;
       }
       case TK_EQ:  return res1 == res2;
       case TK_NEG: return res1 != res2;
@@ -309,6 +308,7 @@ word_t expr(char *e, bool *success) {
   }
   
   for (int i = 0; i < nr_token; i ++) {
+    // printf("%s and %d'len: %ld\n", tokens[i].str, tokens[i].type, strlen(tokens[i].str));
     if (tokens[i].type == '-') {
       if (i == 0 || !(isNum(tokens[i - 1].type) || tokens[i - 1].type == ')')) {
         tokens[i].type = TK_NEG;
