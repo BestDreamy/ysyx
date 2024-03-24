@@ -11,3 +11,5 @@ build/
 !/nemu/**
 !/am-kernels/
 !/am-kernels/**
+!/npc/
+!/npc/**
