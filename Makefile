@@ -44,6 +44,6 @@ _default:
 git:
 	git add .
 	git commit -m "Update nemu for isa"
-	git push origin pa2
+	git push origin pa1
 
 .PHONY: .git_commit .clean_index _default git
