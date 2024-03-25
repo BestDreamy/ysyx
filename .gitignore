@@ -1,6 +1,7 @@
 /nvboard/
 build/
 .cache/
+.vscode/
 /.hdl_checker/
 *.vcd
 *.fst
