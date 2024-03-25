@@ -9,4 +9,5 @@
 !*.cpp
 !.gitignore
 !README.md
+!CMakeLists.txt
 build/
