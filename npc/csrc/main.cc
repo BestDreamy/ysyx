@@ -1,10 +1,12 @@
 #include "verilated.h"
 #include "verilated_fst_c.h"
 #include "Vtop.h"
+/*
 #include "ifu.v"
 #include "defines.v"
 #include "pcReg.v"
 #include "rom.v"
+*/
 #include <cstdint>
 #include <stdio.h>
 #include <stdlib.h>

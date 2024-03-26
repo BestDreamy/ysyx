@@ -1,5 +1,8 @@
-module top;
-reg clk, rst;
+`include "defines"
+module top (
+    input clk,
+    input rst
+);
 reg[63: 0] pc;
 wire[31: 0] inst;
 

@@ -1,4 +1,4 @@
-set(Target top)
+set(Target sim)
 project(${Target})
 cmake_minimum_required(VERSION 3.12)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -8,16 +8,16 @@ add_executable( ${Target}
     csrc/main.cc
 )
 
-
+if(FALSE)
 file(
     GLOB_RECURSE
     VSRC $ENV{NPC_HOME}/vsrc/*.v
 )
 message(Vsrcs: ${VSRC})
+endif()
 verilate( ${Target}
-    SOURCES ${VSRC}
+    SOURCES vsrc/core/top.v
     INCLUDE_DIRS vsrc/core vsrc/perip
-    TOP_MODULE top
+    # TOP_MODULE vsrc/core/top.v
     TRACE_FST
 )
-
