@@ -1,6 +1,4 @@
-`include "deinfes.v"
-
-module pc (
+module pcReg (
     input wire clk_i,
     input wire rst_i,
     output reg[`ysyx_23060251_pc_bus] pc_o

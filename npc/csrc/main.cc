@@ -1,6 +1,6 @@
 #include "verilated.h"
 #include "verilated_fst_c.h"
-#include "Vtop.h"
+#include "Vsim.h"
 #include <cstdint>
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,7 +9,7 @@ typedef uint32_t uint32;
 typedef int32_t  int32;
 
 int main(int argc, char** argv) {
-    Vtop* dut = new Vtop;
+    Vsim* dut = new Vsim;
 
     VerilatedFstC* tfp = new VerilatedFstC;
     Verilated::traceEverOn(true);
