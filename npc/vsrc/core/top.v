@@ -12,10 +12,10 @@ wire[31: 0] inst;
         .pc_o(pc)
     );
 
-ifu ysyx_ifu(
-    clk,
-    rst,
-    pc,
-    inst
-);
+    ifu ysyx_23060251_ifu (
+        .clk_i(clk),
+        .rst_i(rst),
+        .pc_i(pc),
+        .inst_o(inst)
+    );
 endmodule
