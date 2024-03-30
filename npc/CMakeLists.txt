@@ -15,9 +15,12 @@ file(
 )
 message(Vsrcs: ${VSRC})
 endif()
+
+# set(VERILATOR_FLAGS "-Wno-PINMISSING")
 verilate( ${Target}
     SOURCES vsrc/core/top.v
     INCLUDE_DIRS vsrc/core vsrc/perip
     # TOP_MODULE vsrc/core/top.v
+    # VERILATOR_FLAGS ${VERILATOR_FLAGS}
     TRACE_FST
 )

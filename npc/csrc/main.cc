@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
     uint time_counter = 0;
     uint clk = 0, rst = 1;
     while (!Verilated::gotFinish() and time_counter < 100) {
-        if (time_counter == 3) {
+        if (time_counter == 2) {
             rst = 0;
         }
         dut->clk = clk; dut->eval();

@@ -1,16 +1,23 @@
 `define ysyx_23060251_xlen 64
+`define ysyx_23060251_rst_enable  1
+`define ysyx_23060251_rst_disable 0
 
 `define ysyx_23060251_pc 64
 `define ysyx_23060251_pc_bus `ysyx_23060251_pc - 1: 0
-`define ysyx_23060251_reg 64
+// len(Register)
+`define ysyx_23060251_reg `ysyx_23060251_xlen
 `define ysyx_23060251_reg_num 32
-// 64: 0
-`define ysyx_23060251_reg_bus `ysyx_23060251_xlen - 1: 0
-`define ysyx_23060251_imm_bus `ysyx_23060251_xlen - 1: 0
+// 63: 0
+`define ysyx_23060251_reg_bus `ysyx_23060251_reg  - 1: 0
+`define ysyx_23060251_imm `ysyx_23060251_xlen
+`define ysyx_23060251_imm_bus `ysyx_23060251_imm - 1: 0
 
+// len(Instruction)
 `define ysyx_23060251_inst 32
 `define ysyx_23060251_inst_bus `ysyx_23060251_inst - 1: 0
-
+// R, I, S, B, U, J
+`define ysyx_23060251_type 6
+`define ysyx_23060251_type_bus `ysyx_23060251_type - 1: 0
 
 // Memory for inst and data are byte
 `define ysyx_23060251_mem_bus 7: 0
@@ -89,4 +96,4 @@
 // 1. ecall
 // 2. ebreak
 `define ysyx_23060251_sys 2
-`define ysyx_23060251_sys `ysyx_23060251_sys - 1: 0
+`define ysyx_23060251_sys_bus `ysyx_23060251_sys - 1: 0

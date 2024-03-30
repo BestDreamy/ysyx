@@ -40,66 +40,66 @@ module idu (
                                             optype
     ****************************************************************************************/
     // 1. reg op reg
-    wire rv64_add  = rv64_alu   & (fun3 == 3'b000) & (fun7 == 7'b00_000_00);
-    wire rv64_addw = rv64_aluw  & (fun3 == 3'b000) & (fun7 == 7'b00_000_00);
-    wire rv64_sub  = rv64_alu   & (fun3 == 3'b000) & (fun7 == 7'b01_000_00);
-    wire rv64_subw = rv64_aluw  & (fun3 == 3'b000) & (fun7 == 7'b01_000_00);
-    wire rv64_xor  = rv64_alu   & (fun3 == 3'b100) & (fun7 == 7'b00_000_00);
-    wire rv64_or   = rv64_alu   & (fun3 == 3'b110) & (fun7 == 7'b00_000_00);
-    wire rv64_and  = rv64_alu   & (fun3 == 3'b111) & (fun7 == 7'b00_000_00);
-    wire rv64_sll  = rv64_alu   & (fun3 == 3'b001) & (fun7 == 7'b00_000_00);
-    wire rv64_sllw = rv64_aluw  & (fun3 == 3'b001) & (fun7 == 7'b00_000_00);
-    wire rv64_srl  = rv64_alu   & (fun3 == 3'b101) & (fun7 == 7'b00_000_00);
-    wire rv64_srlw = rv64_aluw  & (fun3 == 3'b101) & (fun7 == 7'b00_000_00);
-    wire rv64_sra  = rv64_alu   & (fun3 == 3'b101) & (fun7 == 7'b01_000_00);
-    wire rv64_sraw = rv64_aluw  & (fun3 == 3'b101) & (fun7 == 7'b01_000_00);
-    wire rv64_slt  = rv64_alu   & (fun3 == 3'b010) & (fun7 == 7'b00_000_00);
-    wire rv64_sltu = rv64_alu   & (fun3 == 3'b011) & (fun7 == 7'b00_000_00);
+    wire rv64_add  = rv64_alu   & (func3 == 3'b000) & (func7 == 7'b00_000_00);
+    wire rv64_addw = rv64_aluw  & (func3 == 3'b000) & (func7 == 7'b00_000_00);
+    wire rv64_sub  = rv64_alu   & (func3 == 3'b000) & (func7 == 7'b01_000_00);
+    wire rv64_subw = rv64_aluw  & (func3 == 3'b000) & (func7 == 7'b01_000_00);
+    wire rv64_xor  = rv64_alu   & (func3 == 3'b100) & (func7 == 7'b00_000_00);
+    wire rv64_or   = rv64_alu   & (func3 == 3'b110) & (func7 == 7'b00_000_00);
+    wire rv64_and  = rv64_alu   & (func3 == 3'b111) & (func7 == 7'b00_000_00);
+    wire rv64_sll  = rv64_alu   & (func3 == 3'b001) & (func7 == 7'b00_000_00);
+    wire rv64_sllw = rv64_aluw  & (func3 == 3'b001) & (func7 == 7'b00_000_00);
+    wire rv64_srl  = rv64_alu   & (func3 == 3'b101) & (func7 == 7'b00_000_00);
+    wire rv64_srlw = rv64_aluw  & (func3 == 3'b101) & (func7 == 7'b00_000_00);
+    wire rv64_sra  = rv64_alu   & (func3 == 3'b101) & (func7 == 7'b01_000_00);
+    wire rv64_sraw = rv64_aluw  & (func3 == 3'b101) & (func7 == 7'b01_000_00);
+    wire rv64_slt  = rv64_alu   & (func3 == 3'b010) & (func7 == 7'b00_000_00);
+    wire rv64_sltu = rv64_alu   & (func3 == 3'b011) & (func7 == 7'b00_000_00);
 
     // 2. reg op imm
-    wire rv64_addi  = rv64_alui   & (fun3 == 3'b000);
-    wire rv64_addiw = rv64_aluiw  & (fun3 == 3'b000);
+    wire rv64_addi  = rv64_alui   & (func3 == 3'b000);
+    wire rv64_addiw = rv64_aluiw  & (func3 == 3'b000);
     //   rv64_subi  = rv64_addi
     //   rv64_subiw = rv64_addiw 
-    wire rv64_xori  = rv64_alui   & (fun3 == 3'b100);
-    wire rv64_ori   = rv64_alui   & (fun3 == 3'b110);
-    wire rv64_andi  = rv64_alui   & (fun3 == 3'b111);
-    wire rv64_slli  = rv64_alui   & (fun3 == 3'b001) & (fun7 == 7'b00_000_00);
-    wire rv64_slliw = rv64_aluiw  & (fun3 == 3'b001) & (fun7 == 7'b00_000_00);
-    wire rv64_srli  = rv64_alui   & (fun3 == 3'b101) & (fun7 == 7'b00_000_00);
-    wire rv64_srliw = rv64_aluiw  & (fun3 == 3'b101) & (fun7 == 7'b00_000_00);
-    wire rv64_srai  = rv64_alui   & (fun3 == 3'b101) & (fun7 == 7'b01_000_00);
-    wire rv64_sraiw = rv64_aluiw  & (fun3 == 3'b101) & (fun7 == 7'b01_000_00);
-    wire rv64_slti  = rv64_alui   & (fun3 == 3'b010);
-    wire rv64_sltui = rv64_alui   & (fun3 == 3'b011);
+    wire rv64_xori  = rv64_alui   & (func3 == 3'b100);
+    wire rv64_ori   = rv64_alui   & (func3 == 3'b110);
+    wire rv64_andi  = rv64_alui   & (func3 == 3'b111);
+    wire rv64_slli  = rv64_alui   & (func3 == 3'b001) & (func7 == 7'b00_000_00);
+    wire rv64_slliw = rv64_aluiw  & (func3 == 3'b001) & (func7 == 7'b00_000_00);
+    wire rv64_srli  = rv64_alui   & (func3 == 3'b101) & (func7 == 7'b00_000_00);
+    wire rv64_srliw = rv64_aluiw  & (func3 == 3'b101) & (func7 == 7'b00_000_00);
+    wire rv64_srai  = rv64_alui   & (func3 == 3'b101) & (func7 == 7'b01_000_00);
+    wire rv64_sraiw = rv64_aluiw  & (func3 == 3'b101) & (func7 == 7'b01_000_00);
+    wire rv64_slti  = rv64_alui   & (func3 == 3'b010);
+    wire rv64_sltui = rv64_alui   & (func3 == 3'b011);
 
     // 3. branch
-    wire rv64_beq  = rv64_branch & (fun3 == 3'b000);
-    wire rv64_bne  = rv64_branch & (fun3 == 3'b001);
-    wire rv64_blt  = rv64_branch & (fun3 == 3'b100);
-    wire rv64_bge  = rv64_branch & (fun3 == 3'b101);
-    wire rv64_bltu = rv64_branch & (fun3 == 3'b110);
-    wire rv64_bgeu = rv64_branch & (fun3 == 3'b111);
+    wire rv64_beq  = rv64_branch & (func3 == 3'b000);
+    wire rv64_bne  = rv64_branch & (func3 == 3'b001);
+    wire rv64_blt  = rv64_branch & (func3 == 3'b100);
+    wire rv64_bge  = rv64_branch & (func3 == 3'b101);
+    wire rv64_bltu = rv64_branch & (func3 == 3'b110);
+    wire rv64_bgeu = rv64_branch & (func3 == 3'b111);
 
     // 4. load
-    wire rv64_lb  = rv64_load & (fun3 == 3'b000);
-    wire rv64_lh  = rv64_load & (fun3 == 3'b001);
-    wire rv64_lw  = rv64_load & (fun3 == 3'b010);
-    wire rv64_ld  = rv64_load & (fun3 == 3'b011);
-    wire rv64_lbu = rv64_load & (fun3 == 3'b100);
-    wire rv64_lhu = rv64_load & (fun3 == 3'b101);
-    wire rv64_lwu = rv64_load & (fun3 == 3'b110);
+    wire rv64_lb  = rv64_load & (func3 == 3'b000);
+    wire rv64_lh  = rv64_load & (func3 == 3'b001);
+    wire rv64_lw  = rv64_load & (func3 == 3'b010);
+    wire rv64_ld  = rv64_load & (func3 == 3'b011);
+    wire rv64_lbu = rv64_load & (func3 == 3'b100);
+    wire rv64_lhu = rv64_load & (func3 == 3'b101);
+    wire rv64_lwu = rv64_load & (func3 == 3'b110);
 
     // 5. store
-    wire rv64_sb = rv64_store & (fun3 == 3'b000);
-    wire rv64_sh = rv64_store & (fun3 == 3'b001);
-    wire rv64_sw = rv64_store & (fun3 == 3'b010);
-    wire rv64_sd = rv64_store & (fun3 == 3'b011);
+    wire rv64_sb = rv64_store & (func3 == 3'b000);
+    wire rv64_sh = rv64_store & (func3 == 3'b001);
+    wire rv64_sw = rv64_store & (func3 == 3'b010);
+    wire rv64_sd = rv64_store & (func3 == 3'b011);
 
     // 6. system
-    wire rv64_ecall  = rv64_sys & (fun3 == 3'b000) & (instr_i[31:20] == 12'b0000_0000_0000);
-    wire rv64_ebreak = rv64_sys & (fun3 == 3'b000) & (instr_i[31:20] == 12'b0000_0000_0001);
-    // wire rv64_mret   = rv64_sys & (fun3 == 3'b000) & (instr_i[31:20] == 12'b0011_0000_0010);
+    wire rv64_ecall  = rv64_sys & (func3 == 3'b000) & (inst_i[31:20] == 12'b0000_0000_0000);
+    wire rv64_ebreak = rv64_sys & (func3 == 3'b000) & (inst_i[31:20] == 12'b0000_0000_0001);
+    // wire rv64_mret   = rv64_sys & (func3 == 3'b000) & (inst_i[31:20] == 12'b0011_0000_0010);
 
 
     /****************************************************************************************
@@ -121,7 +121,7 @@ module idu (
     };
 
     assign alu_o = {
-        rv64_sltu| rv64_sltui
+        rv64_sltu| rv64_sltui,
         rv64_slt | rv64_slti,
         rv64_sra | rv64_sraw | rv64_srai | rv64_sraiw,
         rv64_srl | rv64_srlw | rv64_srli | rv64_srliw,
@@ -159,4 +159,35 @@ module idu (
         rv64_ebreak,
         rv64_ecall
     };
+
+
+    /****************************************************************************************
+                                            imm
+    ****************************************************************************************/
+    // I, S, B, U, J
+    wire[`ysyx_23060251_type - 1: 1] rv64_imm_sel = {
+        rv64_jal,    // J-type
+        rv64_lui | rv64_auipc, // U-type
+        rv64_branch, // B-type
+        rv64_store,  // S-type
+        rv64_alui | rv64_aluiw | rv64_load | rv64_jalr // I-type
+    };
+    genImm ysyx_23060251_genImm (
+        .imm_sel_i(rv64_imm_sel),
+        .inst_i(inst_i),
+        .imm_o(imm_o)
+    );
+
+
+    /****************************************************************************************
+                                            src
+    ****************************************************************************************/
+    // verilator lint_off PINMISSING
+    regs ysyx_23060251_regs (
+        .rs1_i(rs1),
+        .src1_o(src1_o),
+        .rs2_i(rs2),
+        .src2_o(src2_o)
+    );
+    // verilator lint_on PINMISSING
 endmodule
