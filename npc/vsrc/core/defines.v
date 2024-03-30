@@ -6,6 +6,7 @@
 `define ysyx_23060251_reg_num 32
 // 64: 0
 `define ysyx_23060251_reg_bus `ysyx_23060251_xlen - 1: 0
+`define ysyx_23060251_imm_bus `ysyx_23060251_xlen - 1: 0
 
 `define ysyx_23060251_inst 32
 `define ysyx_23060251_inst_bus `ysyx_23060251_inst - 1: 0
@@ -29,3 +30,63 @@
 `define ysyx_23060251_func3_bus `ysyx_23060251_func3 - 1: 0
 `define ysyx_23060251_func7  7
 `define ysyx_23060251_func7_bus `ysyx_23060251_func7 - 1: 0
+
+
+// 1. alu
+// 2. alui
+// 3. aluw
+// 4. aluiw
+// 5. branch
+// 6. jal
+// 7. jalr
+// 8. load
+// 9. store
+// 10.lui
+// 11.auipc
+// 12.sys
+`define ysyx_23060251_opinfo 12
+`define ysyx_23060251_opinfo_bus `ysyx_23060251_opinfo - 1: 0
+
+// 1. add
+// 2. sub
+// 3. xor
+// 4. or
+// 5. and
+// 6. sll
+// 7. srl
+// 8. sra
+// 9. slt
+// 10.sltu
+`define ysyx_23060251_alu 10
+`define ysyx_23060251_alu_bus `ysyx_23060251_alu - 1: 0
+
+// 1. beq
+// 2. bne
+// 3. blt
+// 4. bge
+// 5. bltu
+// 6. bgeu
+`define ysyx_23060251_branch 6
+`define ysyx_23060251_branch_bus `ysyx_23060251_branch - 1: 0
+
+// 1. lb
+// 2. lh
+// 3. lw
+// 4. ld
+// 5. lbu
+// 6. lhu
+// 7. lwu
+`define ysyx_23060251_load 7
+`define ysyx_23060251_load_bus `ysyx_23060251_load - 1: 0
+
+// 1. sb
+// 2. sh
+// 3. sw
+// 4. sd
+`define ysyx_23060251_store 4
+`define ysyx_23060251_store_bus `ysyx_23060251_store - 1: 0
+
+// 1. ecall
+// 2. ebreak
+`define ysyx_23060251_sys 2
+`define ysyx_23060251_sys `ysyx_23060251_sys - 1: 0
