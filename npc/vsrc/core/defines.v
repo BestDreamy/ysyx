@@ -1,4 +1,5 @@
 `define ysyx_23060251_xlen 64
+`define ysyx_23060251_xlen_bus `ysyx_23060251_xlen_bus - 1: 0
 `define ysyx_23060251_rst_enable  1
 `define ysyx_23060251_rst_disable 0
 

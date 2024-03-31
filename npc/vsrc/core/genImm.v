@@ -31,11 +31,9 @@ module genImm (
                                                  1'b0
                                                };
 
-    assign imm_o =
-        ({`ysyx_23060251_imm{imm_sel_i[1]}} & rv64_I_imm) |
-        ({`ysyx_23060251_imm{imm_sel_i[2]}} & rv64_S_imm) |
-        ({`ysyx_23060251_imm{imm_sel_i[3]}} & rv64_B_imm) |
-        ({`ysyx_23060251_imm{imm_sel_i[4]}} & rv64_U_imm) |
-        ({`ysyx_23060251_imm{imm_sel_i[5]}} & rv64_J_imm)
-    ;
+    assign imm_o = ({`ysyx_23060251_imm{imm_sel_i[1]}} & rv64_I_imm)
+                 | ({`ysyx_23060251_imm{imm_sel_i[2]}} & rv64_S_imm)
+                 | ({`ysyx_23060251_imm{imm_sel_i[3]}} & rv64_B_imm)
+                 | ({`ysyx_23060251_imm{imm_sel_i[4]}} & rv64_U_imm)
+                 | ({`ysyx_23060251_imm{imm_sel_i[5]}} & rv64_J_imm);
 endmodule

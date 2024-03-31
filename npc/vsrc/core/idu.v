@@ -60,7 +60,7 @@ module idu (
     wire rv64_addi  = rv64_alui   & (func3 == 3'b000);
     wire rv64_addiw = rv64_aluiw  & (func3 == 3'b000);
     //   rv64_subi  = rv64_addi
-    //   rv64_subiw = rv64_addiw 
+    //   rv64_subiw = rv64_addiw
     wire rv64_xori  = rv64_alui   & (func3 == 3'b100);
     wire rv64_ori   = rv64_alui   & (func3 == 3'b110);
     wire rv64_andi  = rv64_alui   & (func3 == 3'b111);
