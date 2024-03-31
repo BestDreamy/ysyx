@@ -43,7 +43,7 @@ _default:
 
 git:
 	git add .
-	git commit -m "Update nemu for isa"
+	git commit -m "Update RTL for isa"
 	git push origin pa2
 
 .PHONY: .git_commit .clean_index _default git

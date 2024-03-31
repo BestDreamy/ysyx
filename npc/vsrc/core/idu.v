@@ -8,14 +8,19 @@ module idu (
     output wire[`ysyx_23060251_store_bus] store_o,
     output wire[`ysyx_23060251_sys_bus] sys_o,
 
+    output wire                         wenReg_o,
+    output wire[`ysyx_23060251_rs_bus]  rd_o,
+
+    output wire[`ysyx_23060251_rs_bus]  rs1_o,
     output wire[`ysyx_23060251_reg_bus] src1_o,
+    output wire[`ysyx_23060251_rs_bus]  rs2_o,
     output wire[`ysyx_23060251_reg_bus] src2_o,
     output wire[`ysyx_23060251_imm_bus] imm_o
 );
     wire[`ysyx_23060251_opcode_bus] opcode = inst_i[6: 0];
-    wire[`ysyx_23060251_rs_bus]        rs1 = inst_i[19: 15];
-    wire[`ysyx_23060251_rs_bus]        rs2 = inst_i[24: 20];
-    wire[`ysyx_23060251_rs_bus]        rd  = inst_i[11: 7];
+    assign                           rs1_o = inst_i[19: 15];
+    assign                           rs2_o = inst_i[24: 20];
+    assign                           rd_o  = inst_i[11: 7];
     wire[`ysyx_23060251_func3_bus]   func3 = inst_i[14: 12];
     wire[`ysyx_23060251_func7_bus]   func7 = inst_i[31: 25];
 
@@ -35,7 +40,8 @@ module idu (
     wire rv64_auipc     = (opcode == 7'b00_101_11);
     wire rv64_sys       = (opcode == 7'b11_100_11);
 
-
+    assign wenReg_o = ~(opinfo_o[`ysyx_23060251_opinfo_branch] | opinfo_o[`ysyx_23060251_opinfo_store]
+                       |opinfo_o[`ysyx_23060251_opinfo_sys]);
     /****************************************************************************************
                                             optype
     ****************************************************************************************/
@@ -106,7 +112,7 @@ module idu (
                                             info
     ****************************************************************************************/
     assign opinfo_o = {
-        rv64_sys,         // 0
+        rv64_sys,         // 11
         rv64_auipc,
         rv64_lui,
         rv64_store,
@@ -117,7 +123,7 @@ module idu (
         rv64_aluiw,
         rv64_aluw,
         rv64_alui,
-        rv64_alu          // 11
+        rv64_alu          // 0
     };
 
     assign alu_o = {
@@ -177,17 +183,4 @@ module idu (
         .inst_i(inst_i),
         .imm_o(imm_o)
     );
-
-
-    /****************************************************************************************
-                                            src
-    ****************************************************************************************/
-    // verilator lint_off PINMISSING
-    regs ysyx_23060251_regs (
-        .rs1_i(rs1),
-        .src1_o(src1_o),
-        .rs2_i(rs2),
-        .src2_o(src2_o)
-    );
-    // verilator lint_on PINMISSING
 endmodule
