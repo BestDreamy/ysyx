@@ -18,6 +18,8 @@ wire[31: 0] inst;
         .pc_i(pc),
         .inst_o(inst)
     );
+import "DPI-C" function void ebreak(int inst);
+always_comb ebreak(inst);
 
 wire[11: 0] opinfo;
 wire[ 9: 0] alu_info;

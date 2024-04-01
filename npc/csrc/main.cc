@@ -1,18 +1,10 @@
 #include "verilated.h"
 #include "verilated_fst_c.h"
 #include "Vtop.h"
-/*
-#include "ifu.v"
-#include "defines.v"
-#include "pcReg.v"
-#include "rom.v"
-*/
-#include <cstdint>
-#include <stdio.h>
+#include "macro.h"
+#include "dpi.h"
 #include <stdlib.h>
 #include <assert.h>
-typedef uint32_t uint32;
-typedef int32_t  int32;
 
 int main(int argc, char** argv) {
     Vtop* dut = new Vtop;
