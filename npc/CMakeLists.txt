@@ -10,9 +10,10 @@ if (NOT verilator_FOUND)
   message(FATAL_ERROR "Verilator was not found. Either install it, or set the VERILATOR_ROOT environment variable")
 endif()
 
-include_directories(include csrc/include/ csrc/)
+include_directories(include csrc/include/) 
 add_executable( ${Target} 
     csrc/main.cc
+    csrc/dpi.cc
 )
 
 if(FALSE)

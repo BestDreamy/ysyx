@@ -2,7 +2,6 @@
 #include "verilated_fst_c.h"
 #include "Vtop.h"
 #include "macro.h"
-#include "dpi.h"
 #include <stdlib.h>
 #include <assert.h>
 
@@ -14,8 +13,8 @@ int main(int argc, char** argv) {
     dut->trace(tfp, 0);
     tfp->open("wave.fst");
 
-    uint time_counter = 0;
-    uint clk = 0, rst = 1;
+    uint32 time_counter = 0;
+    uint32 clk = 0, rst = 1;
     while (!Verilated::gotFinish() and time_counter < 100) {
         if (time_counter == 2) {
             rst = 0;
