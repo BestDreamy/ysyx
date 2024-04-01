@@ -13,3 +13,7 @@ build/
 !/am-kernels/**
 !/npc/
 !/npc/**
+!/abstract-machine/
+!/abstract-machine/**
+!/fceux-am/
+!/fceux-am/**
