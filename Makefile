@@ -1,5 +1,5 @@
 STUID = ysyx_22040000
-STUNAME = 魏百川
+STUNAME = San Zhang 
 
 # DO NOT modify the following code!!!
 
@@ -43,7 +43,7 @@ _default:
 
 git:
 	git add .
-	git commit -m "Update RTL for isa"
+	git commit -m "Update AM"
 	git push origin pa2
 
 .PHONY: .git_commit .clean_index _default git
