@@ -43,7 +43,7 @@ _default:
 
 git:
 	git add .
-	git commit -m "Update $$AM/scripts/platform"
+	git commit -m "Update string and sprintf"
 	git push origin pa2
 
 .PHONY: .git_commit .clean_index _default git
