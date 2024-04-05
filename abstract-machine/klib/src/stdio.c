@@ -17,6 +17,8 @@ int sprintf(char *out, const char *fmt, ...) {
   panic("Not implemented");
 }
 
+
+
 int snprintf(char *out, size_t n, const char *fmt, ...) {
   panic("Not implemented");
 }
