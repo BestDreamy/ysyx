@@ -7,10 +7,11 @@
 size_t strlen(const char *s) {
   size_t i = 0;
   for (; s[i]; i ++) ;
-  return i - 1;
+  return i;
 }
 
 char *strcpy(char *dst, const char *src) {
+  assert(dst != NULL);
   size_t i = 0;
   while (*(src + i)) {
     *(dst + i) = *(src + i);
@@ -21,7 +22,9 @@ char *strcpy(char *dst, const char *src) {
 }
 
 char *strncpy(char *dst, const char *src, size_t n) {
-  for (size_t = 0; i < n; i ++) {
+  assert(dst != NULL);
+  size_t i = 0;
+  for (; i < n; i ++) {
     if (*(src + i) == '\0') break;
     *(dst + i) = *(src + i);
   }
@@ -30,6 +33,7 @@ char *strncpy(char *dst, const char *src, size_t n) {
 }
 
 char *strcat(char *dst, const char *src) {
+  assert(dst != NULL);
   size_t base = strlen(dst), i = 0;
   while (*(src + i)) {
     *(dst + base + i) = *(src + i);
@@ -40,39 +44,50 @@ char *strcat(char *dst, const char *src) {
 }
 
 int strcmp(const char *s1, const char *s2) {
-  size_t n = strlen(s1), m = strlen(s2), i = 0;
-  bool ok = (n == m);
-  while (*(s1 + i) && *(s2 + i) && ok) {
-    if (*(s1 + i) == *(s2 + i)) continue;
-    ok = 0;
+  size_t i = 0;
+  for(; *(s1 + i) && *(s2 + i); i ++) {
+    if (*(s1 + i) != *(s2 + i)) break;
   }
-  return ok;
+  return *((unsigned char*)s1 + i) - *((unsigned char*)s2 + i);
 }
 
-int strncmp(const char *s1, const char *s2, size_t x) {
-  size_t n = strlen(s1), m = strlen(s2);
-  bool ok = (n >= x && m >= x);
-  for (size_t i = 0 ; i < x && ok; i ++) {
-    if (*(s1 + i) == *(s2 + i)) continue;
-    ok = 0;
+int strncmp(const char *s1, const char *s2, size_t n) {
+  size_t i = 0;
+  for(; *(s1 + i) && *(s2 + i) && i < n; i ++) {
+    if (*(s1 + i) != *(s2 + i)) break;
   }
-  return ok;
+  return *((unsigned char*)s1 + i) - *((unsigned char*)s2 + i);
 }
 
 void *memset(void *s, int c, size_t n) {
-  panic("Not implemented");
+  assert(s != NULL);
+  for (size_t i = 0; i < n; i ++) {
+    *((char*)s + i) = c;
+  }
+  return s; 
 }
 
 void *memmove(void *dst, const void *src, size_t n) {
-  panic("Not implemented");
+  assert(dst != NULL);
+  for (size_t i = n; i; i --) {
+    *((char*)dst + i - 1) = *((char*)src + i - 1);
+  }
+  return dst;
 }
 
-void *memcpy(void *out, const void *in, size_t n) {
-  panic("Not implemented");
+void *memcpy(void *dst, const void *src, size_t n) {
+  assert(dst != NULL);
+  for (size_t i = 0; i < n; i ++) {
+    *((char*)dst + i) = *((char*)src + i);
+  }
+  return dst;
 }
 
 int memcmp(const void *s1, const void *s2, size_t n) {
-  panic("Not implemented");
+  for (size_t i = 0; (*((char*)s1 + i) && *((char*)s2 + i)) && i < n; i ++) {
+    if (*((char*)s1 + i) != *((char*)s2 + i)) break;
+  }
+  return *(unsigned char*)s1 - *(unsigned char*)s2;
 }
 
 #endif
