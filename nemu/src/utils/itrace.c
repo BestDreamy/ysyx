@@ -1,2 +1,0 @@
-#define IRINGBUF 32
-

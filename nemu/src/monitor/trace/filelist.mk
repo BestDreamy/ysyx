@@ -1,0 +1,1 @@
+INC_PATH += $(NEMU_HOME)/src/monitor/trace
