@@ -24,6 +24,8 @@ void itrace (uint64 pc, uint32 inst) {
 #define SEL_CURSOR (cursor == i? "   --->  ": " \t ")
 #define SCALE_STR(a, b) ({ for (int i = strlen(a); i < b; i ++) a[i] = ' '; a[b] = '\0'; a; })
 void itraceDisplay() {
+    puts(BOLD_TXT "Itrace:" RST_TXT);
+
     for (int32 i = 0; i < p; i ++) {
         char *start = SEL_CURSOR, disas[32];
         disassemble(disas, 32, iringbuf[i].pc, (uint8*)&iringbuf[i].inst, 4);
