@@ -11,11 +11,14 @@ typedef uint32_t uint32;
 typedef uint64_t uint64;
 typedef int32_t  int32;
 typedef int64_t  int64;
+#define BLACK_TXT "\033[30m"
+#define RED_TXT  "\033[31m"
 #define GREEN_TXT "\033[32m"
-#define RED_TXT "\033[33m"
+#define YELLOW_TXT "\033[33m"
 #define BLUE_TXT  "\033[34m"
 #define RST_TXT   "\033[0m"
 #define BOLD_TXT  "\033[1m"
+#define UNDERLINE_TXT "\033[4m"
 
 void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 
