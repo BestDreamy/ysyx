@@ -30,6 +30,7 @@ void itraceDisplay();
 void mtrace(char en, uint32 addr, uint64 data);
 
 #define CONFIG_FTRACE 1
+bool isSymbolFunc();
 void ftrace_call();
 void ftrace_ret();
 
