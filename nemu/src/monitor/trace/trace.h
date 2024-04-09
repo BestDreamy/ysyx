@@ -26,4 +26,8 @@ void itraceDisplay();
 #define CONFIG_MTRACE 1
 void mtrace(char en, uint32 addr, uint64 data);
 
+#define CONFIG_FTRACE 1
+void ftrace_call();
+void ftrace_ret();
+
 #endif
