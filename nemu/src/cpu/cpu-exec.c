@@ -123,6 +123,10 @@ void cpu_exec(uint64_t n) {
     case NEMU_END: case NEMU_ABORT:
 
     #ifdef CONFIG_MTRACE
+      ftraceDisplay();
+    #endif
+
+    #ifdef CONFIG_MTRACE
       mtraceDisplay();
     #endif
 
