@@ -13,7 +13,7 @@ LDFLAGS   += -T $(AM_HOME)/scripts/linker.ld \
 LDFLAGS   += --gc-sections -e _start
 NEMUFLAGS += -l $(shell dirname $(IMAGE).elf)/nemu-log.txt
 NEMUFLAGS += -b
-NEMUFLAGS
+NEMUFLAGS += -e $(IMAGE).elf
 
 CFLAGS += -DMAINARGS=\"$(mainargs)\"
 CFLAGS += -I$(AM_HOME)/am/src/platform/nemu/include
