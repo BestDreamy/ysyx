@@ -1,15 +1,15 @@
 #include <trace.h>
 #define IRINGBUF 32
 
+static uint32 p = 0;
+static int32  cursor = -1; 
+static bool full = 0;
+
 typedef struct Iringbuf {
     uint64 pc;
     uint32 inst;
-}Iringbuf;
+} Iringbuf;
 Iringbuf iringbuf[IRINGBUF];
-
-uint32 p = 0;
-int32  cursor = -1; 
-bool full = 0;
 
 void itrace (uint64 pc, uint32 inst) {
     {
@@ -21,10 +21,9 @@ void itrace (uint64 pc, uint32 inst) {
     if (p == 0) full = 1;
 }
 
-#define SEL_CURSOR (cursor == i? "   --->  ": " \t ")
 #define SCALE_STR(a, b) ({ for (int i = strlen(a); i < b; i ++) a[i] = ' '; a[b] = '\0'; a; })
 void itraceDisplay() {
-    puts(BOLD_TXT "Itrace:" RST_TXT);
+    puts(BOLD_TXT "I-trace:" RST_TXT);
 
     for (int32 i = 0; i < p; i ++) {
         char *start = SEL_CURSOR, disas[32];

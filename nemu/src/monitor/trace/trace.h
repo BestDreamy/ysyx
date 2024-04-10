@@ -11,6 +11,7 @@ typedef uint32_t uint32;
 typedef uint64_t uint64;
 typedef int32_t  int32;
 typedef int64_t  int64;
+#define SEL_CURSOR (cursor == i? "   --->  ": " \t ")
 #define BLACK_TXT "\033[30m"
 #define RED_TXT  "\033[31m"
 #define GREEN_TXT "\033[32m"
@@ -27,12 +28,14 @@ void itraceDisplay();
 
 
 #define CONFIG_MTRACE 1
-void mtrace(char en, uint32 addr, uint64 data);
+void mtrace(char op, uint32 addr, uint64 data);
+void mtraceDisplay();
 
 #define CONFIG_FTRACE 1
 void init_elf();
 bool isSymbolFunc();
 void ftrace_call();
 void ftrace_ret();
+void ftraceDisplay();
 
 #endif
