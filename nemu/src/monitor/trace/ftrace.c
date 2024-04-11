@@ -50,30 +50,36 @@ void init_elf(const char *elf_file) {
             rewind(fp);
         }
     }
+    // for (int i = 0; i < symbol_num; i ++) printf("%s: %ld")
     // for (int i = 0; i < sz; i ++) printf("%c", shstrtab[i]); puts("");
     // for (int i = 0; i < sz; i ++) printf("%c", strtab[i]); puts("");
 }
 
 static int32 space_num = 0;
 void print_space() {
-    for (int32 i = 0; i < space_num; i ++) printf("\t");
+    for (int32 i = 0; i < space_num; i ++) printf("  ");
 }
 
 char* symbol_is_func(uint64 pc) {
-    char *ans = "";
-    return ans;
+    char *func = NULL;
+    for (int i = 0; i < symbol_num; i ++) {
+        if(pc >= symbol[i].st_value && pc < symbol[i].st_value + symbol[i].st_size) {
+            func = strtab + symbol[i].st_name;
+        }
+    }
+    return func;
 }
 
 void ftrace_call(uint64 pc, uint64 npc) {
     print_space();
     space_num ++;
-    IFDEF(CONFIG_FTRACE, printf("0x%08lxcall [%s -> 0x%08lx]\n", pc, symbol_is_func(npc), npc));
+    IFDEF(CONFIG_FTRACE, printf("0x%08lx: call [%s -> 0x%08lx]\n", pc, symbol_is_func(npc), npc));
 }
 
 void ftrace_ret(uint64 pc, uint64 npc) {
     print_space();
     space_num --;
-    IFDEF(CONFIG_FTRACE, printf("0x%08lxret  [%s -> 0x%08lx]\n", pc, symbol_is_func(npc), npc));
+    IFDEF(CONFIG_FTRACE, printf("0x%08lx: ret  [%s -> 0x%08lx]\n", pc, symbol_is_func(npc), npc));
 }
 
 void ftraceDisplay() {
