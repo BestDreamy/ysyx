@@ -34,9 +34,8 @@ void mtraceDisplay();
 
 #define CONFIG_FTRACE 1
 void init_elf(const char *file);
-bool isSymbolFunc();
-void ftrace_call();
-void ftrace_ret();
+void ftrace_call(uint64 pc, uint64 npc);
+void ftrace_ret(uint64 pc, uint64 npc);
 void ftraceDisplay();
 
 #endif
