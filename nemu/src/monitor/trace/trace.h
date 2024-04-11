@@ -5,7 +5,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
-#include <memory/paddr.h>
+#include <memory/paddr.h> // mtrace
+#include <elf.h> // ftrace
 typedef uint8_t  uint8;
 typedef uint32_t uint32;
 typedef uint64_t uint64;
