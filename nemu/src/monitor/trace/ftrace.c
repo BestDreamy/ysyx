@@ -50,8 +50,7 @@ void init_elf(const char *elf_file) {
             rewind(fp);
         }
     }
-    for (int i = 0; i < symbol_num; i ++) printf("%s: %c\n", strtab + symbol[i].st_name, ELF64_ST_TYPE(symbol[i].st_info) == STT_FUNC? 'f': 'n');
-    puts("");
+    // for (int i = 0; i < symbol_num; i ++) printf("%s: %c\n", strtab + symbol[i].st_name, ELF64_ST_TYPE(symbol[i].st_info) == STT_FUNC? 'f': 'n'); puts("");
     // for (int i = 0; i < sz; i ++) printf("%c", shstrtab[i]); puts("");
     // for (int i = 0; i < sz; i ++) printf("%c", strtab[i]); puts("");
 }
@@ -64,8 +63,7 @@ void print_space() {
 char* symbol_is_func(uint64 pc) {
     char *func = NULL;
     for (int i = 0; i < symbol_num; i ++) {
-        // if(pc >= symbol[i].st_value && pc < symbol[i].st_value + symbol[i].st_size) {
-        if (ELF64_ST_TYPE(symbol[i].st_info) == STT_FUNC) {
+        if (ELF64_ST_TYPE(symbol[i].st_info) == STT_FUNC && pc >= symbol[i].st_value && pc < symbol[i].st_value + symbol[i].st_size) {
             func = strtab + symbol[i].st_name;
         }
     }
