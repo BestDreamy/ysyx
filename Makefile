@@ -43,7 +43,7 @@ _default:
 
 git:
 	git add .
-	git commit -m "Start itrace, mtrace and ftrace"
+	git commit -m "RV32E npc"
 	git push origin pa2
 
 .PHONY: .git_commit .clean_index _default git
