@@ -79,13 +79,14 @@ READELF   = $(CROSS_COMPILE)readelf
 INC_PATH += $(WORK_DIR)/include $(addsuffix /include/, $(addprefix $(AM_HOME)/, $(LIBS)))
 INCFLAGS += $(addprefix -I, $(INC_PATH))
 
+ARCH_H := arch/$(ARCH).h
 CFLAGS   += -O2 -MMD -Wall -Werror $(INCFLAGS) \
             -D__ISA__=\"$(ISA)\" -D__ISA_$(shell echo $(ISA) | tr a-z A-Z)__ \
             -D__ARCH__=$(ARCH) -D__ARCH_$(shell echo $(ARCH) | tr a-z A-Z | tr - _) \
             -D__PLATFORM__=$(PLATFORM) -D__PLATFORM_$(shell echo $(PLATFORM) | tr a-z A-Z | tr - _) \
-            -DARCH_H=\"arch/$(ARCH).h\" \
+            -DARCH_H=\"$(ARCH_H)\" \
             -fno-asynchronous-unwind-tables -fno-builtin -fno-stack-protector \
-            -Wno-main -U_FORTIFY_SOURCE
+            -Wno-main -U_FORTIFY_SOURCE -fvisibility=hidden
 CXXFLAGS +=  $(CFLAGS) -ffreestanding -fno-rtti -fno-exceptions
 ASFLAGS  += -MMD $(INCFLAGS)
 LDFLAGS  += -z noexecstack
@@ -94,7 +95,6 @@ LDFLAGS  += -z noexecstack
 
 ### Paste in arch-specific configurations (e.g., from `scripts/x86_64-qemu.mk`)
 -include $(AM_HOME)/scripts/$(ARCH).mk
-$(info $(ARCH))
 
 ### Fall back to native gcc/binutils if there is no cross compiler
 ifeq ($(wildcard $(shell which $(CC))),)
@@ -129,7 +129,7 @@ $(LIBS): %:
 	@$(MAKE) -s -C $(AM_HOME)/$* archive
 
 ### Rule (link): objects (`*.o`) and libraries (`*.a`) -> `IMAGE.elf`, the final ELF binary to be packed into image (ld)
-$(IMAGE).elf: $(OBJS) am $(LIBS)
+$(IMAGE).elf: $(OBJS) $(LIBS)
 	@echo + LD "->" $(IMAGE_REL).elf
 	@$(LD) $(LDFLAGS) -o $(IMAGE).elf --start-group $(LINKAGE) --end-group
 
@@ -146,7 +146,7 @@ $(ARCHIVE): $(OBJS)
 ### Build order control
 image: image-dep
 archive: $(ARCHIVE)
-image-dep: $(OBJS) am $(LIBS)
+image-dep: $(OBJS) $(LIBS)
 	@echo \# Creating image [$(ARCH)]
 .PHONY: image image-dep archive run $(LIBS)
 
