@@ -19,6 +19,7 @@
 #include <readline/history.h>
 #include "sdb.h"
 #include "memory/vaddr.h"
+#include "memory/paddr.h"
 
 static int is_batch_mode = false;
 
@@ -88,13 +89,14 @@ static int cmd_x(char *args) {
     return 0;
   }
   paddr_t addr = expr(str, success);
-  if (*success == false) assert(0);
+  if (*success == false || !in_pmem(addr)) assert(0);
   for (int i = 0; i < n; i ++) {
-    word_t data = vaddr_read(addr + i * 4, 4); 
     #ifdef ISA_riscv32
+    word_t data = vaddr_read(addr + i * 4, 4); 
     printf("0x%x:\t0x%x(%d)\n", addr + i * 4, data, data);
     #endif
     #ifdef ISA_riscv64
+    word_t data = vaddr_read(addr + i * 4, 4); 
     printf("0x%x:\t0x%lx(%ld)\n", addr + i * 4, data, data);
     #endif
   }
@@ -103,8 +105,14 @@ static int cmd_x(char *args) {
 
 static int cmd_p(char *args) {
   bool *success = &(bool){true};
+  #ifdef ISA_riscv64
+  word_t ans = expr(args, success);
+  printf("0x%x(%d)\n", ans, ans);
+  #endif
+  #ifdef ISA_riscv64
   word_t ans = expr(args, success);
   printf("0x%lx(%ld)\n", ans, ans);
+  #endif
   if (*success == false) assert(0);
   return 0;
 }

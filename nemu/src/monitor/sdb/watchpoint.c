@@ -77,7 +77,12 @@ void wp_display() {
   else {
     printf("Display watchpoints:\n");
     for(; ptr != NULL; ptr = ptr->next) {
+      #ifdef ISA_riscv32
+      printf("%d\t%s\t%d\n", ptr->NO, ptr->expr, ptr->old_val);
+      #endif
+      #ifdef ISA_riscv64
       printf("%d\t%s\t%ld\n", ptr->NO, ptr->expr, ptr->old_val);
+      #endif
     }
   }
 }
