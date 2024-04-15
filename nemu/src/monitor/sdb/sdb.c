@@ -91,7 +91,12 @@ static int cmd_x(char *args) {
   if (*success == false) assert(0);
   for (int i = 0; i < n; i ++) {
     word_t data = vaddr_read(addr + i * 4, 4); 
+    #ifdef ISA_riscv32
+    printf("0x%x:\t0x%x(%d)\n", addr + i * 4, data, data);
+    #endif
+    #ifdef ISA_riscv64
     printf("0x%x:\t0x%lx(%ld)\n", addr + i * 4, data, data);
+    #endif
   }
   return 0;
 }

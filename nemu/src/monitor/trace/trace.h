@@ -29,7 +29,7 @@ void itraceDisplay();
 
 
 // #define CONFIG_MTRACE 1
-void mtrace(char op, uint32 addr, uint64 data);
+void mtrace(char op, paddr_t addr, word_t data);
 void mtraceDisplay();
 
 // #define CONFIG_FTRACE 1
