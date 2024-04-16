@@ -24,8 +24,27 @@ const char *regs[] = {
 };
 
 void isa_reg_display() {
+  printf("Dsiplat registers:\n");
+  printf("pc\t0x%x(%d)\n", cpu.pc, cpu.pc);
+  for (int i = 0; i < ARRLEN(regs); i ++) {
+    int idx = check_reg_idx(i);
+    printf("%4s: 0x%08x(%010d)%c", regs[idx], gpr(idx), gpr(idx), i % 4 == 3? '\n': ' ');
+  }
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
-  return 0;
+  if (!(strcmp(s, "pc") && strcmp(s, "$pc") && strcmp(s, "PC") && strcmp(s, "$PC"))) {
+    return cpu.pc;
+  }
+
+  word_t ans = 0;
+  int i = 0;
+  for (; i < ARRLEN(regs); i ++) {
+    if (strcmp(s, regs[i]) == 0 || strcmp(s + 1, regs[i]) == 0) {
+      ans = gpr(i);
+      break;
+    }
+  }
+  if(i == ARRLEN(regs)) *success = false;
+  return ans;
 }
