@@ -18,8 +18,9 @@ wire[31: 0] inst;
         .pc_i(pc),
         .inst_o(inst)
     );
-import "DPI-C" function bit ebreak(int inst); //type: bit int
-always_comb if (ebreak(inst)) $finish();
+
+import "DPI-C" function bit halt(int inst); //type: bit int
+always_comb if (halt(inst)) $finish();
 
 wire[11: 0] opinfo;
 wire[ 9: 0] alu_info;

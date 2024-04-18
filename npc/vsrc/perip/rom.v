@@ -3,7 +3,7 @@ module rom (
     input wire[`ysyx_23060251_pc_bus] pc_i,
     output wire[`ysyx_23060251_inst_bus] inst_o
 );
-    // reg[7: 0] instMem[0: 4095]
+    // wire[7: 0] instMem[0: 4095]
     wire[`ysyx_23060251_rom_bus] instMem[`ysyx_23060251_rom_num];
 
     initial $readmemh("/home/bcoi/ysyx/npc/bin/inst.txt", instMem);
