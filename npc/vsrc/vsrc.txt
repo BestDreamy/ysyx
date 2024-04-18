@@ -1,0 +1,12 @@
+top.v
+alu.v
+exe.v
+genImm.v
+idu.v
+ifu.v
+mem.v
+pcReg.v
+regs.v
+wb.v
+ram.v
+rom.v
