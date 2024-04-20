@@ -6,6 +6,7 @@
 #include <assert.h>
 
 int main(int argc, char** argv) {
+    char *img_bin = argv[1];
     Vtop* dut = new Vtop;
 
     VerilatedFstC* tfp = new VerilatedFstC;

@@ -11,6 +11,9 @@
 !.gitignore
 !README.md
 !CMakeLists.txt
+!bin/**
+!csrc/**
+!vsrc/**
 build/
 .cache/
 .vscode/

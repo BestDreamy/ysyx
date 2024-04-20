@@ -13,12 +13,16 @@ CXX_FLAGS = $(addprefix -CFLAGS , $(CXX_INC_PATH))
 
 default: run
 
-BIN = $(abspath obj_dir/V$(TOP_MODULE))
+OBJ_DIR = obj_dir
+BIN = $(abspath $(OBJ_DIR)/V$(TOP_MODULE))
+IMG ?= inst.txt
+LOAD_IMG = bin/$(notdir $(IMG))
 
 run:
 	@echo "Verilator the project"
-	@$(VERILATOR) $(VERILATOR_FLAGS) $(VSRC) $(CXX_FLAGS) $(CSRC) 
-	@$(BIN) $(IMG)
+	cp $(IMG) $(LOAD_IMG)
+	@$(VERILATOR) $(VERILATOR_FLAGS) $(VSRC) $(CXX_FLAGS) $(CSRC)
+	$(BIN) $(abspath($(LOAD_IMG)))
 
 SIM = wave.fst
 
