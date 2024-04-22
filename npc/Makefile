@@ -5,6 +5,8 @@ VERILATOR_FLAGS = -cc --exe --build
 VERILATOR_FLAGS += $(VERILATOR_INC_PATH)
 VERILATOR_FLAGS += --trace-fst
 
+WORK_DIR = $(shell pwd)
+
 CSRC = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
 VSRC = -f $(shell find $(abspath ./vsrc) -name "vsrc.txt") 
 
