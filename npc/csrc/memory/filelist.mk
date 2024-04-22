@@ -1,0 +1,1 @@
+INC_PATH += $(NPC_HOME)/csrc/memory

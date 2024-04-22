@@ -2,8 +2,9 @@
 #define DPIC_H
 #include "macro.h"
 #include "isa.h"
+#include "paddr.h"
 
-extern "C" bool halt(uint32 inst);
-extern "C" uint32 fetch(paddr pc);
+extern "C" bool halt(uint32_t inst);
+extern "C" uint32_t fetch(paddr_t pc);
 
 #endif

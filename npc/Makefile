@@ -8,7 +8,9 @@ VERILATOR_FLAGS += --trace-fst
 CSRC = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
 VSRC = -f $(shell find $(abspath ./vsrc) -name "vsrc.txt") 
 
-CXX_INC_PATH = $(addprefix -I, $(abspath ./csrc/include))
+FILELIST_MK = $(shell find ./csrc -name filelist.mk)
+-include $(FILELIST_MK)
+CXX_INC_PATH = $(addprefix -I, $(INC_PATH))
 CXX_FLAGS = $(addprefix -CFLAGS , $(CXX_INC_PATH))
 
 default: run

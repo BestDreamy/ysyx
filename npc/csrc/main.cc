@@ -2,11 +2,12 @@
 #include "verilated_fst_c.h"
 #include "Vtop.h"
 #include "macro.h"
+#include "init.h"
 #include <stdlib.h>
 #include <assert.h>
 
 int main(int argc, char** argv) {
-    char *img_bin = argv[1];
+    load_image(argv[1]);
     Vtop* dut = new Vtop;
 
     VerilatedFstC* tfp = new VerilatedFstC;
