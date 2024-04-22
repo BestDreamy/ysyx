@@ -1,11 +1,11 @@
 #include "init.h"
+#include "macro.h"
+#include "debug.h"
+#include <stdio.h>
 
 uint64_t load_image(char* path) {
   FILE *fp = fopen(path, "rb");
-  if( fp == NULL ) {
-		printf( "Can not open inst file!\n" );
-		exit(1);
-  }
+  // Assert(fp != NULL, "Can not open inst file!\n");
   
   fseek(fp, 0, SEEK_END);
   size_t size = ftell(fp);
