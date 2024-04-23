@@ -9,4 +9,3 @@ pcReg.v
 regs.v
 wb.v
 ram.v
-rom.v

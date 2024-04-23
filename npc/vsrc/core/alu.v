@@ -20,70 +20,71 @@ module alu (
     /****************************************************************************************
                                             opcode
     ****************************************************************************************/
-    wire rv64_alu       = opinfo_i[`ysyx_23060251_opinfo_alu];
-    wire rv64_alui      = opinfo_i[`ysyx_23060251_opinfo_alui];
-    wire rv64_aluw      = opinfo_i[`ysyx_23060251_opinfo_aluw];
-    wire rv64_aluiw     = opinfo_i[`ysyx_23060251_opinfo_aluiw];
-    wire rv64_branch    = opinfo_i[`ysyx_23060251_opinfo_branch];
-    wire rv64_jal       = opinfo_i[`ysyx_23060251_opinfo_jal];
-    wire rv64_jalr      = opinfo_i[`ysyx_23060251_opinfo_jalr];
-    wire rv64_load      = opinfo_i[`ysyx_23060251_opinfo_load];
-    wire rv64_store     = opinfo_i[`ysyx_23060251_opinfo_store];
-    wire rv64_lui       = opinfo_i[`ysyx_23060251_opinfo_lui];
-    wire rv64_auipc     = opinfo_i[`ysyx_23060251_opinfo_auipc];
-    wire rv64_sys       = opinfo_i[`ysyx_23060251_opinfo_sys];
+    wire rv32_alu       = opinfo_i[`ysyx_23060251_opinfo_alu];
+    wire rv32_alui      = opinfo_i[`ysyx_23060251_opinfo_alui];
+    wire rv32_aluw      = opinfo_i[`ysyx_23060251_opinfo_aluw];
+    wire rv32_aluiw     = opinfo_i[`ysyx_23060251_opinfo_aluiw];
+    wire rv32_branch    = opinfo_i[`ysyx_23060251_opinfo_branch];
+    wire rv32_jal       = opinfo_i[`ysyx_23060251_opinfo_jal];
+    wire rv32_jalr      = opinfo_i[`ysyx_23060251_opinfo_jalr];
+    wire rv32_load      = opinfo_i[`ysyx_23060251_opinfo_load];
+    wire rv32_store     = opinfo_i[`ysyx_23060251_opinfo_store];
+    wire rv32_lui       = opinfo_i[`ysyx_23060251_opinfo_lui];
+    wire rv32_auipc     = opinfo_i[`ysyx_23060251_opinfo_auipc];
+    wire rv32_sys       = opinfo_i[`ysyx_23060251_opinfo_sys];
 
-    wire[`ysyx_23060251_xlen_bus] op1 = (rv64_jal | rv64_jalr | rv64_auipc)? pc_i
-                                      : (rv64_lui)? `ysyx_23060251_xlen'b0
+    wire[`ysyx_23060251_xlen_bus] op1 = (rv32_jal | rv32_jalr | rv32_auipc)? pc_i
+                                      : (rv32_lui)? `ysyx_23060251_xlen'b0
                                       : src1_i;
-    wire[`ysyx_23060251_xlen_bus] op2 = (rv64_alui | rv64_aluiw | rv64_lui | rv64_auipc)? imm_i
-                                      : (rv64_jalr | rv64_jal)? 4
+    wire[`ysyx_23060251_xlen_bus] op2 = (rv32_alui | rv32_aluiw | rv32_lui | rv32_auipc)? imm_i
+                                      : (rv32_jalr | rv32_jal)? 4
                                       : src2_i;
     /****************************************************************************************
                                             sel op
     ****************************************************************************************/
-    wire rv64_is_alu    = rv64_alu | rv64_alui | rv64_aluw | rv64_aluiw;
+    wire rv32_is_alu    = rv32_alu | rv32_alui | rv32_aluw | rv32_aluiw;
 
-    wire rv64_add_sel   = (rv64_is_alu & alu_i[`ysyx_23060251_alu_add])
-                        | (rv64_jal)
-                        | (rv64_jalr)
-                        | (rv64_lui)
-                        | (rv64_auipc);
-    wire rv64_sub_sel   = (rv64_is_alu & alu_i[`ysyx_23060251_alu_sub]);
-    wire rv64_xor_sel   = (rv64_is_alu & alu_i[`ysyx_23060251_alu_xor]);
-    wire rv64_or_sel    = (rv64_is_alu & alu_i[`ysyx_23060251_alu_or]);
-    wire rv64_and_sel   = (rv64_is_alu & alu_i[`ysyx_23060251_alu_and]);
-    wire rv64_sll_sel   = (rv64_is_alu & alu_i[`ysyx_23060251_alu_sll]);
-    wire rv64_srl_sel   = (rv64_is_alu & alu_i[`ysyx_23060251_alu_srl]);
-    wire rv64_sra_sel   = (rv64_is_alu & alu_i[`ysyx_23060251_alu_sra]);
-    wire rv64_slt_sel   = (rv64_is_alu & alu_i[`ysyx_23060251_alu_slt]);
-    wire rv64_sltu_sel  = (rv64_is_alu & alu_i[`ysyx_23060251_alu_sltu]);
+    wire rv32_add_sel   = (rv32_is_alu & alu_i[`ysyx_23060251_alu_add])
+                        | (rv32_jal)
+                        | (rv32_jalr)
+                        | (rv32_lui)
+                        | (rv32_auipc);
+    wire rv32_sub_sel   = (rv32_is_alu & alu_i[`ysyx_23060251_alu_sub]);
+    wire rv32_xor_sel   = (rv32_is_alu & alu_i[`ysyx_23060251_alu_xor]);
+    wire rv32_or_sel    = (rv32_is_alu & alu_i[`ysyx_23060251_alu_or]);
+    wire rv32_and_sel   = (rv32_is_alu & alu_i[`ysyx_23060251_alu_and]);
+    wire rv32_sll_sel   = (rv32_is_alu & alu_i[`ysyx_23060251_alu_sll]);
+    wire rv32_srl_sel   = (rv32_is_alu & alu_i[`ysyx_23060251_alu_srl]);
+    wire rv32_sra_sel   = (rv32_is_alu & alu_i[`ysyx_23060251_alu_sra]);
+    wire rv32_slt_sel   = (rv32_is_alu & alu_i[`ysyx_23060251_alu_slt]);
+    wire rv32_sltu_sel  = (rv32_is_alu & alu_i[`ysyx_23060251_alu_sltu]);
     /****************************************************************************************
                                             optype
     ****************************************************************************************/
-    wire rv64_is_aluw = rv64_aluw | rv64_aluiw;
-    wire[`ysyx_23060251_shamt_bus] rv64_shamt = ~rv64_is_aluw? op2[`ysyx_23060251_shamt_bus]
+    wire rv32_is_aluw = rv32_aluw | rv32_aluiw;
+    wire[`ysyx_23060251_shamt_bus] rv32_shamt = ~rv32_is_aluw? op2[`ysyx_23060251_shamt_bus]
                                               : {1'b0, op2[`ysyx_23060251_shamt - 2: 0]};
 
-    wire[`ysyx_23060251_xlen_bus] rv64_add_res   = op1 + op2;
-    wire[`ysyx_23060251_xlen_bus] rv64_sub_res   = op1 - op2;
-    wire[`ysyx_23060251_xlen_bus] rv64_xor_res   = op1 ^ op2;
-    wire[`ysyx_23060251_xlen_bus] rv64_or_res    = op1 | op2;
-    wire[`ysyx_23060251_xlen_bus] rv64_and_res   = op1 & op2;
-    wire[`ysyx_23060251_xlen_bus] rv64_sll_res   = op1 >> rv64_shamt;
-    wire[`ysyx_23060251_xlen_bus] rv64_srl_res   = op1 << rv64_shamt;
-    wire[`ysyx_23060251_xlen_bus] rv64_sra_res   = $signed(op1) >>> rv64_shamt;
-    wire[`ysyx_23060251_xlen_bus] rv64_slt_res   = {63'b0, $signed(op1) < $signed(op2)};
-    wire[`ysyx_23060251_xlen_bus] rv64_sltu_res  = {63'b0, op1 < op2};
+    wire[`ysyx_23060251_xlen_bus] rv32_add_res   = op1 + op2;
+    wire[`ysyx_23060251_xlen_bus] rv32_sub_res   = op1 - op2;
+    wire[`ysyx_23060251_xlen_bus] rv32_xor_res   = op1 ^ op2;
+    wire[`ysyx_23060251_xlen_bus] rv32_or_res    = op1 | op2;
+    wire[`ysyx_23060251_xlen_bus] rv32_and_res   = op1 & op2;
+    wire[`ysyx_23060251_xlen_bus] rv32_sll_res   = op1 >> rv32_shamt;
+    wire[`ysyx_23060251_xlen_bus] rv32_srl_res   = op1 << rv32_shamt;
+    wire[`ysyx_23060251_xlen_bus] rv32_sra_res   = $signed(op1) >>> rv32_shamt;
+    localparam ext_bool_res = `ysyx_23060251_xlen - 1;
+    wire[`ysyx_23060251_xlen_bus] rv32_slt_res   = {{ext_bool_res{1'b0}}, $signed(op1) < $signed(op2)};
+    wire[`ysyx_23060251_xlen_bus] rv32_sltu_res  = {{ext_bool_res{1'b0}}, op1 < op2};
 
-    assign res_o = ({`ysyx_23060251_xlen{rv64_add_sel}}  & rv64_add_res)
-                 | ({`ysyx_23060251_xlen{rv64_sub_sel}}  & rv64_sub_res)
-                 | ({`ysyx_23060251_xlen{rv64_xor_sel}}  & rv64_xor_res)
-                 | ({`ysyx_23060251_xlen{rv64_or_sel}}   & rv64_or_res)
-                 | ({`ysyx_23060251_xlen{rv64_and_sel}}  & rv64_and_res)
-                 | ({`ysyx_23060251_xlen{rv64_sll_sel}}  & rv64_sll_res)
-                 | ({`ysyx_23060251_xlen{rv64_srl_sel}}  & rv64_srl_res)
-                 | ({`ysyx_23060251_xlen{rv64_sra_sel}}  & rv64_sra_res)
-                 | ({`ysyx_23060251_xlen{rv64_slt_sel}}  & rv64_slt_res)
-                 | ({`ysyx_23060251_xlen{rv64_sltu_sel}} & rv64_sltu_res);
+    assign res_o = ({`ysyx_23060251_xlen{rv32_add_sel}}  & rv32_add_res)
+                 | ({`ysyx_23060251_xlen{rv32_sub_sel}}  & rv32_sub_res)
+                 | ({`ysyx_23060251_xlen{rv32_xor_sel}}  & rv32_xor_res)
+                 | ({`ysyx_23060251_xlen{rv32_or_sel}}   & rv32_or_res)
+                 | ({`ysyx_23060251_xlen{rv32_and_sel}}  & rv32_and_res)
+                 | ({`ysyx_23060251_xlen{rv32_sll_sel}}  & rv32_sll_res)
+                 | ({`ysyx_23060251_xlen{rv32_srl_sel}}  & rv32_srl_res)
+                 | ({`ysyx_23060251_xlen{rv32_sra_sel}}  & rv32_sra_res)
+                 | ({`ysyx_23060251_xlen{rv32_slt_sel}}  & rv32_slt_res)
+                 | ({`ysyx_23060251_xlen{rv32_sltu_sel}} & rv32_sltu_res);
 endmodule

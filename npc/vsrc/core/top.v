@@ -4,8 +4,8 @@ module top (
     input rst
 );
 
-wire[63: 0] pc;
-wire[31: 0] inst;
+wire[`ysyx_23060251_pc_bus] pc;
+wire[`ysyx_23060251_inst_bus] inst;
     pcReg ysyx_23060251_pcReg (
         .clk_i(clk),
         .rst_i(rst),
@@ -20,13 +20,13 @@ wire[31: 0] inst;
     );
 
 import "DPI-C" function bit halt(int inst); //type: bit int
-always_comb if (halt(inst)) $finish();
+    always_comb if (halt(inst)) $finish();
 
-wire[11: 0] opinfo;
-wire[ 9: 0] alu_info;
-wire[ 5: 0] branch_info;
-wire[ 6: 0] load_info;
-wire[ 3: 0] store_info;
+wire[`ysyx_23060251_opcode_bus] opinfo;
+wire[`ysyx_23060251_alu_bus] alu_info;
+wire[`ysyx_23060251_branch_bus] branch_info;
+wire[`ysyx_23060251_load_bus] load_info;
+wire[`ysyx_23060251_store_bus] store_info;
 wire[ 1: 0] sys_info;
 wire        wenReg;
 wire[ 4: 0] rd;

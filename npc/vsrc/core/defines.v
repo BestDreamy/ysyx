@@ -1,9 +1,9 @@
-`define ysyx_23060251_xlen 64
+`define ysyx_23060251_xlen 32
 `define ysyx_23060251_xlen_bus `ysyx_23060251_xlen - 1: 0
 `define ysyx_23060251_rst_enable  1
 `define ysyx_23060251_rst_disable 0
 
-`define ysyx_23060251_pc 64
+`define ysyx_23060251_pc 32
 `define ysyx_23060251_pc_bus `ysyx_23060251_pc - 1: 0
 // len(Register)
 `define ysyx_23060251_reg `ysyx_23060251_xlen
