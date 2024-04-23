@@ -22,19 +22,19 @@ wire[`ysyx_23060251_inst_bus] inst;
 import "DPI-C" function bit halt(int inst); //type: bit int
     always_comb if (halt(inst)) $finish();
 
-wire[`ysyx_23060251_opcode_bus] opinfo;
+wire[`ysyx_23060251_opinfo_bus] opinfo;
 wire[`ysyx_23060251_alu_bus] alu_info;
 wire[`ysyx_23060251_branch_bus] branch_info;
 wire[`ysyx_23060251_load_bus] load_info;
 wire[`ysyx_23060251_store_bus] store_info;
-wire[ 1: 0] sys_info;
+wire[`ysyx_23060251_sys_bus] sys_info;
 wire        wenReg;
-wire[ 4: 0] rd;
-wire[ 4: 0] rs1;
-wire[ 4: 0] rs2;
-wire[63: 0] src1;
-wire[63: 0] src2;
-wire[63: 0] imm;
+wire[`ysyx_23060251_rs_bus] rd;
+wire[`ysyx_23060251_rs_bus] rs1;
+wire[`ysyx_23060251_rs_bus] rs2;
+wire[`ysyx_23060251_reg_bus] src1;
+wire[`ysyx_23060251_reg_bus] src2;
+wire[`ysyx_23060251_imm_bus] imm;
     idu ysyx_23060251_idu (
         .inst_i(inst),
         .opinfo_o(opinfo),
@@ -67,7 +67,7 @@ wire[63: 0] imm;
         .rs2_i(rs2),
         .src2_o(src2)
     );
-wire[63: 0] res;
+wire[`ysyx_23060251_xlen_bus] res;
     exe ysyx_23060251_exe (
         .opinfo_i(opinfo),
         .alu_i(alu_info),
