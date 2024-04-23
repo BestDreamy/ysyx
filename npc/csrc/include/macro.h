@@ -1,5 +1,6 @@
 #ifndef MACRO_H
 #define MACRO_H
+#include "autoconfig.h"
 #include <stdint.h>
 #include <inttypes.h>
 

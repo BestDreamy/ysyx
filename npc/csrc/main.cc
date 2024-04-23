@@ -5,6 +5,8 @@
 #include "init.h"
 #include <stdlib.h>
 #include <assert.h>
+#include "isa.h"
+#include "paddr.h"
 
 int main(int argc, char** argv) {
     load_image(argv[1]);

@@ -1,6 +1,5 @@
 #ifndef PADDR_H
 #define PADDR_H
-#include "autoconfig.h"
 #include "macro.h"
 #include "isa.h"
 #define PMEM_LEFT  ((paddr_t)CONFIG_MBASE)
