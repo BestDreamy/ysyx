@@ -9,5 +9,7 @@ extern "C" bool halt(uint32_t inst) {
 
 extern "C" uint32_t fetch(paddr_t pc) {
     Assert(in_pmem(pc), "Out of bounds memory accsee!\n");
-    return paddr_read(pc, 4);
+    word_t inst = paddr_read(pc, 4);
+    printf("pc = " FMT_PADDR ": " FMT_WORD "\n", pc, inst);
+    return inst;
 }

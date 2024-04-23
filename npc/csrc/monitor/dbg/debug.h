@@ -6,7 +6,7 @@
 #include <iostream>
 #define Assert(cond, msg) \
     do { \
-        if (!cond) { \
+        if (!(cond)) { \
             assert_fail_msg(msg); \
         } \
         assert(cond); \

@@ -1,8 +1,8 @@
 #include "paddr.h"
 #include "debug.h"
 
-uint8_t* guest_to_host(paddr_t addr) { return pmem + addr - CONFIG_MSIZE; }
-paddr_t  host_to_guest(uint8_t* mem) { return  mem - pmem + CONFIG_MSIZE; }
+uint8_t* guest_to_host(paddr_t addr) { return pmem + addr - CONFIG_MBASE; }
+paddr_t  host_to_guest(uint8_t* mem) { return  mem - pmem + CONFIG_MBASE; }
 
 bool in_pmem(paddr_t addr) {
     return addr >= PMEM_LEFT && addr < PMEM_RIGHT;

@@ -2,5 +2,5 @@
 #define INIT_H
 #include <stdint.h>
 
-uint64_t load_image(char* path);
+uint64_t load_image(const char* path);
 #endif
