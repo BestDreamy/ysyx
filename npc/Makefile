@@ -22,11 +22,13 @@ BIN = $(abspath $(OBJ_DIR)/V$(TOP_MODULE))
 IMG ?= inst.txt
 LOAD_IMG = bin/$(notdir $(IMG))
 
-run:
+run: $(CSRC)
 	@echo "Verilator the project"
+	rm -rf $(OBJ_DIR)
 	cp $(IMG) $(LOAD_IMG)
 	@$(VERILATOR) $(VERILATOR_FLAGS) $(VSRC) $(CXX_FLAGS) $(CSRC)
-	$(BIN) $(abspath($(LOAD_IMG)))
+	@echo $(LOAD_IMG)
+	# $(BIN) $(abspath($(LOAD_IMG)))
 
 SIM = wave.fst
 

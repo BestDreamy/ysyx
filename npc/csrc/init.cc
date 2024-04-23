@@ -1,6 +1,7 @@
 #include "init.h"
 #include "macro.h"
 #include "debug.h"
+#include "paddr.h"
 #include <stdio.h>
 
 uint64_t load_image(char* path) {
