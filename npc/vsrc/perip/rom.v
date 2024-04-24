@@ -1,14 +1,8 @@
 module rom (
-    // input clk_i,
+    input wire rst_i,
     input wire[`ysyx_23060251_pc_bus] pc_i,
-    output wire[`ysyx_23060251_inst_bus] inst_o
+    output reg[`ysyx_23060251_inst_bus] inst_o
 );
-    // wire[7: 0] instMem[0: 4095]
-    wire[`ysyx_23060251_rom_bus] instMem[`ysyx_23060251_rom_num];
-
-    initial $readmemh("/home/bcoi/ysyx/npc/bin/inst.txt", instMem);
-
-// verilator lint_off WIDTH
-    assign inst_o = {instMem[pc_i], instMem[pc_i + 1], instMem[pc_i + 2], instMem[pc_i + 3]};
-// verilator lint_on WIDTH
+    import "DPI-C" function int fetch(int pc, bit rst_i);
+    always_comb inst_o = fetch(pc_i, rst_i);
 endmodule

@@ -13,7 +13,6 @@ wire[`ysyx_23060251_inst_bus] inst;
     );
 
     ifu ysyx_23060251_ifu (
-        .clk_i(clk),
         .rst_i(rst),
         .pc_i(pc),
         .inst_o(inst)
