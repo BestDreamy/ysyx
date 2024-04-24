@@ -43,7 +43,7 @@ _default:
 
 git:
 	git add .
-	git commit -m "RV32E npc"
+	git commit -m "Modify nemu difftest for ref"
 	git push origin pa2
 
 .PHONY: .git_commit .clean_index _default git
