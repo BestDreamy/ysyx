@@ -18,16 +18,29 @@
 #include <difftest-def.h>
 #include <memory/paddr.h>
 
+// npc as dut, nemu as ref
 __EXPORT void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
   if (direction == DIFFTEST_TO_REF) {
-    // dest <- src, n-bytes
+    // dest(ref) <- src, n-bytes
     memcpy(guest_to_host(addr), buf, n);
   }
   else assert(0);
 }
 
 __EXPORT void difftest_regcpy(void *dut, bool direction) {
-  assert(0);
+  CPU_state *p = (CPU_state*) dut;
+  if (direction == DIFFTEST_TO_REF) {
+    for (int i = 0; i < ARRLEN(cpu.gpr); i ++) {
+      cpu.gpr[i] = p->gpr[i];
+    }
+    cpu.pc = p->pc;
+  }
+  else {
+    for (int i = 0; i < ARRLEN(cpu.gpr); i ++) {
+      p->gpr[i] = cpu.gpr[i];
+    }
+    p->pc = cpu.pc;
+  }
 }
 
 __EXPORT void difftest_exec(uint64_t n) {

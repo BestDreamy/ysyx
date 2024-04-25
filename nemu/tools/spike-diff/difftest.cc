@@ -82,7 +82,7 @@ void sim_t::diff_memcpy(reg_t dest, void* src, size_t n) {
 }
 
 extern "C" {
-
+// spike as ref
 __EXPORT void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
   if (direction == DIFFTEST_TO_REF) {
     s->diff_memcpy(addr, buf, n);

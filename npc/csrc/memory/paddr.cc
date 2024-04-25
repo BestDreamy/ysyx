@@ -25,8 +25,8 @@ word_t pmem_read(void* addr, int len) {
 void pmem_write(void *addr, int len, word_t data) {
     switch (len) {
         case 1: *(uint8_t*) addr = data; break;
-        case 2: *(uint16_t*)addr; break;
-        case 4: *(uint32_t*)addr; break;
+        case 2: *(uint16_t*)addr = data; break;
+        case 4: *(uint32_t*)addr = data; break;
         IFDEF(CONFIG_ISA64, case 8: *(uint64_t*)addr = data; break;);
         default: Assert(0, "Incorrect memory access size!\n");
     }
