@@ -30,6 +30,7 @@ void welcome(int argc, char *argv[]) {
     Log("MTrace: %s", MUXDEF(CONFIG_MTRACE, ANSI_FMT(GREEN_TXT, "ON"), ANSI_FMT(RED_TXT, "OFF")));
     Log("FTrace: %s", MUXDEF(CONFIG_FTRACE, ANSI_FMT(GREEN_TXT, "ON"), ANSI_FMT(RED_TXT, "OFF")));
     Log("ETrace: %s", MUXDEF(CONFIG_ETRACE, ANSI_FMT(GREEN_TXT, "ON"), ANSI_FMT(RED_TXT, "OFF")));
+    Log("DiffTest: %s", MUXDEF(CONFIG_DIFFTEST, ANSI_FMT(GREEN_TXT, "ON"), ANSI_FMT(RED_TXT, "OFF")));
     printf("Welcome to %s-NPC!\n", ANSI_FMT(GREEN_TXT, "riscv32"));
 
     parse_args(argc, argv);
