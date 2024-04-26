@@ -2,7 +2,7 @@
 #define DEBUG_H
 #include "macro.h"
 #include <assert.h>
-#include <stdio.h>
+#include <iostream>
 #define Assert(cond, msg) \
     do { \
         if (!(cond)) { \
@@ -11,11 +11,11 @@
         assert(cond); \
     } while(0)
 
-#define dbg(x) std::cout << YELLOW_TXT << #x << ": " << x << '\n'
+#define dbg(x) std::cout << YELLOW_TXT << #x << ": " << x << '\n' << RESET_TXT
 
 #define Log(format, ...) \
     do { \
-        printf(ANSI_FMT("[%s:%d %s] " format, BLUE_TXT) "\n", \
+        printf(ANSI_FMT(BLUE_TXT, "[%s:%d %s] " format) "\n", \
         __FILE__, __LINE__, __func__, ## __VA_ARGS__); \
     } while(0)
 

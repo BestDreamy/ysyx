@@ -40,5 +40,5 @@ typedef int32_t  int32;
 #define WHITE_TXT       "\33[1;37m"
 #define UNDERLINE_TXT   "\033[4m"
 
-#define ANSI_FMT(fmt, str) str fmt RESET_TXT
+#define ANSI_FMT(fmt, str) fmt str RESET_TXT
 #endif

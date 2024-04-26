@@ -8,7 +8,8 @@
 #include "debug.h"
 
 int main(int argc, char** argv) {
-    load_image(argv[1]);
+    /* load_image(argv[1]); */
+    welcome(argc, argv);
     Vtop* dut = new Vtop;
 
     VerilatedFstC* tfp = new VerilatedFstC;
