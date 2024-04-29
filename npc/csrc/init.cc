@@ -2,7 +2,7 @@
 #include "macro.h"
 #include "debug.h"
 #include "paddr.h"
-#include "difftest.h"
+#include "dut.h"
 #include <cstddef>
 #include <stdio.h>
 #include <getopt.h>
@@ -10,6 +10,7 @@
 static char *img_file = NULL;
 static char *diff_so_file = NULL;
 static bool is_batch_mode = false;
+static int  difftest_port = 1234;
 
 uint64_t load_image() {
     Assert(img_file != NULL, "The binary file not found!\n");
@@ -36,7 +37,7 @@ void welcome(int argc, char *argv[]) {
     parse_args(argc, argv);
     size_t img_size = load_image();
 
-    IFDEF(CONFIG_DIFFTEST, init_difftest(diff_so_file));
+    IFDEF(CONFIG_DIFFTEST, init_difftest(diff_so_file, img_size, difftest_port));
 }
 
 int parse_args(int argc, char *argv[]) {
