@@ -3,22 +3,24 @@
 #include "Vtop.h"
 #include "macro.h"
 #include "init.h"
+#include "cpu.h"
 #include <stdlib.h>
 #include <assert.h>
 #include "debug.h"
 
-int main(int argc, char** argv) {
-    /* load_image(argv[1]); */
-    welcome(argc, argv);
-    Vtop* dut = new Vtop;
+Vtop* dut = NULL;
+VerilatedFstC* tfp = NULL;
 
-    VerilatedFstC* tfp = new VerilatedFstC;
+int main(int argc, char** argv) {
+    welcome(argc, argv);
+    dut = new Vtop;
+    tfp = new VerilatedFstC;
     Verilated::traceEverOn(true);
     dut->trace(tfp, 0);
     tfp->open("sim.fst");
 
     uint32 time_counter = 0;
-    dut->clk = 1; dut->rst = 1;
+    cpu_init();
     while (!Verilated::gotFinish() and time_counter < 50) {
         if (time_counter == 2) {
             dut->rst = 0;
