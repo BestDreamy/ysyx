@@ -18,7 +18,7 @@ wire[`ysyx_23060251_inst_bus] inst;
         .inst_o(inst)
     );
 
-import "DPI-C" function bit halt(int inst); //type: bit int
+    import "DPI-C" function bit halt(int inst); //type: bit int
     always_comb if (halt(inst)) $finish();
 
 wire[`ysyx_23060251_opinfo_bus] opinfo;

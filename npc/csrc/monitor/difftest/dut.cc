@@ -27,10 +27,10 @@ void init_difftest(const char *ref_so_file, long img_size, int port) {
     void (*ref_difftest_init)(int) = (void (*)(int))dlsym(handle, "difftest_init");
     assert(ref_difftest_init);
 
-    Log("Differential testing: %s", ANSI_FMT("ON", GREEN_TXT));
-    Log("The result of every instruction will be compared with %s. "
-        "This will help you a lot for debugging, but also significantly reduce the performance. "
-        "If it is not necessary, you can turn it off in autoconfig.", ref_so_file);
+    // Log("Differential testing: %s", ANSI_FMT("ON", GREEN_TXT));
+    // Log("The result of every instruction will be compared with %s. "
+    //     "This will help you a lot for debugging, but also significantly reduce the performance. "
+    //     "If it is not necessary, you can turn it off in autoconfig.", ref_so_file);
 
     ref_difftest_init(port);
     ref_difftest_memcpy(RESET_VECTOR, guest_to_host(RESET_VECTOR), img_size, DIFFTEST_TO_REF);

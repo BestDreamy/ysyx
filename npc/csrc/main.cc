@@ -10,6 +10,7 @@
 
 Vtop* dut = NULL;
 VerilatedFstC* tfp = NULL;
+uint32_t time_counter = 0;
 
 int main(int argc, char** argv) {
     welcome(argc, argv);
@@ -19,15 +20,12 @@ int main(int argc, char** argv) {
     dut->trace(tfp, 0);
     tfp->open("sim.fst");
 
-    uint32 time_counter = 0;
     cpu_init();
-    while (!Verilated::gotFinish() and time_counter < 50) {
+    while (time_counter < 50) {
         if (time_counter == 2) {
             dut->rst = 0;
         }
-        dut->clk = 1 - dut->clk;
-        dut->eval();
-        tfp->dump(time_counter ++);
+        exec_once();
     }
     tfp->close();
     delete dut;

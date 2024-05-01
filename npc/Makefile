@@ -15,7 +15,8 @@ DIFFTEST_MK = $(shell find ./csrc -name difftest.mk)
 -include $(FILELIST_MK)
 -include $(DIFFTEST_MK)
 CXX_INC_PATH = $(addprefix -I, $(INC_PATH))
-CXX_FLAGS = $(addprefix -CFLAGS , $(CXX_INC_PATH))
+CXX_FLAGS  = $(addprefix -CFLAGS , $(CXX_INC_PATH))
+CXX_FLAGS += $(addprefix -CFLAGS , -fpermissive)
 
 default: run
 
