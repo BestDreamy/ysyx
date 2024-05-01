@@ -15,8 +15,9 @@ DIFFTEST_MK = $(shell find ./csrc -name difftest.mk)
 -include $(FILELIST_MK)
 -include $(DIFFTEST_MK)
 CXX_INC_PATH = $(addprefix -I, $(INC_PATH))
-CXX_FLAGS  = $(addprefix -CFLAGS , $(CXX_INC_PATH))
-CXX_FLAGS += $(addprefix -CFLAGS , -fpermissive)
+CXX_FLAGS    = $(addprefix -CFLAGS , $(CXX_INC_PATH))
+CXX_FLAGS   += $(addprefix -CFLAGS , -fpermissive)
+LD_FLAGS     = $(addprefix -LDFLAGS , $(LIB))
 
 default: run
 
@@ -30,7 +31,7 @@ run: $(CSRC)
 	@echo "\033[0;36mVerilator the project\033[0m"
 	rm -rf $(OBJ_DIR)
 	cp $(IMG) $(LOAD_IMG)
-	@$(VERILATOR) $(VERILATOR_FLAGS) $(VSRC) $(CXX_FLAGS) $(CSRC)
+	@$(VERILATOR) $(VERILATOR_FLAGS) $(VSRC) $(CXX_FLAGS) $(LD_FLAGS) $(CSRC)
 	@echo "\033[0;35m$(ARGS)\033[0m"
 	$(BIN) $(ARGS)
 

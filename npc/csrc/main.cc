@@ -10,7 +10,7 @@
 
 Vtop* dut = NULL;
 VerilatedFstC* tfp = NULL;
-uint32_t time_counter = 0;
+uint32_t time_counter = TIME_RESET;
 
 int main(int argc, char** argv) {
     welcome(argc, argv);
@@ -21,12 +21,6 @@ int main(int argc, char** argv) {
     tfp->open("sim.fst");
 
     cpu_init();
-    while (time_counter < 50) {
-        if (time_counter == 2) {
-            dut->rst = 0;
-        }
-        exec_once();
-    }
     tfp->close();
     delete dut;
     return 0;

@@ -24,17 +24,15 @@ void itrace (paddr_t pc, uint32_t inst) {
 #define SCALE_STR(a, b) ({ for (int i = strlen(a); i < b; i ++) a[i] = ' '; a[b] = '\0'; a; })
 void itraceDisplay() {
     puts(BOLD_TXT "I-trace:" RESET_TXT);
-
+    char disas[32];
     for (int32_t i = 0; i < p; i ++) {
         const char *start = SEL_CURSOR;
-        char disas[32] = "disassemble";
-        // disassemble(disas, 32, iringbuf[i].pc, (uint8*)&iringbuf[i].inst, 4);
+        disassemble(disas, 32, iringbuf[i].pc, (uint8_t*)&iringbuf[i].inst, 4);
         printf("%s" FMT_PADDR ": %s\t%08x\n", start, iringbuf[i].pc, SCALE_STR(disas, 27), iringbuf[i].inst);
     }
     for (int32_t i = p; i < IRINGBUF && full; i ++) {
         const char *start = SEL_CURSOR;
-        char disas[32] = "disassemble";
-        // disassemble(disas, 32, iringbuf[i].pc, (uint8*)&iringbuf[i].inst, 4);
+        disassemble(disas, 32, iringbuf[i].pc, (uint8_t*)&iringbuf[i].inst, 4);
         printf("%s" FMT_PADDR ": %s\t%08x\n", start, iringbuf[i].pc, SCALE_STR(disas, 27), iringbuf[i].inst);
     }
 }

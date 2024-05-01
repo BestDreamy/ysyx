@@ -11,6 +11,8 @@ typedef struct {
 extern CPU_state npc_cpu;
 extern Vtop* dut;
 extern VerilatedFstC* tfp;
+#define FINISH_TIME 50
+#define TIME_RESET  0 
 extern uint32_t time_counter;
 
 void cpu_init();

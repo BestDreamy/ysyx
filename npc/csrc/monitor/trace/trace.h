@@ -9,6 +9,7 @@
 #include <string.h>
 #define SEL_CURSOR (cursor == i? "   --->  ": " \t ")
 
+extern "C" void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 void itrace (paddr_t pc, uint32_t inst);
 void itraceDisplay();
 
