@@ -16,7 +16,8 @@ DIFFTEST_MK = $(shell find ./csrc -name difftest.mk)
 -include $(DIFFTEST_MK)
 CXX_INC_PATH = $(addprefix -I, $(INC_PATH))
 CXX_FLAGS    = $(addprefix -CFLAGS , $(CXX_INC_PATH))
-CXX_FLAGS   += $(addprefix -CFLAGS , -fpermissive)
+# CXX_FLAGS   += $(addprefix -CFLAGS , -fpermissive)
+LIB         += -fsanitize=address -lasan
 LD_FLAGS     = $(addprefix -LDFLAGS , $(LIB))
 
 default: run

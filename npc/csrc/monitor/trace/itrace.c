@@ -27,12 +27,12 @@ void itraceDisplay() {
     char disas[32];
     for (int32_t i = 0; i < p; i ++) {
         const char *start = SEL_CURSOR;
-        disassemble(disas, 32, iringbuf[i].pc, (uint8_t*)&iringbuf[i].inst, 4);
+        disassemble(disas, sizeof(disas), iringbuf[i].pc, (uint8_t*)&iringbuf[i].inst, 4);
         printf("%s" FMT_PADDR ": %s\t%08x\n", start, iringbuf[i].pc, SCALE_STR(disas, 27), iringbuf[i].inst);
     }
     for (int32_t i = p; i < IRINGBUF && full; i ++) {
         const char *start = SEL_CURSOR;
-        disassemble(disas, 32, iringbuf[i].pc, (uint8_t*)&iringbuf[i].inst, 4);
+        disassemble(disas, sizeof(disas), iringbuf[i].pc, (uint8_t*)&iringbuf[i].inst, 4);
         printf("%s" FMT_PADDR ": %s\t%08x\n", start, iringbuf[i].pc, SCALE_STR(disas, 27), iringbuf[i].inst);
     }
 }
