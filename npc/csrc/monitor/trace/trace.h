@@ -13,7 +13,6 @@ extern "C" void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int
 void itrace (paddr_t pc, uint32_t inst);
 void itraceDisplay();
 
-// #define CONFIG_MTRACE 1
 void mtrace(char op, paddr_t addr, word_t data);
 void mtraceDisplay();
 #endif

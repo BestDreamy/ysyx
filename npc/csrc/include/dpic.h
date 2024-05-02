@@ -7,6 +7,5 @@
 #define NOP    0x13
 
 extern "C" bool halt(uint32_t inst);
-extern "C" uint32_t fetch(paddr_t pc, bool rst);
-
+extern "C" uint32_t fetch(bool clk, bool rst, paddr_t pc);
 #endif

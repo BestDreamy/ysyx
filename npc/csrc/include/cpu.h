@@ -15,6 +15,7 @@ extern VerilatedFstC* tfp;
 #define TIME_RESET  0 
 extern uint32_t time_counter;
 
+extern "C" void init_disasm(const char *triple);
 void cpu_init();
 void exec_once();
 void cpu_exec(uint64_t n);
