@@ -8,7 +8,6 @@
 #include <getopt.h>
 
 static char *img_file = NULL;
-extern size_t img_size;
 static char *diff_so_file = NULL;
 static bool is_batch_mode = false;
 static int  difftest_port = 1234;
@@ -36,7 +35,7 @@ void welcome(int argc, char *argv[]) {
     printf("Welcome to %s-NPC!\n", ANSI_FMT(GREEN_TXT, "riscv32"));
 
     parse_args(argc, argv);
-    img_size = load_image();
+    size_t img_size = load_image();
 
     IFDEF(CONFIG_DIFFTEST, init_difftest(diff_so_file, img_size, difftest_port));
 }
