@@ -1,6 +1,7 @@
 #include "cpu.h"
 #include "macro.h"
 #include "trace.h"
+#include "reg.h"
 
 CPU_state npc_cpu;
 
@@ -10,10 +11,13 @@ void cpu_init() {
     dut->clk = 1; dut->rst = 1; dut->eval();
     tfp->dump(time_counter ++);
     // Execute the first instruction
-    IFDEF(CONFIG_ITRACE, itrace(dut->pc, dut->inst));
     dut->rst = 0;
+    
+    IFDEF(CONFIG_ITRACE, itrace(dut->pc, dut->inst));
 
     init_disasm("riscv32-pc-linux-gnu");
+
+    isa_reg_display();
 
     cpu_exec(3);
 }
@@ -26,6 +30,7 @@ void exec_once() {
     dut->clk = 1 - dut->clk; // 1
     dut->eval();
     tfp->dump(time_counter ++);
+
     IFDEF(CONFIG_ITRACE, itrace(dut->pc, dut->inst));
 }
 
