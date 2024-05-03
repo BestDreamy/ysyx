@@ -33,6 +33,16 @@ void init_difftest(const char *ref_so_file, long img_size, int port) {
     //     "If it is not necessary, you can turn it off in autoconfig.", ref_so_file);
 
     ref_difftest_init(port);
+    // Copy the pmem(npc) to pmem(nemu)
     ref_difftest_memcpy(RESET_VECTOR, guest_to_host(RESET_VECTOR), img_size, DIFFTEST_TO_REF);
+    // Copy the  reg(npc) to  reg(nemu)
     ref_difftest_regcpy(&npc_cpu, DIFFTEST_TO_REF);
+}
+
+void difftest_step(paddr_t pc, paddr_t npc) {
+
+}
+
+bool checkregs(CPU_state ref, paddr_t pc) {
+    
 }
