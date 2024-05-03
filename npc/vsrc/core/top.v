@@ -1,11 +1,11 @@
 `include "defines"
 module top (
     input clk,
-    input rst
+    input rst,
+    output wire[`ysyx_23060251_pc_bus]   pc,
+    output wire[`ysyx_23060251_inst_bus] inst
 );
 
-wire[`ysyx_23060251_pc_bus] pc;
-wire[`ysyx_23060251_inst_bus] inst;
     pcReg ysyx_23060251_pcReg (
         .clk_i(clk),
         .rst_i(rst),
