@@ -43,7 +43,7 @@ _default:
 
 git:
 	git add .
-	git commit -m "Modify nemu difftest for ref"
+	git commit -m "Add difftest for npc"
 	git push origin pa2
 
 .PHONY: .git_commit .clean_index _default git
