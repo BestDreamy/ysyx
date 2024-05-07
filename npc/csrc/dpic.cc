@@ -13,7 +13,7 @@ extern "C" bool halt(uint32_t inst) {
 
 int cnt = 0;
 extern "C" uint32_t fetch(bool clk, bool rst, paddr_t pc) {
-    printf("clk=%d, rst=%d, pc=" FMT_PADDR "\n", clk, rst, pc);
+    // printf("clk=%d, rst=%d, pc=" FMT_PADDR "\n", clk, rst, pc);
     if (rst && pc == 0) { 
         return NOP;
     }

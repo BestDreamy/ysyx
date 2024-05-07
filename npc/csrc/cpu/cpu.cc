@@ -17,9 +17,9 @@ void cpu_init() {
 
     init_disasm("riscv32-pc-linux-gnu");
 
-    isa_reg_display();
+    // isa_reg_display();
 
-    cpu_exec(3);
+    cpu_exec(1);
 }
 
 void exec_once() {
