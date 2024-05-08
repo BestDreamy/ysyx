@@ -23,7 +23,7 @@ module regs (
     assign src2_o = gpr[rs2_i];
 
     always @(posedge clk_i) begin
-        if (rst_i == `ysyx_23060251_rst_disable && wen_i) begin
+        if (rst_i == `ysyx_23060251_rst_disable && wen_i && (rd_i != `ysyx_23060251_reg_zero)) begin
             gpr[rd_i] <= wdata_i;
         end
     end

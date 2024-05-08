@@ -5,7 +5,7 @@
 
 CPU_state npc_cpu;
 
-void cpu_init() {
+void cpu_init() { // exe the first instruction
     dut->clk = 0; dut->rst = 1; dut->eval();
     tfp->dump(time_counter ++);
     dut->clk = 1; dut->rst = 1; dut->eval();
@@ -17,9 +17,9 @@ void cpu_init() {
 
     init_disasm("riscv32-pc-linux-gnu");
 
-    // isa_reg_display();
+    isa_reg_display();
 
-    cpu_exec(1);
+    cpu_exec(4);
 }
 
 void exec_once() {
@@ -32,6 +32,8 @@ void exec_once() {
     tfp->dump(time_counter ++);
 
     IFDEF(CONFIG_ITRACE, itrace(dut->pc, dut->inst));
+
+    isa_reg_display();
 }
 
 void cpu_exec(uint64_t n) {

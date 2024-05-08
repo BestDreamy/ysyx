@@ -67,6 +67,7 @@ wire[`ysyx_23060251_imm_bus] imm;
         .rs2_i(rs2),
         .src2_o(src2)
     );
+    
 wire[`ysyx_23060251_xlen_bus] res;
     exe ysyx_23060251_exe (
         .opinfo_i(opinfo),

@@ -7,7 +7,7 @@
 `define ysyx_23060251_pc_bus `ysyx_23060251_pc - 1: 0
 // len(Register)
 `define ysyx_23060251_reg `ysyx_23060251_xlen
-`define ysyx_23060251_reg_num 32
+`define ysyx_23060251_reg_num  32
 // 63: 0
 `define ysyx_23060251_reg_bus `ysyx_23060251_reg  - 1: 0
 `define ysyx_23060251_imm `ysyx_23060251_xlen
@@ -33,6 +33,7 @@
 `define ysyx_23060251_opcode 7
 `define ysyx_23060251_opcode_bus `ysyx_23060251_opcode - 1: 0
 `define ysyx_23060251_rs     5
+`define ysyx_23060251_reg_zero 0
 `define ysyx_23060251_rs_bus `ysyx_23060251_rs - 1: 0
 `define ysyx_23060251_func3  3
 `define ysyx_23060251_func3_bus `ysyx_23060251_func3 - 1: 0

@@ -9,9 +9,18 @@ typedef struct {
     paddr_t pc;
 } CPU_state;
 extern CPU_state npc_cpu;
+
+enum { NEMU_RUNNING, NEMU_STOP, NEMU_END, NEMU_ABORT, NEMU_QUIT };
+
+typedef struct {
+  int state;
+  paddr_t halt_pc;
+} NPCState;
+extern NPCState npc_state;
+
 extern Vtop* dut;
 extern VerilatedFstC* tfp;
-#define FINISH_TIME 50
+#define FINISH_TIME 100
 #define TIME_RESET  0 
 extern uint32_t time_counter;
 
