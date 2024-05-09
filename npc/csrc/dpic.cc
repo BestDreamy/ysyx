@@ -25,7 +25,5 @@ extern "C" uint32_t fetch(bool clk, bool rst, paddr_t pc) {
 
 extern "C" void set_gpr_ptr(const svOpenArrayHandle gpr) {
     word_t* data = (word_t *)(((VerilatedDpiOpenVar*)gpr)->datap());
-    for (int i = 0; i < 32; i ++) {
-        npc_cpu.gpr[i] = data[i];
-    }
+    npc_cpu.gpr = data;
 }

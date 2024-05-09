@@ -5,7 +5,8 @@
 #include "paddr.h"
 #include "isa.h"
 typedef struct {
-    word_t gpr[32];
+    // word_t gpr[32];
+    word_t* gpr;
     paddr_t pc;
 } CPU_state;
 extern CPU_state npc_cpu;

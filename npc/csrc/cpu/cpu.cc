@@ -3,6 +3,7 @@
 #include "trace.h"
 #include "reg.h"
 #include "dut.h"
+#include "debug.h"
 
 CPU_state npc_cpu;
 
@@ -18,9 +19,11 @@ void cpu_init() { // exe the first instruction
 
     init_disasm("riscv32-pc-linux-gnu");
 
-    isa_reg_display();
+    npc_cpu.pc = dut->pc;
 
-    // difftest_step(npc_cpu.pc, npc_cpu.pc + 4);
+    // isa_reg_display();
+
+    difftest_step(npc_cpu.pc, npc_cpu.pc + 4);
 
     cpu_exec(4);
 }
@@ -36,9 +39,11 @@ void exec_once() {
 
     IFDEF(CONFIG_ITRACE, itrace(dut->pc, dut->inst));
 
-    isa_reg_display();
+    npc_cpu.pc = dut->pc;
 
-    // difftest_step(npc_cpu.pc, npc_cpu.pc + 4);
+    // isa_reg_display();
+
+    difftest_step(npc_cpu.pc, npc_cpu.pc + 4);
 }
 
 void cpu_exec(uint64_t n) {
