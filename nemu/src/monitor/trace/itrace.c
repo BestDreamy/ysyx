@@ -19,6 +19,9 @@ void itrace (uint64 pc, uint32 inst) {
     p = (p + 1) % IRINGBUF;
     cursor = (cursor + 1) % IRINGBUF;
     if (p == 0) full = 1;
+
+    void isa_reg_display();
+    // isa_reg_display();
 }
 
 #define SCALE_STR(a, b) ({ for (int i = strlen(a); i < b; i ++) a[i] = ' '; a[b] = '\0'; a; })

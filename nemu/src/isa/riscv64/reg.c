@@ -24,7 +24,7 @@ const char *regs[] = {
 };
 
 void isa_reg_display() {
-  printf("Dsiplat registers:\n");
+  printf("RV64-nemu registers:\n");
   printf("pc\t0x%lx(%ld)\n", cpu.pc, cpu.pc);
   for (int i = 0; i < ARRLEN(regs); i ++) {
     int idx = check_reg_idx(i);

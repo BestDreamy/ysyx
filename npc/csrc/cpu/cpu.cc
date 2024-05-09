@@ -23,7 +23,7 @@ void cpu_init() { // exe the first instruction
 
     // isa_reg_display();
 
-    difftest_step(npc_cpu.pc, npc_cpu.pc + 4);
+    // difftest_step(npc_cpu.pc, npc_cpu.pc + 4);
 
     cpu_exec(4);
 }
