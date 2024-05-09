@@ -37,6 +37,8 @@ void welcome(int argc, char *argv[]) {
     parse_args(argc, argv);
     size_t img_size = load_image();
 
+    // TODO();
+    
     IFDEF(CONFIG_DIFFTEST, init_difftest(diff_so_file, img_size, difftest_port));
 }
 
