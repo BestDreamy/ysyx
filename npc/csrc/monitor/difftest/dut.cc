@@ -40,6 +40,7 @@ void init_difftest(const char *ref_so_file, long img_size, int port) {
 }
 
 void difftest_step(paddr_t pc, paddr_t npc) {
+    Log("DiffTest Step");
     ref_difftest_exec(1);
 
     CPU_state *ref;
