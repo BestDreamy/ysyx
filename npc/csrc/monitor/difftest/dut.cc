@@ -2,6 +2,7 @@
 #include "debug.h"
 #include "paddr.h"
 #include "cpu.h"
+#include "sdb.h"
 #include <cstddef>
 #include <dlfcn.h>
 
