@@ -20,7 +20,6 @@
 
 // npc as dut, nemu as ref
 __EXPORT void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
-  // Log("mem");
   if (direction == DIFFTEST_TO_REF) {
     // dest(ref) <- src, n-bytes
     memcpy(guest_to_host(addr), buf, n);
@@ -29,24 +28,23 @@ __EXPORT void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction)
 }
 
 __EXPORT void difftest_regcpy(void *dut, bool direction) {
-  // Log("reg");
-  CPU_state *p = (CPU_state*) dut;
+  CPU_state *cpu_dut = (CPU_state*) dut;
   if (direction == DIFFTEST_TO_REF) {
     for (int i = 0; i < ARRLEN(cpu.gpr); i ++) {
-      cpu.gpr[i] = p->gpr[i];
+      cpu.gpr[i] = cpu_dut->gpr[i];
     }
-    cpu.pc = p->pc;
+    cpu.pc = cpu_dut->pc;
   }
   else {
     for (int i = 0; i < ARRLEN(cpu.gpr); i ++) {
-      p->gpr[i] = cpu.gpr[i];
+      cpu_dut->gpr[i] = cpu.gpr[i];
     }
-    p->pc = cpu.pc;
+    cpu_dut->pc = cpu.pc;
   }
+  isa_reg_display();
 }
 
 __EXPORT void difftest_exec(uint64_t n) {
-  // Log("exe!!!!!");
   cpu_exec(n);
 }
 
@@ -60,4 +58,5 @@ __EXPORT void difftest_init(int port) {
   init_mem();
   /* Perform ISA dependent initialization. */
   init_isa();
+  isa_reg_display();
 }

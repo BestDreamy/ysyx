@@ -7,10 +7,11 @@
 #include <stdio.h>
 #include <getopt.h>
 
-static char *img_file = NULL;
-static char *diff_so_file = NULL;
-static bool is_batch_mode = false;
-static int  difftest_port = 1234;
+char *img_file = NULL;
+char *diff_so_file = NULL;
+bool is_batch_mode = false;
+int  difftest_port = 1234;
+size_t img_size;
 
 uint64_t load_image() {
     Assert(img_file != NULL, "The binary file not found!\n");
@@ -35,11 +36,9 @@ void welcome(int argc, char *argv[]) {
     printf("Welcome to %s-NPC!\n", ANSI_FMT(GREEN_TXT, "riscv32"));
 
     parse_args(argc, argv);
-    size_t img_size = load_image();
+    img_size = load_image();
 
     // TODO();
-    
-    IFDEF(CONFIG_DIFFTEST, init_difftest(diff_so_file, img_size, difftest_port));
 }
 
 int parse_args(int argc, char *argv[]) {

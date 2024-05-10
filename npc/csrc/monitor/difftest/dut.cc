@@ -43,17 +43,17 @@ void difftest_step(paddr_t pc, paddr_t npc) {
     Log("DiffTest Step");
     ref_difftest_exec(1);
 
-    CPU_state *ref;
-    ref_difftest_regcpy(ref, DIFFTEST_TO_DUT);
+    CPU_state ref;
+    ref_difftest_regcpy(&ref, DIFFTEST_TO_DUT);
     checkregs(ref, pc);
 }
 
-bool checkregs(CPU_state *ref, paddr_t pc) {
+bool checkregs(CPU_state ref, paddr_t pc) {
     bool ok = 1;
     for (int i = 0; i < 32; i ++) {
-        if (ref->gpr[i] == npc_cpu.gpr[i]) continue;
+        if (ref.gpr[i] == npc_cpu.gpr[i]) continue;
         ok = 0;
     }
-    if (ref->pc != npc_cpu.pc) ok = 0;
+    if (ref.pc != npc_cpu.pc) ok = 0;
     return ok;
 }

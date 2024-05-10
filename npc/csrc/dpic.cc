@@ -11,7 +11,6 @@ extern "C" bool halt(uint32_t inst) {
     return (inst == EBREAK || inst == 0);
 }
 
-int cnt = 0;
 extern "C" uint32_t fetch(bool clk, bool rst, paddr_t pc) {
     // printf("clk=%d, rst=%d, pc=" FMT_PADDR "\n", clk, rst, pc);
     if (rst && pc == 0) { 
@@ -23,7 +22,8 @@ extern "C" uint32_t fetch(bool clk, bool rst, paddr_t pc) {
     return inst;
 }
 
+word_t* gprs = NULL;
 extern "C" void set_gpr_ptr(const svOpenArrayHandle gpr) {
     word_t* data = (word_t *)(((VerilatedDpiOpenVar*)gpr)->datap());
-    npc_cpu.gpr = data;
+    gprs = data;
 }

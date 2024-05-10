@@ -5,10 +5,10 @@
 #include "paddr.h"
 #include "isa.h"
 typedef struct {
-    // word_t gpr[32];
-    word_t* gpr;
+    word_t gpr[32];
     paddr_t pc;
 } CPU_state;
+extern word_t* gprs;
 extern CPU_state npc_cpu;
 
 enum { NEMU_RUNNING, NEMU_STOP, NEMU_END, NEMU_ABORT, NEMU_QUIT };
