@@ -5,6 +5,7 @@
 #include "dut.h"
 #include "debug.h"
 #include "init.h"
+#include "sdb.h"
 
 CPU_state npc_cpu;
 NPC_state npc_state = {.state = NPC_STOP, .halt_ret = 0};

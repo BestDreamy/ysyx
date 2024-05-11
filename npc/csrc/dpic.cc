@@ -2,7 +2,6 @@
 #include "debug.h"
 #include "trace.h"
 #include "cpu.h"
-#include "sdb.h"
 #include <stdio.h>
 #include <verilated.h>
 #include "verilated_dpi.h"
