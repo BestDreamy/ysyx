@@ -19,8 +19,8 @@ module top (
         .inst_o(inst)
     );
 
-    import "DPI-C" function bit halt(int inst); //type: bit int
-    always_comb if (halt(inst)) $finish();
+    import "DPI-C" function void halt(int inst); //type: bit int
+    always_comb halt(inst);
 
 wire[`ysyx_23060251_opinfo_bus] opinfo;
 wire[`ysyx_23060251_alu_bus] alu_info;

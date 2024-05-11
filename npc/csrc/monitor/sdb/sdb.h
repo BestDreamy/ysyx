@@ -1,10 +1,11 @@
 #ifndef SDB_H
 #define SDB_H
-enum { NEMU_RUNNING, NEMU_STOP, NEMU_END, NEMU_ABORT, NEMU_QUIT };
+enum { NPC_RUNNING, NPC_STOP, NPC_END, NPC_ABORT, NPC_QUIT };
 
 typedef struct {
   int state;
+  bool halt_ret;
   paddr_t halt_pc;
-} NPCState;
-extern NPCState npc_state;
+} NPC_state;
+extern NPC_state npc_state;
 #endif

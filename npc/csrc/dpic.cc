@@ -2,13 +2,15 @@
 #include "debug.h"
 #include "trace.h"
 #include "cpu.h"
+#include "sdb.h"
 #include <stdio.h>
 #include <verilated.h>
 #include "verilated_dpi.h"
 
 extern "C" bool halt(uint32_t inst) {
-    if (inst == EBREAK) puts("******************* ebreak triggered !!! ************************\n");
-    return (inst == EBREAK || inst == 0);
+    if (inst == EBREAK) {
+        
+    }
 }
 
 extern "C" uint32_t fetch(bool clk, bool rst, paddr_t pc) {

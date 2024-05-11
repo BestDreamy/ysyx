@@ -7,6 +7,7 @@
 #include "init.h"
 
 CPU_state npc_cpu;
+NPC_state npc_state = {.state = NPC_};
 
 void cpu_init() { // exe the first instruction
     dut->clk = 0; dut->rst = 1; dut->eval();
