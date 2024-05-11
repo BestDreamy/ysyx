@@ -31,8 +31,8 @@ typedef int32_t  int32;
 #define RESET_TXT       "\033[0m"
 #define BOLD_TXT        "\033[1m"
 #define BLACK_TXT       "\033[30m"
-#define RED_TXT         "\033[31m"
-#define GREEN_TXT       "\033[32m"
+#define RED_TXT         "\033[1;31m"
+#define GREEN_TXT       "\033[1;32m"
 #define YELLOW_TXT      "\033[33m"
 #define BLUE_TXT        "\033[34m"
 #define MAGENTA_TXT     "\33[1;35m"
@@ -40,5 +40,5 @@ typedef int32_t  int32;
 #define WHITE_TXT       "\33[1;37m"
 #define UNDERLINE_TXT   "\033[4m"
 
-#define ANSI_FMT(fmt, str) fmt str RESET_TXT
+#define ANSI_FMT(str, fmt) fmt str RESET_TXT
 #endif

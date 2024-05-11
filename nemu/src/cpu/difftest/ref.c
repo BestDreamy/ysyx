@@ -41,7 +41,6 @@ __EXPORT void difftest_regcpy(void *dut, bool direction) {
     }
     cpu_dut->pc = cpu.pc;
   }
-  isa_reg_display();
 }
 
 __EXPORT void difftest_exec(uint64_t n) {
@@ -58,5 +57,4 @@ __EXPORT void difftest_init(int port) {
   init_mem();
   /* Perform ISA dependent initialization. */
   init_isa();
-  isa_reg_display();
 }

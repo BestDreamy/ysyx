@@ -15,7 +15,7 @@
 
 #define Log(format, ...) \
     do { \
-        printf(ANSI_FMT(BLUE_TXT, "[%s:%d %s] " format) "\n", \
+        printf(ANSI_FMT("[%s:%d %s] " format, BLUE_TXT) "\n", \
         __FILE__, __LINE__, __func__, ## __VA_ARGS__); \
     } while(0)
 

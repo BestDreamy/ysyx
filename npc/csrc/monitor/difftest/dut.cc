@@ -3,6 +3,7 @@
 #include "paddr.h"
 #include "cpu.h"
 #include "sdb.h"
+#include "reg.h"
 #include <cstddef>
 #include <dlfcn.h>
 
@@ -41,12 +42,17 @@ void init_difftest(const char *ref_so_file, long img_size, int port) {
 }
 
 void difftest_step(paddr_t pc, paddr_t npc) {
-    Log("DiffTest Step");
     ref_difftest_exec(1);
 
     CPU_state ref;
     ref_difftest_regcpy(&ref, DIFFTEST_TO_DUT);
-    checkregs(ref, pc);
+
+    if(checkregs(ref, pc) == 0) {
+        npc_state.state = NPC_ABORT;
+        npc_state.halt_pc = pc;
+        isa_reg_display();
+        dump_gpr(ref);
+    }
 }
 
 bool checkregs(CPU_state ref, paddr_t pc) {
@@ -57,4 +63,12 @@ bool checkregs(CPU_state ref, paddr_t pc) {
     }
     if (ref.pc != npc_cpu.pc) ok = 0;
     return ok;
+}
+
+void dump_gpr(CPU_state ref) {
+  printf(BOLD_TXT "NEMU Registers:\n" RESET_TXT);
+  printf("pc\t0x%x(%d)\n", ref.pc, ref.pc);
+  for (int i = 0; i < 32; i ++) {
+    printf("%4s: 0x%08x(%010d)%c", regs[i], ref.gpr[i], ref.gpr[i], i % 4 == 3? '\n': ' ');
+  }
 }
