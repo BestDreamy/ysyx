@@ -66,9 +66,9 @@ bool checkregs(CPU_state ref, paddr_t pc) {
 }
 
 void dump_gpr(CPU_state ref) {
-  printf(BOLD_TXT "NEMU Registers:\n" RESET_TXT);
-  printf("pc\t0x%x(%d)\n", ref.pc, ref.pc);
-  for (int i = 0; i < 32; i ++) {
-    printf("%4s: 0x%08x(%010d)%c", regs[i], ref.gpr[i], ref.gpr[i], i % 4 == 3? '\n': ' ');
-  }
+    printf(BOLD_TXT "NEMU Registers:\n" RESET_TXT);
+    printf("pc\t0x%x(%d)\n", ref.pc, ref.pc);
+    for (int i = 0; i < 32; i ++) {
+        printf("%4s: 0x%08x(%010d)%c", regs[i], ref.gpr[i], ref.gpr[i], i % 4 == 3? '\n': ' ');
+    }
 }

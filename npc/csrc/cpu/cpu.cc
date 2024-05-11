@@ -26,9 +26,11 @@ void cpu_init() { // exe the first instruction
 
     // isa_reg_display();
 
+    npc_eval();
+
     IFDEF(CONFIG_DIFFTEST, init_difftest(diff_so_file, img_size, difftest_port));
 
-    cpu_exec(4);
+    cpu_exec(-1);
 }
 
 void exec_once() {
@@ -40,16 +42,20 @@ void exec_once() {
     dut->eval();
     tfp->dump(time_counter ++);
 
-    IFDEF(CONFIG_ITRACE, itrace(dut->pc, dut->inst));
-
     npc_cpu.pc = dut->pc;
 
+    IFDEF(CONFIG_ITRACE, itrace(dut->pc, dut->inst));
+
     // isa_reg_display();
+
+    npc_eval();
 
     IFDEF(CONFIG_DIFFTEST, difftest_step(npc_cpu.pc, npc_cpu.pc + 4));
 }
 
 void cpu_exec(uint64_t n) {
+    npc_state.state = NPC_RUNNING;
+    
     for (int i = 0; i < n - 1; i ++) {
         exec_once();
 
@@ -83,4 +89,11 @@ void cpu_exec(uint64_t n) {
 void ebreak() {
     npc_state.halt_ret = 1;
     npc_state.halt_pc = npc_cpu.pc;
+}
+
+void npc_eval() {
+    npc_cpu.pc = dut->pc;
+    for (int i = 0; i < 32; i ++) {
+        npc_cpu.gpr[i] = gprs[i];
+    }
 }
