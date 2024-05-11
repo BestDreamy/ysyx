@@ -7,7 +7,7 @@
 #include "init.h"
 
 CPU_state npc_cpu;
-NPC_state npc_state = {.state = NPC_};
+NPC_state npc_state = {.state = NPC_STOP, .halt_ret = 0};
 
 void cpu_init() { // exe the first instruction
     dut->clk = 0; dut->rst = 1; dut->eval();
@@ -55,4 +55,9 @@ void cpu_exec(uint64_t n) {
 
     IFDEF(CONFIG_ITRACE, itraceDisplay());
     IFDEF(CONFIG_MTRACE, mtraceDisplay());
+}
+
+void ebreak() {
+    npc_state.halt_ret = 1;
+    npc_state.halt_pc = npc_cpu.pc;
 }

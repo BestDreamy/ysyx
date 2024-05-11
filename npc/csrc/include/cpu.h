@@ -21,4 +21,5 @@ extern "C" void init_disasm(const char *triple);
 void cpu_init();
 void exec_once();
 void cpu_exec(uint64_t n);
+void ebreak();
 #endif

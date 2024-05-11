@@ -7,9 +7,9 @@
 #include <verilated.h>
 #include "verilated_dpi.h"
 
-extern "C" bool halt(uint32_t inst) {
+extern "C" void halt(uint32_t inst) {
     if (inst == EBREAK) {
-        
+        ebreak();
     }
 }
 
