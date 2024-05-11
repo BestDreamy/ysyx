@@ -1,5 +1,6 @@
 #ifndef SDB_H
 #define SDB_H
+// 指令执行， 暂停执行， 正常结束， 异常结束， XXXX
 enum { NPC_RUNNING, NPC_STOP, NPC_END, NPC_ABORT, NPC_QUIT };
 
 typedef struct {
