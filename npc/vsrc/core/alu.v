@@ -1,24 +1,20 @@
 module alu (
     input  wire[`ysyx_23060251_opinfo_bus] opinfo_i,
     input  wire[`ysyx_23060251_alu_bus] alu_i,
-    // input  wire[`ysyx_23060251_branch_bus] branch_i,
+    input  wire[`ysyx_23060251_branch_bus] branch_info_i,
 
     input  wire[`ysyx_23060251_pc_bus]  pc_i,
     input  wire[`ysyx_23060251_reg_bus] src1_i,
     input  wire[`ysyx_23060251_reg_bus] src2_i,
     input  wire[`ysyx_23060251_imm_bus] imm_i,
 
-    output wire[`ysyx_23060251_xlen_bus] res_o
+    output wire[`ysyx_23060251_xlen_bus] res_o,
+    output wire                          cnd_o
 );
-
-// 1. reg op reg
-// 2. reg op imm
-// 3. pc + 4 (jal, jalr)
-// 4. 0 + imm (lui)
-// 5. pc + imm (auipc)
 
     /****************************************************************************************
                                             opcode
+                                                -- ref: defines.v::45
     ****************************************************************************************/
     wire rv32_alu       = opinfo_i[`ysyx_23060251_opinfo_alu];
     wire rv32_alui      = opinfo_i[`ysyx_23060251_opinfo_alui];
@@ -36,7 +32,7 @@ module alu (
     wire[`ysyx_23060251_xlen_bus] op1 = (rv32_jal | rv32_jalr | rv32_auipc)? pc_i
                                       : (rv32_lui)? `ysyx_23060251_xlen'b0
                                       : src1_i;
-    wire[`ysyx_23060251_xlen_bus] op2 = (rv32_alui | rv32_aluiw | rv32_lui | rv32_auipc)? imm_i
+    wire[`ysyx_23060251_xlen_bus] op2 = (rv32_alui | rv32_aluiw | rv32_lui | rv32_auipc | rv32_load | rv32_store)? imm_i
                                       : (rv32_jalr | rv32_jal)? 4
                                       : src2_i;
     /****************************************************************************************
@@ -48,7 +44,9 @@ module alu (
                         | (rv32_jal)
                         | (rv32_jalr)
                         | (rv32_lui)
-                        | (rv32_auipc);
+                        | (rv32_auipc)
+                        | (rv32_load)
+                        | (rv32_store);
     wire rv32_sub_sel   = (rv32_is_alu & alu_i[`ysyx_23060251_alu_sub]);
     wire rv32_xor_sel   = (rv32_is_alu & alu_i[`ysyx_23060251_alu_xor]);
     wire rv32_or_sel    = (rv32_is_alu & alu_i[`ysyx_23060251_alu_or]);
@@ -87,4 +85,20 @@ module alu (
                  | ({`ysyx_23060251_xlen{rv32_sra_sel}}  & rv32_sra_res)
                  | ({`ysyx_23060251_xlen{rv32_slt_sel}}  & rv32_slt_res)
                  | ({`ysyx_23060251_xlen{rv32_sltu_sel}} & rv32_sltu_res);
+    /****************************************************************************************
+                                            branch
+    ****************************************************************************************/
+    wire beq  = branch_info_i[`ysyx_23060251_branch_beq];
+    wire bne  = branch_info_i[`ysyx_23060251_branch_bne];
+    wire blt  = branch_info_i[`ysyx_23060251_branch_blt];
+    wire bge  = branch_info_i[`ysyx_23060251_branch_bge];
+    wire bltu = branch_info_i[`ysyx_23060251_branch_bltu];
+    wire bgeu = branch_info_i[`ysyx_23060251_branch_bgeu];
+
+    assign cnd_o = (beq  & (op1 == op2)) |
+                   (bne  & (op1 != op2)) |
+                   (blt  & ($signed(op1) <  $signed(op2))) |
+                   (bge  & ($signed(op1) >= $signed(op2))) |
+                   (bltu & (op1  < op2)) |
+                   (bgeu & (op1 >= op2));
 endmodule

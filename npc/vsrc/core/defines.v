@@ -21,13 +21,17 @@
 `define ysyx_23060251_type_bus `ysyx_23060251_type - 1: 0
 
 // Memory for inst and data are byte
+`define ysyx_23060251_byte 8
+`define ysyx_23060251_half 16
+`define ysyx_23060251_word 32
+`define ysyx_23060251_double 64
 `define ysyx_23060251_mem_bus 7: 0
 // ROM
-`define ysyx_23060251_rom_num 4096
-`define ysyx_23060251_rom_bus `ysyx_23060251_mem_bus
-// RAM
-`define ysyx_23060251_ram_num 4096
-`define ysyx_23060251_ram_bus `ysyx_23060251_mem_bus
+// `define ysyx_23060251_rom_num 4096
+// `define ysyx_23060251_rom_bus `ysyx_23060251_mem_bus
+// RAM (0x0800_0000)
+`define ysyx_23060251_ram 28
+`define ysyx_23060251_ram_bus `ysyx_23060251_ram - 1: 0
 
 
 `define ysyx_23060251_opcode 7
@@ -42,17 +46,17 @@
 `define ysyx_23060251_shamt 6
 `define ysyx_23060251_shamt_bus `ysyx_23060251_shamt - 1: 0
 
-// 1. alu
-// 2. alui
-// 3. aluw
-// 4. aluiw
-// 5. branch
-// 6. jal
-// 7. jalr
-// 8. load
-// 9. store
-// 10.lui
-// 11.auipc
+// 1. alu      (reg op reg)
+// 2. alui     (reg op imm)
+// 3. aluw     (reg op reg)
+// 4. aluiw    (reg op reg)
+// 5. branch   (reg op reg)
+// 6. jal      ( pc  +   4)
+// 7. jalr     ( pc  +   4)
+// 8. load     (reg  + imm)
+// 9. store    (reg  + imm)
+// 10.lui      (  0  + imm)
+// 11.auipc    ( oc  + imm)
 // 12.sys
 `define ysyx_23060251_opinfo_alu    0
 `define ysyx_23060251_opinfo_alui   1

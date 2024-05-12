@@ -7,5 +7,5 @@ module rom (
     import "DPI-C" function int fetch(bit clk, bit rst, int pc);
     always_comb begin
         inst_o = fetch(clk_i, rst_i, pc_i);
-    end 
+    end
 endmodule

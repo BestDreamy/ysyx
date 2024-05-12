@@ -9,6 +9,7 @@ module top (
     pcReg ysyx_23060251_pcReg (
         .clk_i(clk),
         .rst_i(rst),
+        .npc_i(npc),
         .pc_o(pc)
     );
 
@@ -28,7 +29,7 @@ wire[`ysyx_23060251_branch_bus] branch_info;
 wire[`ysyx_23060251_load_bus] load_info;
 wire[`ysyx_23060251_store_bus] store_info;
 wire[`ysyx_23060251_sys_bus] sys_info;
-wire        wenReg;
+wire wenReg;
 wire[`ysyx_23060251_rs_bus] rd;
 wire[`ysyx_23060251_rs_bus] rs1;
 wire[`ysyx_23060251_rs_bus] rs2;
@@ -68,16 +69,22 @@ wire[`ysyx_23060251_imm_bus] imm;
         .src2_o(src2)
     );
     
+wire[`ysyx_23060251_pc_bus] npc;
 wire[`ysyx_23060251_xlen_bus] res;
+wire cnd;
+wire[`ysyx_23060251_ram_bus] addr;
     exe ysyx_23060251_exe (
         .opinfo_i(opinfo),
         .alu_i(alu_info),
-        .branch_i(branch_info),
+        .branch_info_i(branch_info),
         .pc_i(pc),
         .src1_i(src1),
         .src2_i(src2),
         .imm_i(imm),
-        .res_o(res)
+        .npc_o(npc),
+        .res_o(res),
+        .cnd_o(cnd),
+        .addr_o(addr)
     );
 
 /*

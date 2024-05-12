@@ -4,6 +4,8 @@ VERILATOR_INC_PATH = $(addprefix -I, $(abspath ./vsrc/core) $(abspath ./vsrc/per
 VERILATOR_FLAGS = -cc --exe --build
 VERILATOR_FLAGS += $(VERILATOR_INC_PATH)
 VERILATOR_FLAGS += --trace-fst
+VERILATOR_FLAGS += -Wno-WIDTHEXPAND
+VERILATOR_FLAGS += -Wno-WIDTHTRUNC
 
 WORK_DIR = $(shell pwd)
 
