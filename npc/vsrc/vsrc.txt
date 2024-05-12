@@ -4,8 +4,10 @@ exe.v
 genImm.v
 idu.v
 ifu.v
-mem.v
+lsu.v
 pcReg.v
 regs.v
 wb.v
 ram.v
+bjp.v
+agu.v
