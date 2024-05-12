@@ -10,6 +10,7 @@
 void (*ref_difftest_memcpy)(paddr_t addr, void *buf, size_t n, bool direction) = NULL;
 void (*ref_difftest_regcpy)(void *dut, bool direction) = NULL;
 void (*ref_difftest_exec)(uint64_t n) = NULL;
+CPU_state ref;
 
 void init_difftest(const char *ref_so_file, long img_size, int port) {
     Assert(ref_so_file != NULL, "Difftest file not found!");
@@ -44,14 +45,12 @@ void init_difftest(const char *ref_so_file, long img_size, int port) {
 void difftest_step(paddr_t pc, paddr_t npc) {
     ref_difftest_exec(1);
 
-    CPU_state ref;
     ref_difftest_regcpy(&ref, DIFFTEST_TO_DUT);
 
     if(checkregs(ref, pc) == 0) {
         npc_state.state = NPC_ABORT;
         npc_state.halt_pc = pc;
-        isa_reg_display();
-        dump_gpr(ref);
+        cmp_reg();
     }
 }
 
@@ -71,4 +70,9 @@ void dump_gpr(CPU_state ref) {
     for (int i = 0; i < 32; i ++) {
         printf("%4s: 0x%08x(%010d)%c", regs[i], ref.gpr[i], ref.gpr[i], i % 4 == 3? '\n': ' ');
     }
+}
+
+void cmp_reg () {
+    isa_reg_display();
+    dump_gpr(ref);
 }

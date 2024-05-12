@@ -178,7 +178,7 @@ module idu (
         rv64_store,  // S-type
         rv64_alui | rv64_aluiw | rv64_load | rv64_jalr // I-type
     };
-    genImm ysyx_23060251_genImm (
+    igu ysyx_23060251_igu (
         .imm_sel_i(rv64_imm_sel),
         .inst_i(inst_i),
         .imm_o(imm_o)

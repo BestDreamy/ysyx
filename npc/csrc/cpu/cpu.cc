@@ -24,13 +24,13 @@ void cpu_init() { // exe the first instruction
 
     npc_cpu.pc = dut->pc;
 
-    // isa_reg_display();
-
     npc_eval();
 
     IFDEF(CONFIG_DIFFTEST, init_difftest(diff_so_file, img_size, difftest_port));
 
-    cpu_exec(-1);
+    cpu_exec(13);
+
+    cmp_reg();
 }
 
 void exec_once() {
@@ -46,15 +46,13 @@ void exec_once() {
 
     IFDEF(CONFIG_ITRACE, itrace(dut->pc, dut->inst));
 
-    // isa_reg_display();
-
     npc_eval();
 
     IFDEF(CONFIG_DIFFTEST, difftest_step(npc_cpu.pc, npc_cpu.pc + 4));
 }
 
 void cpu_exec(uint64_t n) {
-    npc_state.state = NPC_RUNNING;
+    if (n > 1) npc_state.state = NPC_RUNNING;
     
     for (int i = 0; i < n - 1; i ++) {
         exec_once();
@@ -72,10 +70,6 @@ void cpu_exec(uint64_t n) {
 
         case NPC_END: case NPC_ABORT:
 
-            IFDEF(CONFIG_MTRACE, mtraceDisplay());
-
-            IFDEF(CONFIG_ITRACE, itraceDisplay());
-
             Log("npc: %s at pc = " FMT_WORD,
                 (npc_state.state == NPC_ABORT ? ANSI_FMT("ABORT", RED_TXT) :
                 (npc_state.halt_ret ? ANSI_FMT("HIT GOOD TRAP", GREEN_TXT) :
@@ -84,6 +78,10 @@ void cpu_exec(uint64_t n) {
 
         // case NPC_QUIT: statistic();
     }
+
+    IFDEF(CONFIG_MTRACE, mtraceDisplay());
+
+    IFDEF(CONFIG_ITRACE, itraceDisplay());
 }
 
 void ebreak() {

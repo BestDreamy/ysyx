@@ -73,7 +73,7 @@ wire[`ysyx_23060251_pc_bus] npc;
 wire[`ysyx_23060251_xlen_bus] res;
 wire cnd;
 wire[`ysyx_23060251_ram_bus] addr;
-    exe ysyx_23060251_exe (
+    exu ysyx_23060251_exu (
         .opinfo_i(opinfo),
         .alu_i(alu_info),
         .branch_info_i(branch_info),

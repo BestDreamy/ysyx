@@ -1,4 +1,4 @@
-module genImm (
+module igu (
     // I, S, B, U, J
     input  wire[`ysyx_23060251_type - 1: 1] imm_sel_i,
     input  wire[`ysyx_23060251_inst_bus]    inst_i,

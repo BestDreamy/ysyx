@@ -8,6 +8,6 @@ module pcReg (
         if (rst_i == `ysyx_23060251_rst_enable) 
             pc_o <= `ysyx_23060251_pc'h8000_0000;
         else 
-            pc_o <= pc_o + 4;
+            pc_o <= npc_i;
     end
 endmodule

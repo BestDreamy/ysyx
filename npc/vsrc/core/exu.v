@@ -1,4 +1,4 @@
-module exe (
+module exu (
     input  wire[`ysyx_23060251_opinfo_bus] opinfo_i,
     input  wire[`ysyx_23060251_alu_bus] alu_i,
     input  wire[`ysyx_23060251_branch_bus] branch_info_i,
