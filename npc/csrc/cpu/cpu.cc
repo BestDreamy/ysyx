@@ -28,9 +28,7 @@ void cpu_init() { // exe the first instruction
 
     IFDEF(CONFIG_DIFFTEST, init_difftest(diff_so_file, img_size, difftest_port));
 
-    cpu_exec(8);
-
-    cmp_reg();
+    cpu_exec(-1);
 }
 
 void exec_once() {
@@ -65,6 +63,12 @@ void cpu_exec(uint64_t n) {
         if (npc_state.state != NPC_RUNNING) break;
     }
 
+    IFDEF(CONFIG_MTRACE, mtraceDisplay());
+
+    IFDEF(CONFIG_ITRACE, itraceDisplay());
+
+    // cmp_reg();
+
     switch (npc_state.state) {
         case NPC_RUNNING: npc_state.state = NPC_STOP; break;
 
@@ -78,10 +82,6 @@ void cpu_exec(uint64_t n) {
 
         // case NPC_QUIT: statistic();
     }
-
-    IFDEF(CONFIG_MTRACE, mtraceDisplay());
-
-    IFDEF(CONFIG_ITRACE, itraceDisplay());
 }
 
 void ebreak() {

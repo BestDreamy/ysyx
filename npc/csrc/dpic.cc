@@ -7,7 +7,7 @@
 #include "verilated_dpi.h"
 
 extern "C" void halt(uint32_t inst) {
-    if (inst == EBREAK) {
+    if (inst == EBREAK || inst == 0x6f) {
         ebreak();
     }
 }
@@ -20,7 +20,7 @@ extern "C" uint32_t fetch(bool clk, bool rst, paddr_t pc) {
     }
     Assert(in_pmem(pc), "Out of bounds memory accsee!\n");
     uint32_t inst = paddr_read(pc, 4);
-    printf("pc = " FMT_PADDR ": " FMT_WORD " at %d\n", pc, inst, cnt ++);
+    // printf("pc = " FMT_PADDR ": " FMT_WORD " at %d\n", pc, inst, cnt ++);
     return inst;
 }
 
