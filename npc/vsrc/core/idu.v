@@ -10,12 +10,15 @@ module idu (
 
     output wire                         wenReg_o,
     output wire[`ysyx_23060251_rs_bus]  rd_o,
-
     output wire[`ysyx_23060251_rs_bus]  rs1_o,
     output wire[`ysyx_23060251_reg_bus] src1_o,
     output wire[`ysyx_23060251_rs_bus]  rs2_o,
     output wire[`ysyx_23060251_reg_bus] src2_o,
-    output wire[`ysyx_23060251_imm_bus] imm_o
+    output wire[`ysyx_23060251_imm_bus] imm_o,
+
+    output wire wenMem_o,
+    output wire renMem_o,
+    output wire[`ysyx_23060251_mask_bus] mask_o
 );
     wire[`ysyx_23060251_opcode_bus] opcode = inst_i[6: 0];
     assign                           rs1_o = inst_i[19: 15];
@@ -178,9 +181,20 @@ module idu (
         rv64_store,  // S-type
         rv64_alui | rv64_aluiw | rv64_load | rv64_jalr // I-type
     };
+    
     igu ysyx_23060251_igu (
         .imm_sel_i(rv64_imm_sel),
         .inst_i(inst_i),
         .imm_o(imm_o)
     );
+
+    /****************************************************************************************
+                                            mem
+    ****************************************************************************************/
+    assign renMem_o = rv64_load;
+    assign wenMem_o = rv64_store;
+    assign mask = ({`ysyx_23060251_mask{rv64_lb | rv64_lbu | rv64_sb}} & `ysyx_23060251_mask_byte)
+                | ({`ysyx_23060251_mask{rv64_lh | rv64_lhu | rv64_sh}} & `ysyx_23060251_mask_half)
+                | ({`ysyx_23060251_mask{rv64_lw | rv64_lwu | rv64_sw}} & `ysyx_23060251_mask_word)
+                | ({`ysyx_23060251_mask{rv64_ld            | rv64_sd}} & `ysyx_23060251_mask_double);
 endmodule

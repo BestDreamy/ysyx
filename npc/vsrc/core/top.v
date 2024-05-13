@@ -36,6 +36,9 @@ wire[`ysyx_23060251_rs_bus] rs2;
 wire[`ysyx_23060251_reg_bus] src1;
 wire[`ysyx_23060251_reg_bus] src2;
 wire[`ysyx_23060251_imm_bus] imm;
+wire wenMem;
+wire renMem;
+wire[`ysyx_23060251_mask_bus] mask;
     idu ysyx_23060251_idu (
         .inst_i(inst),
         .opinfo_o(opinfo),
@@ -50,7 +53,10 @@ wire[`ysyx_23060251_imm_bus] imm;
         .rs2_o(rs2),
         .src1_o(src1),
         .src2_o(src2),
-        .imm_o(imm)
+        .imm_o(imm),
+        .wenMem_o(wenMem),
+        .renMem_o(renMem),
+        .mask_o(mask)
     );
 
     /****************************************************************************************

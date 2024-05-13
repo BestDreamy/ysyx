@@ -25,13 +25,23 @@
 `define ysyx_23060251_half 16
 `define ysyx_23060251_word 32
 `define ysyx_23060251_double 64
-`define ysyx_23060251_mem_bus 7: 0
+// `define ysyx_23060251_mem_bus 7: 0
 // ROM
 // `define ysyx_23060251_rom_num 4096
 // `define ysyx_23060251_rom_bus `ysyx_23060251_mem_bus
 // RAM (0x0800_0000)
 `define ysyx_23060251_ram 28
 `define ysyx_23060251_ram_bus `ysyx_23060251_ram - 1: 0
+// 00 --> byte
+// 01 --> half
+// 10 --> word
+// 11 --> double
+`define ysyx_23060251_mask_byte 2'b00
+`define ysyx_23060251_mask_half 2'b01
+`define ysyx_23060251_mask_word 2'b10
+`define ysyx_23060251_mask_double 2'b11
+`define ysyx_23060251_mask 2
+`define ysyx_23060251_mask_bus `ysyx_23060251_mask - 1: 0
 
 
 `define ysyx_23060251_opcode 7
