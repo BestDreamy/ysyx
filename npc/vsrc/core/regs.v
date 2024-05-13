@@ -12,7 +12,9 @@ module regs (
     output wire[`ysyx_23060251_reg_bus] src2_o
 );
     reg[`ysyx_23060251_reg_bus] gpr[`ysyx_23060251_reg_num];
-    import "DPI-C" function void set_gpr_ptr(input bit[`ysyx_23060251_reg_bus] gpr[]);
+    import "DPI-C" function void set_gpr_ptr(
+        input bit[`ysyx_23060251_reg_bus] gpr[]
+    );
     initial begin
         // gpr[2] = 32'h80000000;
         // Set the [npc_cpu.gpr[i]=0]

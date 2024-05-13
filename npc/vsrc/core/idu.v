@@ -16,6 +16,7 @@ module idu (
     output wire[`ysyx_23060251_reg_bus] src2_o,
     output wire[`ysyx_23060251_imm_bus] imm_o,
 
+    output wire is_load_signed_o,
     output wire wenMem_o,
     output wire renMem_o,
     output wire[`ysyx_23060251_mask_bus] mask_o
@@ -181,7 +182,7 @@ module idu (
         rv64_store,  // S-type
         rv64_alui | rv64_aluiw | rv64_load | rv64_jalr // I-type
     };
-    
+
     igu ysyx_23060251_igu (
         .imm_sel_i(rv64_imm_sel),
         .inst_i(inst_i),
@@ -191,6 +192,7 @@ module idu (
     /****************************************************************************************
                                             mem
     ****************************************************************************************/
+    assign is_load_signed_o = (rv64_lbu | rv64_lhu | rv64_lwu);
     assign renMem_o = rv64_load;
     assign wenMem_o = rv64_store;
     assign mask = ({`ysyx_23060251_mask{rv64_lb | rv64_lbu | rv64_sb}} & `ysyx_23060251_mask_byte)

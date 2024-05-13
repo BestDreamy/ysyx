@@ -2,6 +2,7 @@
 #include "debug.h"
 #include "trace.h"
 #include "cpu.h"
+#include "paddr.h"
 #include <stdio.h>
 #include <verilated.h>
 #include "verilated_dpi.h"
@@ -28,4 +29,21 @@ word_t* gprs = NULL;
 extern "C" void set_gpr_ptr(const svOpenArrayHandle gpr) {
     word_t* data = (word_t *)(((VerilatedDpiOpenVar*)gpr)->datap());
     gprs = data;
+}
+
+extern "C" word_t vmem_read(bool is_signed, paddr_t addr, uint8_t mask) {
+    word_t data = paddr_read(addr, 1 << mask);
+    if (is_signed) {
+        int size_of_word = sizeof(data) * 8;
+        switch (mask) {
+            case 0: data = (data << size_of_word -  8) >> size_of_word -  8; break;
+            case 1: data = (data << size_of_word - 16) >> size_of_word - 16; break;
+            // lwu: rv64
+            case 2: data = (data << size_of_word - 32) >> size_of_word - 32; break;
+        }
+    }
+}
+
+extern "C" void vmem_write(paddr_t addr, uint8_t mask, word_t data) {
+    paddr_write(addr, 1 << mask, data);
 }

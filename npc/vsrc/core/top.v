@@ -20,7 +20,9 @@ module top (
         .inst_o(inst)
     );
 
-    import "DPI-C" function void halt(int inst); //type: bit int
+    import "DPI-C" function void halt(
+        int inst
+    );
     always_comb halt(inst);
 
 wire[`ysyx_23060251_opinfo_bus] opinfo;
@@ -36,6 +38,7 @@ wire[`ysyx_23060251_rs_bus] rs2;
 wire[`ysyx_23060251_reg_bus] src1;
 wire[`ysyx_23060251_reg_bus] src2;
 wire[`ysyx_23060251_imm_bus] imm;
+wire is_load_signed;
 wire wenMem;
 wire renMem;
 wire[`ysyx_23060251_mask_bus] mask;
@@ -54,6 +57,7 @@ wire[`ysyx_23060251_mask_bus] mask;
         .src1_o(src1),
         .src2_o(src2),
         .imm_o(imm),
+        .is_load_signed_o(is_load_signed),
         .wenMem_o(wenMem),
         .renMem_o(renMem),
         .mask_o(mask)
@@ -91,6 +95,19 @@ wire[`ysyx_23060251_ram_bus] addr;
         .res_o(res),
         .cnd_o(cnd),
         .addr_o(addr)
+    );
+
+// wire[`ysyx_23060251_xlen_bus] wdata;
+wire[`ysyx_23060251_xlen_bus] rdata;
+    lsu ysyx_23060251_lsu (
+        .clk_i(clk),
+        .is_load_signed_i(is_load_signed),
+        .wenMem_i(wenMem),
+        .renMem_i(renMem),
+        .addr_i(addr),
+        .mask_i(mask),
+        .wdata_i(src2),
+        .rdata_o(rdata)
     );
 
 /*
