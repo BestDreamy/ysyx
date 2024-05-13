@@ -195,8 +195,8 @@ module idu (
     assign is_load_signed_o = (rv64_lbu | rv64_lhu | rv64_lwu);
     assign renMem_o = rv64_load;
     assign wenMem_o = rv64_store;
-    assign mask = ({`ysyx_23060251_mask{rv64_lb | rv64_lbu | rv64_sb}} & `ysyx_23060251_mask_byte)
-                | ({`ysyx_23060251_mask{rv64_lh | rv64_lhu | rv64_sh}} & `ysyx_23060251_mask_half)
-                | ({`ysyx_23060251_mask{rv64_lw | rv64_lwu | rv64_sw}} & `ysyx_23060251_mask_word)
-                | ({`ysyx_23060251_mask{rv64_ld            | rv64_sd}} & `ysyx_23060251_mask_double);
+    assign mask_o = ({`ysyx_23060251_mask{rv64_lb | rv64_lbu | rv64_sb}} & `ysyx_23060251_mask_byte)
+                  | ({`ysyx_23060251_mask{rv64_lh | rv64_lhu | rv64_sh}} & `ysyx_23060251_mask_half)
+                  | ({`ysyx_23060251_mask{rv64_lw | rv64_lwu | rv64_sw}} & `ysyx_23060251_mask_word)
+                  | ({`ysyx_23060251_mask{rv64_ld            | rv64_sd}} & `ysyx_23060251_mask_double);
 endmodule

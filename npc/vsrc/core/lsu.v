@@ -12,19 +12,20 @@ module lsu (
 );
 
     import "DPI-C" function int vmem_read(
-        input bit is_signed,
-        input int addr,
-        input byte mask
+        bit is_signed,
+        int addr,
+        byte mask
         // output int data
     );
     always_comb begin
         if (renMem_i) rdata_o = vmem_read(is_load_signed_i, addr_i, mask_i);
+        else rdata_o = 0;
     end
 
     import "DPI-C" function void vmem_write(
-        input int addr,
-        input byte mask,
-        input int data
+        int addr,
+        byte mask,
+        int data
     );
     always @(posedge clk_i) begin
         if (wenMem_i) vmem_write(addr_i, mask_i, wdata_i);

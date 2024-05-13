@@ -7,14 +7,14 @@
 #include <verilated.h>
 #include "verilated_dpi.h"
 
-extern "C" void halt(uint32_t inst) {
+void halt(uint32_t inst) {
     if (inst == EBREAK || inst == 0x6f) {
         ebreak();
     }
 }
 
 static int cnt = 0;
-extern "C" uint32_t fetch(bool clk, bool rst, paddr_t pc) {
+uint32_t fetch(bool clk, bool rst, paddr_t pc) {
     // printf("clk=%d, rst=%d, pc=" FMT_PADDR "\n", clk, rst, pc);
     if (rst && pc == 0) { 
         return NOP;
@@ -26,12 +26,12 @@ extern "C" uint32_t fetch(bool clk, bool rst, paddr_t pc) {
 }
 
 word_t* gprs = NULL;
-extern "C" void set_gpr_ptr(const svOpenArrayHandle gpr) {
+void set_gpr_ptr(const svOpenArrayHandle gpr) {
     word_t* data = (word_t *)(((VerilatedDpiOpenVar*)gpr)->datap());
     gprs = data;
 }
 
-extern "C" word_t vmem_read(bool is_signed, paddr_t addr, uint8_t mask) {
+word_t vmem_read(bool is_signed, paddr_t addr, uint8_t mask) {
     word_t data = paddr_read(addr, 1 << mask);
     if (is_signed) {
         int size_of_word = sizeof(data) * 8;
@@ -42,8 +42,9 @@ extern "C" word_t vmem_read(bool is_signed, paddr_t addr, uint8_t mask) {
             case 2: data = (data << size_of_word - 32) >> size_of_word - 32; break;
         }
     }
+    return data;
 }
 
-extern "C" void vmem_write(paddr_t addr, uint8_t mask, word_t data) {
+void vmem_write(paddr_t addr, uint8_t mask, word_t data) {
     paddr_write(addr, 1 << mask, data);
 }

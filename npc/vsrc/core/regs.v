@@ -16,8 +16,7 @@ module regs (
         input bit[`ysyx_23060251_reg_bus] gpr[]
     );
     initial begin
-        // gpr[2] = 32'h80000000;
-        // Set the [npc_cpu.gpr[i]=0]
+        // Set the npc_cpu.gpr[i] to 0
         set_gpr_ptr(gpr);
     end
 
