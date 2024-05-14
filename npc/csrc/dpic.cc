@@ -39,12 +39,14 @@ word_t vaddr_read(bool is_signed, paddr_t addr, uint8_t mask) {
             case 0: data = (data << size_of_word -  8) >> size_of_word -  8; break;
             case 1: data = (data << size_of_word - 16) >> size_of_word - 16; break;
             // lwu: rv64
-            case 2: data = (data << size_of_word - 32) >> size_of_word - 32; break;
+            IFDEF(CONFIG_ISA64, case 2: data = (data << size_of_word - 32) >> size_of_word - 32; break;);
         }
     }
+    IFDEF(CONFIG_MTRACE, mtrace('r', addr, data));
     return data;
 }
 
 void vaddr_write(paddr_t addr, uint8_t mask, word_t data) {
+    IFDEF(CONFIG_MTRACE, mtrace('w', addr, data));
     paddr_write(addr, 1 << mask, data);
 }
