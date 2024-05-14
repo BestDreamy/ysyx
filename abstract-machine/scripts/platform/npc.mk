@@ -20,6 +20,7 @@ image: $(IMAGE).elf
 	@echo + OBJCOPY "->" $(IMAGE_REL).bin
 	@$(OBJCOPY) -S --set-section-flags .bss=alloc,contents -O binary $(IMAGE).elf $(IMAGE).bin
 
+# 启动 DiffTest 时，ref 和 dut 使用同一个 .bin 文件
 DIFF_IMAGE = $(subst npc,nemu,$(IMAGE))
 run: image
 	$(MAKE) -C $(NPC_HOME) run IMG=$(DIFF_IMAGE).bin
