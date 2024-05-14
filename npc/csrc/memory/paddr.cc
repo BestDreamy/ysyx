@@ -33,14 +33,12 @@ void pmem_write(void *addr, int len, word_t data) {
 }
 
 word_t paddr_read(paddr_t addr, int len) {
-    dbg(addr);
     Assert(in_pmem(addr), "Out of bounds memory accsee!\n");
     word_t data = pmem_read(guest_to_host(addr), len);
     return data;
 }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
-    dbg(addr);
     Assert(in_pmem(addr), "Out of bounds memory accsee!\n");
     pmem_write(guest_to_host(addr), len, data);
 }

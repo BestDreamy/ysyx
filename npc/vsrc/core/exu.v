@@ -10,8 +10,7 @@ module exu (
 
     output wire[`ysyx_23060251_pc_bus]   npc_o,
     output wire[`ysyx_23060251_xlen_bus] res_o,
-    output wire                          cnd_o,
-    output wire[`ysyx_23060251_ram_bus]  addr_o
+    output wire                          cnd_o
 );
 
     alu ysyx_23060251_alu (
@@ -37,11 +36,11 @@ module exu (
         .npc_o(npc_o)
     );
 
-    agu ysyx_23060251_agu (
-        .is_load_i(opinfo_i[`ysyx_23060251_opinfo_load]),
-        .is_store_i(opinfo_i[`ysyx_23060251_opinfo_store]),
-        .src1_i(src1_i),
-        .imm_i(imm_i),
-        .addr_o(addr_o)
-    );
+    // agu ysyx_23060251_agu (
+    //     .is_load_i(opinfo_i[`ysyx_23060251_opinfo_load]),
+    //     .is_store_i(opinfo_i[`ysyx_23060251_opinfo_store]),
+    //     .src1_i(src1_i),
+    //     .imm_i(imm_i),
+    //     .addr_o(addr_o)
+    // );
 endmodule

@@ -25,13 +25,10 @@
 `define ysyx_23060251_half 16
 `define ysyx_23060251_word 32
 `define ysyx_23060251_double 64
-// `define ysyx_23060251_mem_bus 7: 0
-// ROM
-// `define ysyx_23060251_rom_num 4096
-// `define ysyx_23060251_rom_bus `ysyx_23060251_mem_bus
+
 // RAM (0x0800_0000)
-`define ysyx_23060251_ram 28
-`define ysyx_23060251_ram_bus `ysyx_23060251_ram - 1: 0
+// `define ysyx_23060251_ram 28
+// `define ysyx_23060251_ram_bus `ysyx_23060251_ram - 1: 0
 // 00 --> byte
 // 01 --> half
 // 10 --> word

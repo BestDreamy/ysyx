@@ -77,7 +77,6 @@ wire[`ysyx_23060251_mask_bus] mask;
 wire[`ysyx_23060251_pc_bus] npc;
 wire[`ysyx_23060251_xlen_bus] res;
 wire cnd;
-wire[`ysyx_23060251_ram_bus] addr;
     exu ysyx_23060251_exu (
         .opinfo_i(opinfo),
         .alu_i(alu_info),
@@ -88,8 +87,7 @@ wire[`ysyx_23060251_ram_bus] addr;
         .imm_i(imm),
         .npc_o(npc),
         .res_o(res),
-        .cnd_o(cnd),
-        .addr_o(addr)
+        .cnd_o(cnd)
     );
 
 // wire[`ysyx_23060251_xlen_bus] wdata;
@@ -99,7 +97,7 @@ wire[`ysyx_23060251_xlen_bus] rdata;
         .is_load_signed_i(is_load_signed),
         .wenMem_i(wenMem),
         .renMem_i(renMem),
-        .addr_i(addr),
+        .addr_i(res),
         .mask_i(mask),
         .wdata_i(src2),
         .rdata_o(rdata)
