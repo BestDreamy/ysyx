@@ -11,23 +11,22 @@ module lsu (
     output  reg[`ysyx_23060251_xlen_bus] rdata_o
 );
 
-    import "DPI-C" function int vmem_read(
+    import "DPI-C" function int vaddr_read(
         bit is_signed,
         int addr,
         byte mask
-        // output int data
     );
     always_comb begin
-        if (renMem_i) rdata_o = vmem_read(is_load_signed_i, addr_i, mask_i);
+        if (renMem_i) rdata_o = vaddr_read(is_load_signed_i, addr_i, mask_i);
         else rdata_o = 0;
     end
 
-    import "DPI-C" function void vmem_write(
+    import "DPI-C" function void vaddr_write(
         int addr,
         byte mask,
         int data
     );
     always @(posedge clk_i) begin
-        if (wenMem_i) vmem_write(addr_i, mask_i, wdata_i);
+        if (wenMem_i) vaddr_write(addr_i, mask_i, wdata_i);
     end
 endmodule

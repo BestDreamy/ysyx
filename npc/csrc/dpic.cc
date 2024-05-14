@@ -31,7 +31,7 @@ void set_gpr_ptr(const svOpenArrayHandle gpr) {
     gprs = data;
 }
 
-word_t vmem_read(bool is_signed, paddr_t addr, uint8_t mask) {
+word_t vaddr_read(bool is_signed, paddr_t addr, uint8_t mask) {
     word_t data = paddr_read(addr, 1 << mask);
     if (is_signed) {
         int size_of_word = sizeof(data) * 8;
@@ -45,6 +45,6 @@ word_t vmem_read(bool is_signed, paddr_t addr, uint8_t mask) {
     return data;
 }
 
-void vmem_write(paddr_t addr, uint8_t mask, word_t data) {
+void vaddr_write(paddr_t addr, uint8_t mask, word_t data) {
     paddr_write(addr, 1 << mask, data);
 }

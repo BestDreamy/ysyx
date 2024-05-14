@@ -12,4 +12,9 @@ module ifu (
         .inst_o(inst_o)
     );
 
+    import "DPI-C" function void halt(
+        int inst
+    );
+    always_comb halt(inst_o);
+
 endmodule

@@ -20,11 +20,6 @@ module top (
         .inst_o(inst)
     );
 
-    import "DPI-C" function void halt(
-        int inst
-    );
-    always_comb halt(inst);
-
 wire[`ysyx_23060251_opinfo_bus] opinfo;
 wire[`ysyx_23060251_alu_bus] alu_info;
 wire[`ysyx_23060251_branch_bus] branch_info;

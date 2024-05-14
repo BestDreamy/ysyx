@@ -28,7 +28,7 @@ void cpu_init() { // exe the first instruction
 
     IFDEF(CONFIG_DIFFTEST, init_difftest(diff_so_file, img_size, difftest_port));
 
-    cpu_exec(10);
+    cpu_exec(-1);
 }
 
 void exec_once() {

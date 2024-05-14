@@ -1,14 +1,1 @@
 top.v
-alu.v
-exu.v
-igu.v
-idu.v
-ifu.v
-lsu.v
-pcReg.v
-regs.v
-wb.v
-ram.v
-bjp.v
-agu.v
-rom.v
