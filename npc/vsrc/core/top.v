@@ -66,7 +66,9 @@ wire[`ysyx_23060251_mask_bus] mask;
         .rst_i(rst),
         .wen_i(wenReg),
         .rd_i(rd),
-        .wdata_i(res),
+        .e_wdata_i(res),
+        .is_load_i(renMem),
+        .m_wdata_i(rdata),
 
         .rs1_i(rs1),
         .src1_o(src1),

@@ -8,7 +8,6 @@
 #include "sdb.h"
 
 CPU_state npc_cpu;
-NPC_state npc_state = {.state = NPC_STOP, .halt_ret = 0};
 
 void cpu_init() { // exe the first instruction
     dut->clk = 0; dut->rst = 1; dut->eval();

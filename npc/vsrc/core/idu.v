@@ -45,7 +45,7 @@ module idu (
     wire rv64_sys       = (opcode == 7'b11_100_11);
 
     assign wenReg_o = ~(opinfo_o[`ysyx_23060251_opinfo_branch] | opinfo_o[`ysyx_23060251_opinfo_store]
-                       |opinfo_o[`ysyx_23060251_opinfo_sys]);
+                    |   opinfo_o[`ysyx_23060251_opinfo_sys]);
     /****************************************************************************************
                                             optype
     ****************************************************************************************/
@@ -192,7 +192,7 @@ module idu (
     /****************************************************************************************
                                             mem
     ****************************************************************************************/
-    assign is_load_signed_o = (rv64_lbu | rv64_lhu | rv64_lwu);
+    assign is_load_signed_o = ~(rv64_lbu | rv64_lhu | rv64_lwu);
     assign renMem_o = rv64_load;
     assign wenMem_o = rv64_store;
     assign mask_o = ({`ysyx_23060251_mask{rv64_lb | rv64_lbu | rv64_sb}} & `ysyx_23060251_mask_byte)

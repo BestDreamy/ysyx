@@ -4,7 +4,9 @@ module regs (
 
     input  wire wen_i,
     input  wire[`ysyx_23060251_rs_bus]  rd_i,
-    input  wire[`ysyx_23060251_reg_bus] wdata_i,
+    input  wire[`ysyx_23060251_reg_bus] e_wdata_i,
+    input  wire is_load_i,
+    input  wire[`ysyx_23060251_xlen_bus] m_wdata_i,
 
     input  wire[`ysyx_23060251_rs_bus]  rs1_i,
     input  wire[`ysyx_23060251_rs_bus]  rs2_i,
@@ -25,7 +27,8 @@ module regs (
 
     always @(posedge clk_i) begin
         if (rst_i == `ysyx_23060251_rst_disable && wen_i && (rd_i != `ysyx_23060251_reg_zero)) begin
-            gpr[rd_i] <= wdata_i;
+            if (is_load_i) gpr[rd_i] <= m_wdata_i;
+            else gpr[rd_i] <= e_wdata_i;
         end
     end
 endmodule
