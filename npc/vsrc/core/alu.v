@@ -68,8 +68,8 @@ module alu (
     wire[`ysyx_23060251_xlen_bus] rv32_xor_res   = op1 ^ op2;
     wire[`ysyx_23060251_xlen_bus] rv32_or_res    = op1 | op2;
     wire[`ysyx_23060251_xlen_bus] rv32_and_res   = op1 & op2;
-    wire[`ysyx_23060251_xlen_bus] rv32_sll_res   = op1 >> rv32_shamt;
-    wire[`ysyx_23060251_xlen_bus] rv32_srl_res   = op1 << rv32_shamt;
+    wire[`ysyx_23060251_xlen_bus] rv32_sll_res   = op1 << rv32_shamt;
+    wire[`ysyx_23060251_xlen_bus] rv32_srl_res   = op1 >> rv32_shamt;
     wire[`ysyx_23060251_xlen_bus] rv32_sra_res   = $signed(op1) >>> rv32_shamt;
     localparam ext_bool_res = `ysyx_23060251_xlen - 1;
     wire[`ysyx_23060251_xlen_bus] rv32_slt_res   = {{ext_bool_res{1'b0}}, $signed(op1) < $signed(op2)};

@@ -90,6 +90,9 @@
 // 8. sra
 // 9. slt
 // 10.sltu
+// 11.mul
+// 12.div
+// 13.rem
 `define ysyx_23060251_alu_add  0
 `define ysyx_23060251_alu_sub  1
 `define ysyx_23060251_alu_xor  2
@@ -100,7 +103,10 @@
 `define ysyx_23060251_alu_sra  7
 `define ysyx_23060251_alu_slt  8
 `define ysyx_23060251_alu_sltu 9
-`define ysyx_23060251_alu 10
+`define ysyx_23060251_alu_mul  10
+`define ysyx_23060251_alu_div  11
+`define ysyx_23060251_alu_rem  12
+`define ysyx_23060251_alu 13
 `define ysyx_23060251_alu_bus `ysyx_23060251_alu - 1: 0
 
 // 1. beq
