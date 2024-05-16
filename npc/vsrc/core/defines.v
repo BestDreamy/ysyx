@@ -93,21 +93,32 @@
 // 11.mul
 // 12.div
 // 13.rem
-`define ysyx_23060251_alu_add  0
-`define ysyx_23060251_alu_sub  1
-`define ysyx_23060251_alu_xor  2
-`define ysyx_23060251_alu_or   3
-`define ysyx_23060251_alu_and  4
-`define ysyx_23060251_alu_sll  5
-`define ysyx_23060251_alu_srl  6
-`define ysyx_23060251_alu_sra  7
-`define ysyx_23060251_alu_slt  8
-`define ysyx_23060251_alu_sltu 9
-`define ysyx_23060251_alu_mul  10
-`define ysyx_23060251_alu_div  11
-`define ysyx_23060251_alu_rem  12
-`define ysyx_23060251_alu 13
+`define ysyx_23060251_alu_add     0
+`define ysyx_23060251_alu_sub     1
+`define ysyx_23060251_alu_xor     2
+`define ysyx_23060251_alu_or      3
+`define ysyx_23060251_alu_and     4
+`define ysyx_23060251_alu_sll     5
+`define ysyx_23060251_alu_srl     6
+`define ysyx_23060251_alu_sra     7
+`define ysyx_23060251_alu_slt     8
+`define ysyx_23060251_alu_sltu    9
+`define ysyx_23060251_alu_mul    10
+`define ysyx_23060251_alu_mulh   11
+`define ysyx_23060251_alu_mulhsu 12
+`define ysyx_23060251_alu_mulhu  13
+`define ysyx_23060251_alu_div    14
+`define ysyx_23060251_alu_divu   15
+`define ysyx_23060251_alu_rem    16
+`define ysyx_23060251_alu_remu   17
+`define ysyx_23060251_alu        18
 `define ysyx_23060251_alu_bus `ysyx_23060251_alu - 1: 0
+
+parameter ext_bool_res = `ysyx_23060251_xlen - 1;
+parameter ysyx_23060251_mul = `ysyx_23060251_xlen << 1;
+`define ysyx_23060251_mul_bus       ysyx_23060251_mul - 1: 0
+`define ysyx_23060251_mul_low_bus  `ysyx_23060251_xlen - 1: 0
+`define ysyx_23060251_mul_high_bus  ysyx_23060251_mul - 1: `ysyx_23060251_xlen
 
 // 1. beq
 // 2. bne

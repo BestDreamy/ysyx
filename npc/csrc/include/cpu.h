@@ -13,7 +13,7 @@ extern CPU_state npc_cpu;
 
 extern Vtop* dut;
 extern VerilatedFstC* tfp;
-#define FINISH_TIME 10000
+#define FINISH_TIME 30000
 #define TIME_RESET  0 
 extern uint32_t time_counter;
 
