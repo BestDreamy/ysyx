@@ -11,10 +11,10 @@
 !.gitignore
 !README.md
 !CMakeLists.txt
-!bin/**
 !csrc/**
 !vsrc/**
 build/
 .cache/
 .vscode/
 obj_dir/
+bin/

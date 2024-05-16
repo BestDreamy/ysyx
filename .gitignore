@@ -16,4 +16,3 @@
 build/
 .cache/
 /.hdl_checker/
-bin/

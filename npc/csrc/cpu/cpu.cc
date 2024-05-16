@@ -54,7 +54,7 @@ void cpu_exec(uint64_t n) {
     for (int i = 0; i < n - 1; i ++) {
         exec_once();
 
-        if (time_counter >= FINISH_TIME || npc_state.halt_ret) {
+        if (time_counter >= FINISH_TIME || (npc_state.state == NPC_RUNNING && npc_state.halt_ret)) {
             npc_state.state = NPC_END;
             break;
         }
@@ -75,7 +75,7 @@ void cpu_exec(uint64_t n) {
 
             Log("npc: %s at pc = " FMT_WORD,
                 (npc_state.state == NPC_ABORT ? ANSI_FMT("ABORT", RED_TXT) :
-                (npc_state.halt_ret ? ANSI_FMT("HIT GOOD TRAP", GREEN_TXT) :
+                (npc_state.state == NPC_END ? ANSI_FMT("HIT GOOD TRAP", GREEN_TXT) :
                 ANSI_FMT("HIT BAD TRAP", RED_TXT))),
                 npc_state.halt_pc);
 
