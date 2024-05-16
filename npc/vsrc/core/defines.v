@@ -114,8 +114,8 @@
 `define ysyx_23060251_alu        18
 `define ysyx_23060251_alu_bus `ysyx_23060251_alu - 1: 0
 
-parameter ext_bool_res = `ysyx_23060251_xlen - 1;
-parameter ysyx_23060251_mul = `ysyx_23060251_xlen << 1;
+parameter ext_bool_res      =      `ysyx_23060251_xlen - 1;
+parameter ysyx_23060251_mul =      `ysyx_23060251_xlen << 1;
 `define ysyx_23060251_mul_bus       ysyx_23060251_mul - 1: 0
 `define ysyx_23060251_mul_low_bus  `ysyx_23060251_xlen - 1: 0
 `define ysyx_23060251_mul_high_bus  ysyx_23060251_mul - 1: `ysyx_23060251_xlen

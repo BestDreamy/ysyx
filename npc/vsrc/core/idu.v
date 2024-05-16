@@ -50,29 +50,29 @@ module idu (
                                             optype
     ****************************************************************************************/
     // 1. reg op reg
-    wire rv64_add  = rv64_alu   & (func3 == 3'b000) & (func7 == 7'b00_000_00);
-    wire rv64_addw = rv64_aluw  & (func3 == 3'b000) & (func7 == 7'b00_000_00);
-    wire rv64_sub  = rv64_alu   & (func3 == 3'b000) & (func7 == 7'b01_000_00);
-    wire rv64_subw = rv64_aluw  & (func3 == 3'b000) & (func7 == 7'b01_000_00);
-    wire rv64_xor  = rv64_alu   & (func3 == 3'b100) & (func7 == 7'b00_000_00);
-    wire rv64_or   = rv64_alu   & (func3 == 3'b110) & (func7 == 7'b00_000_00);
-    wire rv64_and  = rv64_alu   & (func3 == 3'b111) & (func7 == 7'b00_000_00);
-    wire rv64_sll  = rv64_alu   & (func3 == 3'b001) & (func7 == 7'b00_000_00);
-    wire rv64_sllw = rv64_aluw  & (func3 == 3'b001) & (func7 == 7'b00_000_00);
-    wire rv64_srl  = rv64_alu   & (func3 == 3'b101) & (func7 == 7'b00_000_00);
-    wire rv64_srlw = rv64_aluw  & (func3 == 3'b101) & (func7 == 7'b00_000_00);
-    wire rv64_sra  = rv64_alu   & (func3 == 3'b101) & (func7 == 7'b01_000_00);
-    wire rv64_sraw = rv64_aluw  & (func3 == 3'b101) & (func7 == 7'b01_000_00);
-    wire rv64_slt  = rv64_alu   & (func3 == 3'b010) & (func7 == 7'b00_000_00);
-    wire rv64_sltu = rv64_alu   & (func3 == 3'b011) & (func7 == 7'b00_000_00);
-    wire rv64_mul  = rv64_alu   & (func3 == 3'b000) & (func7 == 7'b00_000_01);
-    wire rv64_mulh = rv64_alu   & (func3 == 3'b001) & (func7 == 7'b00_000_01);
-    wire rv64_mulsu= rv64_alu   & (func3 == 3'b010) & (func7 == 7'b00_000_01);
-    wire rv64_mulu = rv64_alu   & (func3 == 3'b011) & (func7 == 7'b00_000_01);
-    wire rv64_div  = rv64_alu   & (func3 == 3'b100) & (func7 == 7'b00_000_01);
-    wire rv64_divu = rv64_alu   & (func3 == 3'b101) & (func7 == 7'b00_000_01);
-    wire rv64_rem  = rv64_alu   & (func3 == 3'b110) & (func7 == 7'b00_000_01);
-    wire rv64_remu = rv64_alu   & (func3 == 3'b111) & (func7 == 7'b00_000_01);
+    wire rv64_add    = rv64_alu   & (func3 == 3'b000) & (func7 == 7'b00_000_00);
+    wire rv64_addw   = rv64_aluw  & (func3 == 3'b000) & (func7 == 7'b00_000_00);
+    wire rv64_sub    = rv64_alu   & (func3 == 3'b000) & (func7 == 7'b01_000_00);
+    wire rv64_subw   = rv64_aluw  & (func3 == 3'b000) & (func7 == 7'b01_000_00);
+    wire rv64_xor    = rv64_alu   & (func3 == 3'b100) & (func7 == 7'b00_000_00);
+    wire rv64_or     = rv64_alu   & (func3 == 3'b110) & (func7 == 7'b00_000_00);
+    wire rv64_and    = rv64_alu   & (func3 == 3'b111) & (func7 == 7'b00_000_00);
+    wire rv64_sll    = rv64_alu   & (func3 == 3'b001) & (func7 == 7'b00_000_00);
+    wire rv64_sllw   = rv64_aluw  & (func3 == 3'b001) & (func7 == 7'b00_000_00);
+    wire rv64_srl    = rv64_alu   & (func3 == 3'b101) & (func7 == 7'b00_000_00);
+    wire rv64_srlw   = rv64_aluw  & (func3 == 3'b101) & (func7 == 7'b00_000_00);
+    wire rv64_sra    = rv64_alu   & (func3 == 3'b101) & (func7 == 7'b01_000_00);
+    wire rv64_sraw   = rv64_aluw  & (func3 == 3'b101) & (func7 == 7'b01_000_00);
+    wire rv64_slt    = rv64_alu   & (func3 == 3'b010) & (func7 == 7'b00_000_00);
+    wire rv64_sltu   = rv64_alu   & (func3 == 3'b011) & (func7 == 7'b00_000_00);
+    wire rv64_mul    = rv64_alu   & (func3 == 3'b000) & (func7 == 7'b00_000_01);
+    wire rv64_mulh   = rv64_alu   & (func3 == 3'b001) & (func7 == 7'b00_000_01);
+    wire rv64_mulhsu = rv64_alu   & (func3 == 3'b010) & (func7 == 7'b00_000_01);
+    wire rv64_mulhu  = rv64_alu   & (func3 == 3'b011) & (func7 == 7'b00_000_01);
+    wire rv64_div    = rv64_alu   & (func3 == 3'b100) & (func7 == 7'b00_000_01);
+    wire rv64_divu   = rv64_alu   & (func3 == 3'b101) & (func7 == 7'b00_000_01);
+    wire rv64_rem    = rv64_alu   & (func3 == 3'b110) & (func7 == 7'b00_000_01);
+    wire rv64_remu   = rv64_alu   & (func3 == 3'b111) & (func7 == 7'b00_000_01);
 
     // 2. reg op imm
     wire rv64_addi  = rv64_alui   & (func3 == 3'b000);
@@ -139,9 +139,14 @@ module idu (
     };
 
     assign alu_o = {
-        rv64_rem | rv64_remu,
-        rv64_div | rv64_divu,
-        rv64_mul | rv64_mulh | rv64_mulsu | rv64_mulu,
+        rv64_remu,
+        rv64_rem,
+        rv64_divu,
+        rv64_div,
+        rv64_mulhu,
+        rv64_mulhsu,
+        rv64_mulh,
+        rv64_mul,
         rv64_sltu| rv64_sltui,
         rv64_slt | rv64_slti,
         rv64_sra | rv64_sraw | rv64_srai | rv64_sraiw,

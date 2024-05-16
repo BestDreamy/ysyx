@@ -3,11 +3,6 @@
 !Makefile
 !README.md
 !init.sh
-build/
-.cache/
-/.hdl_checker/
-bin/
-
 !/nemu/
 !/nemu/**
 !/am-kernels/
@@ -18,3 +13,7 @@ bin/
 !/abstract-machine/**
 !/fceux-am/
 !/fceux-am/**
+build/
+.cache/
+/.hdl_checker/
+bin/

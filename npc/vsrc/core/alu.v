@@ -81,14 +81,14 @@ module alu (
     wire[`ysyx_23060251_xlen_bus] rv32_sra_res    = $signed(op1) >>> rv32_shamt;
     wire[`ysyx_23060251_xlen_bus] rv32_slt_res    = {{ext_bool_res{1'b0}}, $signed(op1) < $signed(op2)};
     wire[`ysyx_23060251_xlen_bus] rv32_sltu_res   = {{ext_bool_res{1'b0}}, op1 < op2};
-    wire[`ysyx_23060251_mul_bus]  rv32_mul_res    = ($signed(op1) * $signed(op2));
+    wire[`ysyx_23060251_mul_bus]  rv32_mul_res    = $signed(op1) * $signed(op2);
     // wire[`ysyx_23060251_mul_bus]  rv32_mulh_res   = (op1 * op2);
-    wire[`ysyx_23060251_mul_bus]  rv32_mulhsu_res = ($signed(op1) * op2);
-    wire[`ysyx_23060251_mul_bus]  rv32_mulhu_res  = (op1 * op2);
-    wire[`ysyx_23060251_xlen_bus] rv32_div_res    = ($signed(op1) / $signed(op2));
-    wire[`ysyx_23060251_xlen_bus] rv32_divu_res   = (op1 / op2);
-    wire[`ysyx_23060251_xlen_bus] rv32_rem_res    = ($signed(op1) % $signed(op2));
-    wire[`ysyx_23060251_xlen_bus] rv32_remu_res   = (op1 % op2);
+    wire[`ysyx_23060251_mul_bus]  rv32_mulhsu_res = $signed(op1) * op2;
+    wire[`ysyx_23060251_mul_bus]  rv32_mulhu_res  = op1 * op2;
+    wire[`ysyx_23060251_xlen_bus] rv32_div_res    = $signed(op1) / $signed(op2);
+    wire[`ysyx_23060251_xlen_bus] rv32_divu_res   = op1 / op2;
+    wire[`ysyx_23060251_xlen_bus] rv32_rem_res    = $signed(op1) % $signed(op2);
+    wire[`ysyx_23060251_xlen_bus] rv32_remu_res   = op1 % op2;
 
     assign res_o = ({`ysyx_23060251_xlen{rv32_add_sel}}     & rv32_add_res)
                  | ({`ysyx_23060251_xlen{rv32_sub_sel}}     & rv32_sub_res)
