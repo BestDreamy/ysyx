@@ -16,8 +16,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
                     while(*s) {
                         out[p ++] = *s, s ++;
                     }
-                }
-                break;
+                } break;
                 case 'd': {
                     int d = va_arg(ap, int);
                     if (d < 0) {
@@ -33,8 +32,11 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
                     for ( res --; res >= 0; res --) {
                         out[p ++] = s[res];
                     }
-                }
-                break;
+                } break;
+                case 'c': {
+                    char ch = va_arg(ap, int);
+                    out[p ++] = ch;
+                } break;
             }
             isSubstitute = 0;
             continue;
@@ -63,6 +65,7 @@ int printf(const char *fmt, ...) {
     }
     va_end(ap);
     return len;
+    return 0;
 }
 
 int sprintf(char *out, const char *fmt, ...) {

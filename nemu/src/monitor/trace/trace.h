@@ -28,7 +28,7 @@ void itrace (uint64 pc, uint32 inst);
 void itraceDisplay();
 
 
-#define CONFIG_MTRACE 1
+/* #define CONFIG_MTRACE 1 */
 void mtrace(char op, paddr_t addr, word_t data);
 void mtraceDisplay();
 

@@ -47,6 +47,7 @@ endif
 
 ### Create the destination directory (`build/$ARCH`)
 WORK_DIR  = $(shell pwd)
+# $(info WORK_DIR: $(WORK_DIR))
 DST_DIR   = $(WORK_DIR)/build/$(ARCH)
 $(shell mkdir -p $(DST_DIR))
 

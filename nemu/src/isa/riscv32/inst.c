@@ -66,9 +66,9 @@ static int decode_exec(Decode *s) {
 
   INSTPAT_START();
   INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, {R(rd) = s->pc + 4; s->dnpc = imm + s->pc; 
-                                                                 ftrace_call(s->pc, s->dnpc); });
+                                                                 IFDEF(CONFIG_FTRACE, ftrace_call(s->pc, s->dnpc);) });
   INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, {R(rd) = s->pc + 4; s->dnpc = src1 + imm; 
-                                                                 s->isa.inst.val == 0x00008067? ftrace_ret(s->pc, s->dnpc): ftrace_call(s->pc, s->dnpc); });
+                                                                 IFDEF(CONFIG_FTRACE, s->isa.inst.val == 0x00008067? ftrace_ret(s->pc, s->dnpc): ftrace_call(s->pc, s->dnpc);) });
                                                                  // ret --> [[jalr x0, 0(x1)]]
   INSTPAT("??????? ????? ????? 000 ????? 11000 11", beq    , B, {if (src1 == src2) s->dnpc = s->pc + imm; });
   INSTPAT("??????? ????? ????? 001 ????? 11000 11", bne    , B, {if (src1 != src2) s->dnpc = s->pc + imm; });
