@@ -27,12 +27,9 @@ void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 void itrace (uint64 pc, uint32 inst);
 void itraceDisplay();
 
-
-/* #define CONFIG_MTRACE 1 */
 void mtrace(char op, paddr_t addr, word_t data);
 void mtraceDisplay();
 
-// #define CONFIG_FTRACE 1
 void init_elf(const char *file);
 void ftrace_call(uint64 pc, uint64 npc);
 void ftrace_ret(uint64 pc, uint64 npc);

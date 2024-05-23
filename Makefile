@@ -43,7 +43,7 @@ _default:
 
 git:
 	git add .
-	git commit -m "update pa2.3 timer"
+	git commit -m "add dtrace"
 	git push origin pa2
 
 .PHONY: .git_commit .clean_index _default git
