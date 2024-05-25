@@ -20,4 +20,5 @@
     } while(0)
 
 void assert_fail_msg(const char* msg);
+#define panic(format, ...) Assert(0, format, ## __VA_ARGS__)
 #endif
