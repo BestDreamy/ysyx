@@ -24,6 +24,5 @@ int main(int argc, char** argv) {
     cpu_init();
     tfp->close();
     delete dut;
-    panic("finish");
     return is_exit_status_bad();
 }

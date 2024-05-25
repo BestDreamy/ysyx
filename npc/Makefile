@@ -32,10 +32,10 @@ ARGS += $(LOAD_IMG)
 
 run: $(CSRC)
 	@echo "\033[0;36mVerilator the project\033[0m"
-	rm -rf $(OBJ_DIR)
-	cp $(IMG) $(LOAD_IMG)
+	@rm -rf $(OBJ_DIR)
+	@cp $(IMG) $(LOAD_IMG)
 	@$(VERILATOR) $(VERILATOR_FLAGS) $(VSRC) $(CXX_FLAGS) $(LD_FLAGS) $(CSRC)
-	@echo "\033[0;35m$(ARGS)\033[0m"
+	@# echo "\033[0;35m$(ARGS)\033[0m"
 	$(BIN) $(ARGS)
 
 SIM = sim.fst

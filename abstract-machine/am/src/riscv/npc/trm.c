@@ -18,10 +18,12 @@ void putch(char ch) {
   outb(SERIAL_PORT, ch);
 }
 
+# define npc_trap(code) asm volatile("mv a0, %0; \
+                                      ebreak" : :"r"(code))
 void halt(int code) {
-  asm volatile(
-  	"mv a0, %0; ebreak;": :"r"(code)
-  );
+  npc_trap(code);
+
+  // should not reach here
   while (1);
 }
 
