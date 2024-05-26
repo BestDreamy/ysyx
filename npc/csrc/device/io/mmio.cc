@@ -1,5 +1,5 @@
-#include <device/map.h>
-#include <memory/paddr.h>
+#include "mmio.h"
+#include "debug.h"
 
 #define NR_MAP 16
 

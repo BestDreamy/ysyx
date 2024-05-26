@@ -1,4 +1,5 @@
-#include <map.h>
+#include "map.h"
+#include "init.h"
 
 #define IO_SPACE_MAX (2 * 1024 * 1024)
 
