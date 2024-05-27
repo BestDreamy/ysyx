@@ -43,7 +43,7 @@ _default:
 
 git:
 	git add .
-	git commit -m "add dtrace"
+	git commit -m "add device to npc"
 	git push origin pa2
 
 .PHONY: .git_commit .clean_index _default git
