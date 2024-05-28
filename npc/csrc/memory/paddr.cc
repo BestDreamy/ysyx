@@ -1,5 +1,6 @@
 #include "paddr.h"
 #include "debug.h"
+#include "host.h"
 
 uint8_t* guest_to_host(paddr_t addr) { return pmem + addr - CONFIG_MBASE; }
 paddr_t  host_to_guest(uint8_t* mem) { return  mem - pmem + CONFIG_MBASE; }
