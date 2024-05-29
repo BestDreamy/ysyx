@@ -18,6 +18,8 @@ DIFFTEST_MK = $(shell find ./csrc -name difftest.mk)
 -include $(DIFFTEST_MK)
 CXX_INC_PATH = $(addprefix -I, $(INC_PATH))
 CXX_FLAGS    = $(addprefix -CFLAGS , $(CXX_INC_PATH))
+CXX_FLAGS   += $(addprefix -CFLAGS , -Wno-pointer-arith)  # ignore warning: (void*) arithmetic
+CXX_FLAGS   += $(addprefix -CFLAGS , -Wno-return-type)    # ignore warning: no return
 # CXX_FLAGS   += $(addprefix -CFLAGS , -fpermissive)
 # LIB         += -fsanitize=address -lasan
 LD_FLAGS     = $(addprefix -LDFLAGS , $(LIB))

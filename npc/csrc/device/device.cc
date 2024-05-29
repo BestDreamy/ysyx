@@ -1,4 +1,7 @@
 #include "device.h"
+#include "sdb.h"
+#include "timer.h"
+#include "alarm.h"
 #ifndef CONFIG_TARGET_AM
 #include <SDL2/SDL.h>
 #endif
@@ -6,14 +9,16 @@
 void init_map();
 void init_serial();
 void init_timer();
-void init_vga();
-void init_i8042();
-void init_audio();
-void init_disk();
-void init_sdcard();
-void init_alarm();
+// void init_vga();
+// void init_i8042();
+// void init_audio();
+// void init_disk();
+// void init_sdcard();
+// void init_alarm();
 
+#ifdef CONFIG_HAS_VGA
 void vga_update_screen();
+#endif
 
 void device_update() {
   static uint64_t last = 0;
@@ -30,7 +35,7 @@ void device_update() {
   while (SDL_PollEvent(&event)) {
     switch (event.type) {
       case SDL_QUIT:
-        nemu_state.state = NEMU_QUIT;
+        npc_state.state = NPC_QUIT;
         break;
       default: break;
     }
@@ -57,5 +62,7 @@ void init_device() {
   IFDEF(CONFIG_HAS_DISK, init_disk());
   IFDEF(CONFIG_HAS_SDCARD, init_sdcard());
 
-  IFNDEF(CONFIG_TARGET_AM, init_alarm());
+  #ifndef CONFIG_TARGET_AM
+    init_alarm();
+  #endif
 }

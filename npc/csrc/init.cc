@@ -3,6 +3,7 @@
 #include "debug.h"
 #include "paddr.h"
 #include "dut.h"
+#include "device.h"
 #include <cstddef>
 #include <stdio.h>
 #include <getopt.h>
@@ -39,6 +40,7 @@ void welcome(int argc, char *argv[]) {
     parse_args(argc, argv);
     img_size = load_image();
 
+    init_device();
     // TODO();
 }
 
