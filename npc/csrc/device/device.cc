@@ -1,6 +1,4 @@
-#include <common.h>
-#include <utils.h>
-#include <device/alarm.h>
+#include "device.h"
 #ifndef CONFIG_TARGET_AM
 #include <SDL2/SDL.h>
 #endif
@@ -15,7 +13,6 @@ void init_disk();
 void init_sdcard();
 void init_alarm();
 
-void send_key(uint8_t, bool);
 void vga_update_screen();
 
 void device_update() {
@@ -35,16 +32,6 @@ void device_update() {
       case SDL_QUIT:
         nemu_state.state = NEMU_QUIT;
         break;
-#ifdef CONFIG_HAS_KEYBOARD
-      // If a key was pressed
-      case SDL_KEYDOWN:
-      case SDL_KEYUP: {
-        uint8_t k = event.key.keysym.scancode;
-        bool is_keydown = (event.key.type == SDL_KEYDOWN);
-        send_key(k, is_keydown);
-        break;
-      }
-#endif
       default: break;
     }
   }
