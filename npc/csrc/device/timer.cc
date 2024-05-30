@@ -3,7 +3,8 @@
 #include "map.h"
 #include "mmio.h"
 #include "sdb.h"
-#include <time.h>
+#include "alarm.h"
+#include <sys/time.h>
 
 static uint32_t *rtc_port_base = NULL;
 
@@ -45,4 +46,7 @@ static void timer_intr() {
 void init_timer() {
   rtc_port_base = (uint32_t *)new_space(8);
   add_mmio_map("rtc", CONFIG_RTC_MMIO, rtc_port_base, 8, rtc_io_handler);
+  #ifndef CONFIG_TARGET_AM
+    add_alarm_handle(timer_intr);
+  #endif
 }

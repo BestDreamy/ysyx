@@ -23,4 +23,4 @@ image: $(IMAGE).elf
 # 启动 DiffTest 时，ref 和 dut 使用同一个 .bin 文件
 # DIFF_IMAGE = $(subst npc,nemu,$(IMAGE))
 run: image
-	$(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin
+	@$(MAKE) -C $(NPC_HOME) run IMG=$(IMAGE).bin
