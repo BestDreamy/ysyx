@@ -6,6 +6,7 @@
 #include "debug.h"
 #include "init.h"
 #include "sdb.h"
+#include "device.h"
 
 CPU_state npc_cpu;
 
@@ -60,6 +61,8 @@ void cpu_exec(uint64_t n) {
         }
 
         if (npc_state.state != NPC_RUNNING) break;
+
+        IFDEF(CONFIG_DEVICE, device_update());
     }
 
     IFDEF(CONFIG_MTRACE, mtraceDisplay());
