@@ -14,7 +14,6 @@ void init_timer();
 // void init_audio();
 // void init_disk();
 // void init_sdcard();
-// void init_alarm();
 
 #ifdef CONFIG_HAS_VGA
 void vga_update_screen();
@@ -37,6 +36,16 @@ void device_update() {
       case SDL_QUIT:
         npc_state.state = NPC_QUIT;
         break;
+#ifdef CONFIG_HAS_KEYBOARD
+      // If a key was pressed
+      case SDL_KEYDOWN:
+      case SDL_KEYUP: {
+        uint8_t k = event.key.keysym.scancode;
+        bool is_keydown = (event.key.type == SDL_KEYDOWN);
+        send_key(k, is_keydown);
+        break;
+      }
+#endif
       default: break;
     }
   }

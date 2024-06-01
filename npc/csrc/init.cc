@@ -36,12 +36,14 @@ void welcome(int argc, char *argv[]) {
     Log("ETrace: %s", MUXDEF(CONFIG_ETRACE, ANSI_FMT(GREEN_TXT, "ON"), ANSI_FMT(RED_TXT, "OFF")));
     Log("DiffTest: %s", MUXDEF(CONFIG_DIFFTEST, ANSI_FMT(GREEN_TXT, "ON"), ANSI_FMT(RED_TXT, "OFF")));
     Log("Device: %s", MUXDEF(CONFIG_DEVICE, ANSI_FMT(GREEN_TXT, "ON"), ANSI_FMT(RED_TXT, "OFF")));
-    printf("Welcome to %s-NPC!\n", ANSI_FMT(GREEN_TXT, "riscv32"));
 
     parse_args(argc, argv);
     img_size = load_image();
 
     init_device();
+
+    printf("Welcome to %s-NPC!\n", ANSI_FMT(GREEN_TXT, "riscv32"));
+    printf("For help, type \"help\"\n");
     // TODO();
 }
 

@@ -8,8 +8,19 @@
 int vsprintf(char *out, const char *fmt, va_list ap) {
     int p = 0;
     bool isSubstitute = 0;
+    char fillChar = '\0';
+    int  fillWidth = 0;
     for (int i = 0; fmt[i]; i ++) {
         if (isSubstitute) {
+            if (fmt[i] == '0' && fillChar == '\0') {
+                fillChar = fmt[i];
+                continue;
+            }
+            if (fmt[i] >= '0' && fmt[i] <= '9' && fillChar != '\0') {
+                fillWidth = fmt[i] - '0';
+                continue;
+            }
+
             switch (fmt[i]) {
                 case 's': {
                     char *s = va_arg(ap, char*);
@@ -24,13 +35,19 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
                         out[p ++] = '-';
                     }
                     char s[64];
-                    int res = 0;
-                    for (; res < 64 && d; res ++) {
-                        s[res] = '0' + d % 10;
+                    int wid = 0;
+
+                    do {
+                        s[wid ++] = '0' + d % 10;
                         d /= 10;
+                    } while(d);
+
+                    while (wid < fillWidth) {
+                        out[p ++] = fillChar;
+                        fillWidth --;
                     }
-                    for ( res --; res >= 0; res --) {
-                        out[p ++] = s[res];
+                    for ( wid --; wid >= 0; wid --) {
+                        out[p ++] = s[wid];
                     }
                 } break;
                 case 'c': {
@@ -39,6 +56,8 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
                 } break;
             }
             isSubstitute = 0;
+            fillChar = '\0';
+            fillWidth = 0;
             continue;
         }
 
