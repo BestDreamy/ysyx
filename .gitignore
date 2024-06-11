@@ -16,3 +16,4 @@
 build/
 .cache/
 /.hdl_checker/
+/am-kernels
