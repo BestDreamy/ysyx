@@ -44,6 +44,6 @@ _default:
 git:
 	git add .
 	git commit -m "Start pa3"
-	git push origin pa2
+	git push origin pa3
 
 .PHONY: .git_commit .clean_index _default git
