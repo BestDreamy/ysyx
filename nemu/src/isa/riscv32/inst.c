@@ -21,6 +21,7 @@
 #define R(i) gpr(i)
 #define Mr vaddr_read
 #define Mw vaddr_write
+#define CSR(i) csr(i)
 
 enum {
   TYPE_I, TYPE_U, TYPE_S,
@@ -136,7 +137,11 @@ static int decode_exec(Decode *s) {
   /* INSTPAT("0000001 ????? ????? 100 ????? 01110 11", divw   , R, R(rd) = SEXT(BITS((sword_t)src1 / (sword_t)src2, 31, 0), 32)); */
   /* INSTPAT("0000001 ????? ????? 110 ????? 01110 11", remw   , R, R(rd) = SEXT(BITS((sword_t)src1 % (sword_t)src2, 31, 0), 32)); */
   // ---------------------------------------------------------------------------------------------------------
+  INSTPAT("??????? ????? ????? 001 ????? 1110011", csrrw   , I, {R(rd) = CSR(imm); CSR(imm)  = src1;});
+  INSTPAT("??????? ????? ????? 010 ????? 1110011", csrrs   , I, {R(rd) = CSR(imm); CSR(imm) |= src1;});
+  // ---------------------------------------------------------------------------------------------------------
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
+  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = isa_raise_intr(R(17), s->pc)); // Environment call from M-mode
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc)); // invalid inst
   INSTPAT_END();
 
