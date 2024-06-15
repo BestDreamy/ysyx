@@ -43,6 +43,10 @@ static debug_module_config_t difftest_dm_config = {
 struct diff_context_t {
   word_t gpr[32];
   word_t pc;
+
+  // workspace/nemu/src/isa/riscv32/include/isa-def.h
+  // -> csr_num
+  word_t csr[4];
 };
 
 static sim_t* s = NULL;
@@ -52,6 +56,7 @@ static state_t *state = NULL;
 void sim_t::diff_init(int port) {
   p = get_core("0");
   state = p->get_state();
+  p->put_csr(0x300, 0x1800);
 }
 
 void sim_t::diff_step(uint64_t n) {
@@ -64,6 +69,11 @@ void sim_t::diff_get_regs(void* diff_context) {
     ctx->gpr[i] = state->XPR[i];
   }
   ctx->pc = state->pc;
+
+  ctx->csr[0] = p->get_csr(0x300);
+  ctx->csr[1] = p->get_csr(0x341);
+  ctx->csr[2] = p->get_csr(0x342);
+  ctx->csr[3] = p->get_csr(0x305);
 }
 
 void sim_t::diff_set_regs(void* diff_context) {
@@ -72,6 +82,11 @@ void sim_t::diff_set_regs(void* diff_context) {
     state->XPR.write(i, (sword_t)ctx->gpr[i]);
   }
   state->pc = ctx->pc;
+
+  p->put_csr(0x300, ctx->csr[0]);
+  p->put_csr(0x341, ctx->csr[1]);
+  p->put_csr(0x342, ctx->csr[2]);
+  p->put_csr(0x305, ctx->csr[3]);
 }
 
 void sim_t::diff_memcpy(reg_t dest, void* src, size_t n) {

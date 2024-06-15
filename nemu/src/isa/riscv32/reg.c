@@ -23,12 +23,21 @@ const char *regs[] = {
   "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"
 };
 
+const char *csrs[] = {
+  "mcause", "mepc", "mstatus", "mtvec"
+};
+
 void isa_reg_display() {
   printf("RV32E-nemu Registers:\n");
   printf("pc\t0x%x(%d)\n", cpu.pc, cpu.pc);
+
   for (int i = 0; i < ARRLEN(regs); i ++) {
     int idx = check_reg_idx(i);
     printf("%4s: 0x%08x(%010d)%c", regs[idx], gpr(idx), gpr(idx), i % 4 == 3? '\n': ' ');
+  }
+  
+  for (int i = 0; i < ARRLEN(csrs); i ++) {
+    printf("%4s: 0x%08x(%010d)%c", csrs[i], cpu.csr[i], cpu.csr[i], i % 4 == 3? '\n': ' ');
   }
 }
 
