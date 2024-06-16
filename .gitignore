@@ -11,8 +11,12 @@
 !/npc/**
 !/abstract-machine/
 !/abstract-machine/**
-!/fceux-am/
-!/fceux-am/**
+# !/fceux-am/
+# !/fceux-am/**
+!/nanos-lite/
+!/nanos-lite/**
+!/navy-apps/
+!/navy-apps/**
 build/
 .cache/
 /.hdl_checker/
