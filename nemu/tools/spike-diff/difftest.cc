@@ -71,9 +71,9 @@ void sim_t::diff_get_regs(void* diff_context) {
   ctx->pc = state->pc;
 
   ctx->csr[0] = p->get_csr(0x300);
-  ctx->csr[1] = p->get_csr(0x341);
-  ctx->csr[2] = p->get_csr(0x342);
-  ctx->csr[3] = p->get_csr(0x305);
+  ctx->csr[1] = p->get_csr(0x305);
+  ctx->csr[2] = p->get_csr(0x341);
+  ctx->csr[3] = p->get_csr(0x342);
 }
 
 void sim_t::diff_set_regs(void* diff_context) {
@@ -84,9 +84,9 @@ void sim_t::diff_set_regs(void* diff_context) {
   state->pc = ctx->pc;
 
   p->put_csr(0x300, ctx->csr[0]);
-  p->put_csr(0x341, ctx->csr[1]);
-  p->put_csr(0x342, ctx->csr[2]);
-  p->put_csr(0x305, ctx->csr[3]);
+  p->put_csr(0x305, ctx->csr[1]);
+  p->put_csr(0x341, ctx->csr[2]);
+  p->put_csr(0x342, ctx->csr[3]);
 }
 
 void sim_t::diff_memcpy(reg_t dest, void* src, size_t n) {

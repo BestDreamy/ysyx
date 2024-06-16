@@ -19,10 +19,10 @@
 #include <common.h>
 
 enum {
-  mcause,
-  mepc,
   mstatus,
   mtvec,
+  mepc,
+  mcause,
   csr_num
 };
 
