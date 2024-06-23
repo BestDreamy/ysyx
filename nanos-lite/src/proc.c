@@ -1,4 +1,5 @@
 #include <proc.h>
+#include "loader.h"
 
 #define MAX_NR_PROC 4
 
@@ -25,7 +26,7 @@ void init_proc() {
   Log("Initializing processes...");
 
   // load program here
-
+  naive_uload(NULL, NULL);
 }
 
 Context* schedule(Context *prev) {

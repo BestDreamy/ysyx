@@ -1,4 +1,5 @@
 #include <common.h>
+#include "ramdisk.h"
 
 extern uint8_t ramdisk_start;
 extern uint8_t ramdisk_end;
