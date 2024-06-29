@@ -66,14 +66,6 @@ void *memset(void *s, int c, size_t n) {
   }
   return s; 
 }
-// void *memset(void *s, int c, size_t n) {
-//   size_t i = 0;
-//   char *s_t = (char *)s;
-//   while (i++ < n) {
-//     *s_t++ = c;
-//   }
-//   return s;
-// }
 
 void *memmove(void *dst, const void *src, size_t n) {
   assert(dst != NULL);

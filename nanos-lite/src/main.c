@@ -7,6 +7,24 @@ void init_irq(void);
 void init_fs(void);
 void init_proc(void);
 
+/*
+
+main() --> init_irq()         yield()                                 do_event()*
+                    |         ^      |                                ^
+               [AM] |         |      |                                |
+                    v         |      v                                |
+                    cte_init()       ecall*             __am_irq_handle()*
+                                          |             ^
+                                   [nemu] |             |
+                                          v             |
+                                          __am_asm_trap()
+
+*ecall modify the mcause by isa_raise_intr()
+*__am_irq_handle() deal with the event by mcause
+*do_event() deal with the GPR1 by event
+
+*/
+
 int main() {
   extern const char logo[];
   printf("%s", logo);
