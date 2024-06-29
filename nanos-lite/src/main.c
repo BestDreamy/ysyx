@@ -21,7 +21,7 @@ main() --> init_irq()         yield()                                 do_event()
 
 *ecall modify the mcause by isa_raise_intr()
 *__am_irq_handle() deal with the event by mcause
-*do_event() deal with the GPR1 by event
+*do_event() deal with the GPR1 by event and GPR1 is defined in init_proc()
 
 */
 
