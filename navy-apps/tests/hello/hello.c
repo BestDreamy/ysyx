@@ -2,6 +2,12 @@
 #include <stdio.h>
 
 int main() {
+  /*
+
+  write() --> libc/src/syscalls/syswrite.c --> libc/src/reent/writer.c --> libos/src/syscall.c
+  main() --> wirte() --> _write_r() --> _write()
+
+  */
   write(1, "Hello World!\n", 13);
   int i = 2;
   volatile int j = 0;
