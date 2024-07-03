@@ -42,7 +42,7 @@ _default:
 	@echo "Please run 'make' under subprojects."
 
 git:
-	git commit -a -m "Finish pa3.3"
+	git commit -a -m "Finish pa3.4"
 	git push origin pa3
 
 .PHONY: .git_commit .clean_index _default git
