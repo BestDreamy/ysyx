@@ -20,3 +20,19 @@ int main() {
   }
   return 0;
 }
+
+/*
+int main() {
+  write(1, "Hello World!\n", 13);
+  int i = 4;
+  volatile int j = 0;
+  while (i) {
+    j ++;
+    if (j == 1000000) {
+      printf("Hello World from Navy-apps for the %dth time!\n", i --);
+      j = 0;
+    }
+  }
+  return 0;
+}
+*/

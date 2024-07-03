@@ -50,7 +50,6 @@ intptr_t _syscall_(intptr_t type, intptr_t a0, intptr_t a1, intptr_t a2) {
   // ecall 
   // GPR1, GPR2, GPR3, GPR4, GPRx = a7, a0, a1, a2, a0
 
-
   // execute system call
   asm volatile (SYSCALL : "=r"(ret) : "r"(_gpr1), "r"(_gpr2), "r"(_gpr3), "r"(_gpr4));
   return ret;
@@ -72,6 +71,14 @@ int _write(int fd, void *buf, size_t count) {
 }
 
 void *_sbrk(intptr_t increment) {
+  extern char _end;
+  // Check [program break, program break + increment) is available by _syscall_().
+  // If _syscall_() return 0, that means this data segment is available.
+  // And then malloc the memory by 'end'.
+  if (_syscall_(SYS_brk, increment, 0, 0) == 0) {
+    char* nxt_end = &_end + increment;
+    return (void*) nxt_end;
+  }
   return (void *)-1;
 }
 
