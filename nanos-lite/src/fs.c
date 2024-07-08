@@ -36,6 +36,7 @@ void init_fs() {
   // TODO: initialize the size of /dev/fb
 }
 
+// opening_offset's value in [0, file.size)
 size_t opening_offset;
 
 int fs_open(const char *pathname, int flags, int mode) {
@@ -52,7 +53,15 @@ int fs_open(const char *pathname, int flags, int mode) {
 }
 
 size_t fs_read(int fd, void *buf, size_t len) {
+  if (fd < 3) panic("Read invalid fd.");
 
+  Finfo opening_file = file_table[fd];
+  if (len + opening_offset > opening_file.size) {
+    len = opening_file.size - opening_offset;
+  }
+  ramdisk_read(buf, opening_file.disk_offset + opening_offset, len);
+  opening_offset = (len + opening_offset) % opening_file.size;
+  return len;
 }
 
 // size_t fs_write(int fd, const void *buf, size_t len);
