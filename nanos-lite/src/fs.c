@@ -30,7 +30,34 @@ static Finfo file_table[] __attribute__((used)) = {
   [FD_STDERR] = {"stderr", 0, 0, invalid_read, invalid_write},
 #include "files.h"
 };
+#define NR_FILES int(sizeof(file_table) / sizeof Finfo)
 
 void init_fs() {
   // TODO: initialize the size of /dev/fb
+}
+
+size_t opening_offset;
+
+int fs_open(const char *pathname, int flags, int mode) {
+  int fd = -1;
+  for (int i = 3; i < NR_FILES; i ++) {
+    if (strcmp(file_table[i].name, pathname) == 0) {
+      opening_offset = 0;
+      fa = i;
+      break;
+    }
+  }
+  if (fd == -1) panic("No this file in FIEL_TABLE.")
+  return fd;
+}
+
+size_t fs_read(int fd, void *buf, size_t len) {
+
+}
+
+// size_t fs_write(int fd, const void *buf, size_t len);
+// size_t fs_lseek(int fd, size_t offset, int whence);
+
+int fs_close(int fd) {
+  return 0;
 }
