@@ -1,5 +1,6 @@
 #include <common.h>
 #include "syscall.h"
+#include "fs.h"
 
 intptr_t sys_write (int fd, const void* buf, size_t count) {
   assert(fd == 1 || fd == 2);
@@ -22,20 +23,25 @@ void do_syscall(Context *c) {
       break;
     case SYS_yield: 
       // printf("\tsyscall to SYS_yield\n"); 
-      c->GPRx = 0; 
-      yield(); 
+      c->GPRx = 0;
+      yield();
       break;
     case SYS_open:
+      c->GPRx = fs_open((const char*)a[1], a[2], a[3]); 
       break;
     case SYS_read:
+      c->GPRx = fs_read(a[1], (void*)a[2], a[3]); 
       break;
     case SYS_write:
       // printf("\tsyscall to SYS_write\n"); 
-      c->GPRx = sys_write(a[1], (void*)a[2], a[3]); 
+      /* c->GPRx = sys_write(a[1], (void*)a[2], a[3]);  */
+      c->GPRx = fs_write(a[1], (void*)a[2], a[3]); 
       break;
     case SYS_close:
+      c->GPRx = fs_close(a[1]); 
       break;
     case SYS_lseek:
+      c->GPRx = fs_lseek(a[1], a[2], a[3]); 
       break;
     case SYS_brk:
       // printf("\tsyscall to SYS_brk\n"); 
@@ -45,6 +51,7 @@ void do_syscall(Context *c) {
       panic("Unhandled syscall ID = %d", a[0]);
   }
 
+#define STRACE 1
 #ifdef STRACE
   char *type = (a[0] ==         SYS_exit) ? "SYS_EXIT" :
                (a[0] ==        SYS_yield) ? "SYS_YIELD" :

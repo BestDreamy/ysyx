@@ -40,14 +40,14 @@ void init_fs() {
   // TODO: initialize the size of /dev/fb
 }
 
-// opening_offset's value in [0, file.size)
-size_t opening_offset;
+// file_offset's value in [0, file.size)
+size_t file_offset;
 
 int fs_open(const char *pathname, int flags, int mode) {
   int fd = -1;
   for (int i = 3; i < NR_FILES; i ++) {
     if (strcmp(file_table[i].name, pathname) == 0) {
-      opening_offset = 0;
+      file_offset = 0;
       fd = i;
       break;
     }
@@ -59,37 +59,47 @@ int fs_open(const char *pathname, int flags, int mode) {
 size_t fs_read(int fd, void *buf, size_t len) {
   if (fd < 3) panic("Read invalid fd.");
 
-  Finfo opening_file = file_table[fd];
-  if (len + opening_offset > opening_file.size) {
-    len = opening_file.size - opening_offset;
+  Finfo file = file_table[fd];
+  if (len + file_offset > file.size) {
+    len = file.size - file_offset;
   }
-  ramdisk_read(buf, opening_file.disk_offset + opening_offset, len);
-  opening_offset = (len + opening_offset) % opening_file.size;
+  ramdisk_read(buf, file.disk_offset + file_offset, len);
+  file_offset = (len + file_offset) % file.size;
   return len;
 }
 
+intptr_t sys_write(int fd, const void* buf, size_t count);
 size_t fs_write(int fd, const void *buf, size_t len) {
-  return 0;
+  if (fd == 0) panic("Write invalid fd.");
+  if (fd < 3) return sys_write(fd, buf, len);
+
+  Finfo file = file_table[fd];
+  if (len + file_offset > file.size) {
+    len = file.size - file_offset;
+  }
+  ramdisk_write(buf, file.disk_offset + file_offset, len);
+  file_offset = (len + file_offset) % file.size;
+  return len;
 }
 
 size_t fs_lseek(int fd, size_t offset, int whence) {
   if (fd < 3) panic("Seek invalid fd.");
 
-  Finfo opening_file = file_table[fd];
+  Finfo file = file_table[fd];
   switch (whence) {
     case SEEK_SET:
-      opening_offset = offset;
+      file_offset = offset;
       break;
     case SEEK_CUR:
-      opening_offset = opening_offset + offset;
+      file_offset = file_offset + offset;
       break;
     case SEEK_END:
-      opening_offset = opening_file.size + offset;
+      file_offset = file.size + offset;
       break;
     default:
       panic("Invalid whence when seeking.");
   }
-  return opening_offset;
+  return file_offset;
 }
 
 int fs_close(int fd) {

@@ -7,7 +7,7 @@ static Context* do_event(Event e, Context* c) {
     case EVENT_YIELD: 
       // printf("Event yield is triggered\n"); 
       break;
-    case EVENT_SYSCALL: 
+    case EVENT_SYSCALL:
       // printf("Event syscall is triggered\n"); 
       do_syscall(c); 
       break;
