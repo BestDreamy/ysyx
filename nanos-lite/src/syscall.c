@@ -16,24 +16,32 @@ void do_syscall(Context *c) {
 
   // From navy-apps/libs/libos/src/syscall.c
   switch (a[0]) {
-    case 0: 
+    case SYS_exit: 
       // printf("\tsyscall to SYS_exit\n"); 
-      halt(c->GPRx); 
+      halt(c->GPRx);
       break;
-    case 1: 
+    case SYS_yield: 
       // printf("\tsyscall to SYS_yield\n"); 
       c->GPRx = 0; 
       yield(); 
       break;
-    case 4: 
+    case SYS_open:
+      break;
+    case SYS_read:
+      break;
+    case SYS_write:
       // printf("\tsyscall to SYS_write\n"); 
       c->GPRx = sys_write(a[1], (void*)a[2], a[3]); 
       break;
-    case 9: 
+    case SYS_close:
+      break;
+    case SYS_lseek:
+      break;
+    case SYS_brk:
       // printf("\tsyscall to SYS_brk\n"); 
       c->GPRx = 0; 
       break;
-    default: 
+    default:
       panic("Unhandled syscall ID = %d", a[0]);
   }
 
