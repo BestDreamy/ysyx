@@ -52,12 +52,12 @@ int fs_open(const char *pathname, int flags, int mode) {
       break;
     }
   }
-  if (fd == -1) panic("No this file in FIEL_TABLE.");
+  if (fd == -1) panic("No this file in FILE_TABLE.");
   return fd;
 }
 
 size_t fs_read(int fd, void *buf, size_t len) {
-  if (fd < 3) panic("Read invalid fd.");
+  if (fd < 3) return Log("Read invalid fd."), 0;
 
   Finfo file = file_table[fd];
   if (len + file_offset > file.size) {
@@ -68,10 +68,15 @@ size_t fs_read(int fd, void *buf, size_t len) {
   return len;
 }
 
-intptr_t sys_write(int fd, const void* buf, size_t count);
+// intptr_t sys_write(int fd, const void* buf, size_t len);
 size_t fs_write(int fd, const void *buf, size_t len) {
-  if (fd == 0) panic("Write invalid fd.");
-  if (fd < 3) return sys_write(fd, buf, len);
+  if (fd == 0) return Log("Write invalid fd."), 0;
+  if (fd < 3) {
+    for (int i = 0; i < len; i ++) {
+      putch(*((char*)buf + i));
+    }
+    return len;
+  }
 
   Finfo file = file_table[fd];
   if (len + file_offset > file.size) {
@@ -83,7 +88,7 @@ size_t fs_write(int fd, const void *buf, size_t len) {
 }
 
 size_t fs_lseek(int fd, size_t offset, int whence) {
-  if (fd < 3) panic("Seek invalid fd.");
+  if (fd < 3) return Log("Seek invalid fd."), 0;
 
   Finfo file = file_table[fd];
   switch (whence) {

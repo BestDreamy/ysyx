@@ -2,12 +2,12 @@
 #include "syscall.h"
 #include "fs.h"
 
-intptr_t sys_write (int fd, const void* buf, size_t count) {
+intptr_t sys_write (int fd, const void* buf, size_t len) {
   assert(fd == 1 || fd == 2);
-  for (intptr_t i = 0; i < count; i ++) {
+  for (intptr_t i = 0; i < len; i ++) {
     putch(*((char*)buf + i));
   }
-  return count;
+  return len;
 }
 
 void do_syscall(Context *c) {
@@ -27,7 +27,7 @@ void do_syscall(Context *c) {
       yield();
       break;
     case SYS_open:
-      c->GPRx = fs_open((const char*)a[1], a[2], a[3]); 
+      c->GPRx = fs_open((char*)a[1], a[2], a[3]); 
       break;
     case SYS_read:
       c->GPRx = fs_read(a[1], (void*)a[2], a[3]); 
