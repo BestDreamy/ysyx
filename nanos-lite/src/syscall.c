@@ -51,7 +51,7 @@ void do_syscall(Context *c) {
       panic("Unhandled syscall ID = %d", a[0]);
   }
 
-#define STRACE 1
+// #define STRACE 1
 #ifdef STRACE
   char *type = (a[0] ==         SYS_exit) ? "SYS_EXIT" :
                (a[0] ==        SYS_yield) ? "SYS_YIELD" :
@@ -63,12 +63,6 @@ void do_syscall(Context *c) {
                (a[0] ==          SYS_brk) ? "SYS_BRK" :
                (a[0] ==       SYS_execve) ? "SYS_EXECVE" :
                (a[0] == SYS_gettimeofday) ? "SYS_GETTIMEOFDAY" : "";
-  // char *file = ((a[0] !=         SYS_exit) &&
-  //               (a[0] !=        SYS_yield) &&
-  //               (a[0] !=         SYS_open) &&
-  //               (a[0] !=          SYS_brk) &&
-  //               (a[0] != SYS_gettimeofday)) ? fs_get(a[1]).name : "none";
-  // printf("[strace] file: %s, type: %s, a1 = %x, a2 = %x, a3 = %x, ret: %x\n", file, type, a[1], a[2], a[3], c->GPRx);
   printf("\033[1;33m(strace) type=%s, arg1=%x, arg2=%x, arg3=%x, ret=%x\n\033[0m", type, a[1], a[2], a[3], c->GPRx);
 #endif
 }

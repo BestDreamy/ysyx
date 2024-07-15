@@ -28,10 +28,11 @@ size_t invalid_write(const void *buf, size_t offset, size_t len) {
 }
 
 /* This is the information about all files in disk. */
+size_t serial_write(const void *buf, size_t offset, size_t len);
 static Finfo file_table[] __attribute__((used)) = {
   [FD_STDIN]  = {"stdin", 0, 0, invalid_read, invalid_write},
-  [FD_STDOUT] = {"stdout", 0, 0, invalid_read, invalid_write},
-  [FD_STDERR] = {"stderr", 0, 0, invalid_read, invalid_write},
+  [FD_STDOUT] = {"stdout", 0, 0, invalid_read, serial_write},
+  [FD_STDERR] = {"stderr", 0, 0, invalid_read, serial_write},
 #include "files.h"
 };
 #define NR_FILES (int)(sizeof(file_table) / sizeof(Finfo))
@@ -57,9 +58,12 @@ int fs_open(const char *pathname, int flags, int mode) {
 }
 
 size_t fs_read(int fd, void *buf, size_t len) {
-  if (fd < 3) return Log("Read invalid fd."), 0;
-
+  /* if (fd < 3) return Log("Read invalid fd."), 0; */
   Finfo file = file_table[fd];
+  if (file.read != NULL) {
+    return file.read(buf, 0, len);
+  }
+
   if (len + file_offset > file.size) {
     len = file.size - file_offset;
   }
@@ -68,17 +72,16 @@ size_t fs_read(int fd, void *buf, size_t len) {
   return len;
 }
 
-// intptr_t sys_write(int fd, const void* buf, size_t len);
+/* intptr_t sys_write(int fd, const void* buf, size_t len); */
 size_t fs_write(int fd, const void *buf, size_t len) {
-  if (fd == 0) return Log("Write invalid fd."), 0;
-  if (fd < 3) {
-    for (int i = 0; i < len; i ++) {
-      putch(*((char*)buf + i));
-    }
-    return len;
-  }
+  /* if (fd == 0) return Log("Write invalid fd."), 0; */
+  /* if (fd < 3) return sys_write(fd, buf, len); */
 
   Finfo file = file_table[fd];
+  if (file.write != NULL) {
+    return file.write(buf, 0, len);
+  }
+
   if (len + file_offset > file.size) {
     len = file.size - file_offset;
   }
