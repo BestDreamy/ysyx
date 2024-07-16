@@ -1,6 +1,7 @@
 #include <common.h>
 #include "syscall.h"
 #include "fs.h"
+#include <sys/time.h>
 
 intptr_t sys_write (int fd, const void* buf, size_t len) {
   assert(fd == 1 || fd == 2);
@@ -11,7 +12,10 @@ intptr_t sys_write (int fd, const void* buf, size_t len) {
 }
 
 int sys_gettimeofday(struct timeval *tv, struct timezone *tz) {
-  ;
+  uint64_t us = io_read(AM_TIMER_UPTIME).us;
+  tv->tv_sec = us / 1000000;
+  tv->tv_usec = us % 1000000;
+  return 0;
 }
 
 void do_syscall(Context *c) {
@@ -50,6 +54,9 @@ void do_syscall(Context *c) {
     case SYS_brk:
       // printf("\tsyscall to SYS_brk\n"); 
       c->GPRx = 0; 
+      break;
+    case SYS_gettimeofday:
+      c->GPRx = sys_gettimeofday((struct timeval*)a[1], (struct timezone*)a[2]);
       break;
     default:
       panic("Unhandled syscall ID = %d", a[0]);
