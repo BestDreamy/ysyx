@@ -76,7 +76,6 @@ size_t fs_read(int fd, void *buf, size_t len) {
 size_t fs_write(int fd, const void *buf, size_t len) {
   /* if (fd == 0) return Log("Write invalid fd."), 0; */
   /* if (fd < 3) return sys_write(fd, buf, len); */
-
   Finfo file = file_table[fd];
   if (file.write != NULL) {
     return file.write(buf, 0, len);
