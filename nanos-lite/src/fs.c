@@ -45,7 +45,7 @@ static Finfo file_table[] __attribute__((used)) = {
   [FD_STDOUT] = {"stdout", 0, 0, invalid_read, serial_write},
   [FD_STDERR] = {"stderr", 0, 0, invalid_read, serial_write},
   [FD_EVENTS] = {"/dev/events", 0, 0, events_read, invalid_write},
-  [FD_FB] = {"/dev/fb", 0, 0, invalid_read, invalid_write},
+  [FD_FB] = {"/dev/fb", 0, 0, invalid_read, fb_write},
   [FD_DISPINFO] = {"/proc/dispinfo", 0, 0, dispinfo_read, invalid_write},
 #include "files.h"
 };
@@ -53,19 +53,19 @@ static Finfo file_table[] __attribute__((used)) = {
 
 void init_fs() {
   // frame buffer
-  // AM_GPU_CONFIG_T fb = io_read(AM_GPU_CONFIG);
-  // file_table[FD_FB].size = fb.width * fb.height;
+  AM_GPU_CONFIG_T fb = io_read(AM_GPU_CONFIG);
+  file_table[FD_FB].size = fb.width * fb.height;
 }
 
 // file_offset's value in [0, file.size)
-size_t file_offset;
+size_t file_offset = 0;
 
 int fs_open(const char *pathname, int flags, int mode) {
   int fd = -1;
   for (int i = 3; i < NR_FILES; i ++) {
     if (strcmp(file_table[i].name, pathname) == 0) {
-      file_offset = 0;
       fd = i;
+      file_offset = 0;
       break;
     }
   }

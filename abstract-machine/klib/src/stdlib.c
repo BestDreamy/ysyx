@@ -35,6 +35,20 @@ void *malloc(size_t size) {
   //   panic() -> putchar() -> (glibc) -> malloc() -> panic()
 #if !(defined(__ISA_NATIVE__) && defined(__NATIVE_USE_KLIB__))
   panic("Not implemented");
+  // char *addr_curr_p = NULL;
+  // if (addr_curr_p == NULL) {
+  //   addr_curr_p = (void *)ROUNDUP(heap.start, 8);
+  // }
+
+  // size = (size_t)ROUNDUP(size, 8);
+  // char *addr_prev_p = addr_curr_p;
+  // addr_curr_p += size;
+  // assert((uintptr_t)heap.start <= (uintptr_t)addr_curr_p &&
+  //        (uintptr_t)addr_curr_p < (uintptr_t)heap.end);
+  // for (uint64_t *p = (uint64_t *)addr_prev_p; p != (uint64_t *)addr_curr_p; p++) {
+  //   *p = 0;
+  // }
+  // return addr_prev_p;
 #endif
   return NULL;
 }

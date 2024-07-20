@@ -68,14 +68,20 @@ int _write(int fd, void *buf, size_t count) {
   return _syscall_(SYS_write, fd, (intptr_t)buf, count);
 }
 
+extern char _end;
+intptr_t brk_addr = (intptr_t)&_end;
 void *_sbrk(intptr_t increment) {
   extern char _end;
   // Check [program break, program break + increment) is available by _syscall_().
   // If _syscall_() return 0, that means this data segment is available.
   // And then malloc the memory by 'end'.
-  if (_syscall_(SYS_brk, increment, 0, 0) == 0) {
-    char* nxt_end = &_end + increment;
-    return (void*) nxt_end;
+  intptr_t brk_addr_prev = brk_addr;
+  intptr_t brk_addr_curr = brk_addr + increment;
+
+  if (!_syscall_(SYS_brk, brk_addr + increment, 0, 0)) {
+    intptr_t ret = brk_addr;
+    brk_addr = brk_addr + increment;
+    return (void *)ret;
   }
   return (void *)-1;
 }
