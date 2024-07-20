@@ -38,19 +38,23 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
   return snprintf((char*)buf, len, "WIDTH: %d\nHEIGHT: %d", ev.width, ev.height);
 }
 
+extern size_t file_offset;
 size_t fb_write(const void *buf, size_t offset, size_t len) {
-  AM_GPU_CONFIG_T ev = io_read(AM_GPU_CONFIG);
-  int width = ev.width;
- 
-  offset /= 4;
-  len /= 4;
- 
-  int y = offset / width;
-  int x = offset - y * width;
- 
-  io_write(AM_GPU_FBDRAW, x, y, (void *)buf, len, 1, true);
+  AM_GPU_CONFIG_T cfg = io_read(AM_GPU_CONFIG);
 
-  return len;
+  AM_GPU_FBDRAW_T ctl;
+  ctl.pixels = (void *)buf;
+  ctl.sync = true;
+
+  ctl.x = offset % cfg.width;
+  ctl.y = offset / cfg.width;
+  ctl.w = len >> 16;
+  ctl.h = len & 0x0000FFFF;
+
+  io_write(AM_GPU_FBDRAW, ctl.x, ctl.y, ctl.pixels, ctl.w, ctl.h, ctl.sync);
+  file_offset = offset + len;
+
+  return 0;
 }
 
 void init_device() {
