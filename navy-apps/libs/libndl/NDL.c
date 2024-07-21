@@ -22,16 +22,16 @@ int NDL_PollEvent(char *buf, int len) {
   return !(ret == 0);
 }
 
-void NDL_OpenCanvas(int *w, int *h) {
+void NDL_OpenCanvas(int *canvas_w, int *canvas_h) {
   int fd = open("/proc/dispinfo", 0, 0);
 
   char buf[32];
   read(fd, buf, sizeof(buf)); // --> dispinfo_read 
   sscanf(buf, "WIDTH: %d\nHEIGHT: %d", &screen_w, &screen_h);
 
-  if (*w == 0 && *h == 0) {
-    *w = screen_w;
-    *h = screen_h;
+  if (*canvas_w == 0 && *canvas_h == 0) {
+    *canvas_w = screen_w;
+    *canvas_h = screen_h;
   }
   // printf("width: %d\nheight: %d\n", screen_w, screen_h);
   // printf("width: %d\nheight: %d\n", *w, *h);
@@ -40,7 +40,7 @@ void NDL_OpenCanvas(int *w, int *h) {
   // if (getenv("NWM_APP")) {
   //   int fbctl = 4;
   //   fbdev = 5;
-  //   screen_w = *w; screen_h = *h;
+  //   screen_w = *canvas_w; screen_h = *canvas_h;
   //   char buf[64];
   //   int len = sprintf(buf, "%d %d", screen_w, screen_h);
   //   // let NWM resize the window and create the frame buffer
@@ -56,13 +56,23 @@ void NDL_OpenCanvas(int *w, int *h) {
   // }
 }
 
-void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
-  x = 1;
-  y = screen_w * ((screen_h - h) / 2) + ((screen_w - w) / 2);
+void NDL_DrawRect(uint32_t *pixels, int x, int y, int canvas_w, int canvas_h) {
+  int center_x = screen_w / 2 - canvas_w / 2;
+  int center_y = screen_h / 2 - canvas_h / 2;
+
+  x = center_x + x;
+  y = center_y + y;
 
   int fd = open("/dev/fb", 0, 0);
-  lseek(fd, x * y, SEEK_SET);
-  write(fd, pixels, ((size_t)w << 16) | ((size_t)h & 0x0000FFFF));
+
+  size_t offset = (screen_w * y + x);
+  lseek(fd, offset, SEEK_SET);
+
+  for (int i = 0; i < canvas_h; i ++) {
+    write(fd, pixels, canvas_w);
+    lseek(fd, screen_w - canvas_w, SEEK_CUR);
+    pixels += canvas_w;
+  }
   close(fd);
 }
 
