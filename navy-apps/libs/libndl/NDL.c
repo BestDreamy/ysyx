@@ -68,10 +68,12 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int canvas_w, int canvas_h) {
   size_t offset = (screen_w * y + x);
   lseek(fd, offset, SEEK_SET);
 
+  uint32_t *buf = pixels;
   for (int i = 0; i < canvas_h; i ++) {
-    write(fd, pixels, canvas_w);
+    write(fd, buf, canvas_w);
+    /* lseek(fd, offset + screen_w * (i + 1), SEEK_SET); */
     lseek(fd, screen_w - canvas_w, SEEK_CUR);
-    pixels += canvas_w;
+    buf += canvas_w;
   }
   close(fd);
 }

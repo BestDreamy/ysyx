@@ -77,7 +77,7 @@ size_t fs_read(int fd, void *buf, size_t len) {
   /* if (fd < 3) return Log("Read invalid fd."), 0; */
   Finfo file = file_table[fd];
   if (file.read != NULL) {
-    return file.read(buf, 0, len);
+    return file.read(buf, file_offset, len);
   }
 
   if (len + file_offset > file.size) {
@@ -95,7 +95,7 @@ size_t fs_write(int fd, const void *buf, size_t len) {
   /* if (fd < 3) return sys_write(fd, buf, len); */
   Finfo file = file_table[fd];
   if (file.write != NULL) {
-    return file.write(buf, 0, len);
+    return file.write(buf, file_offset, len);
   }
 
   if (len + file_offset > file.size) {
