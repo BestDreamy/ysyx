@@ -17,18 +17,17 @@ int SDL_PollEvent(SDL_Event *ev) {
   char buf[32];
   // Get the state of the keyboard from NDL.
   if (NDL_PollEvent(buf, sizeof(buf) / sizeof(char))) {
-    printf("%s\n", buf);
     if (strncmp(buf, "kd", 2) == 0) {
       ev->key.type = SDL_KEYDOWN;
     } else {
       ev->key.type = SDL_KEYUP;
     }
 
-    for (int i = 0; i < sizeof(keyname) / sizeof(keyname[0]); i ++) {
-      if (strcmp(buf + 3, keyname[i]) == 0) {
-        ev->key.keysym.sym = i;
-        break;
-      }
+    char keyname[16];
+    int keycode;
+    sscanf(buf + 3, "%s %d\n", keyname, &keycode);
+    if (keycode != 0) {
+      ev->key.keysym.sym = keycode;
     }
     return 1;
   }

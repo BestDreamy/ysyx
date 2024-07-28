@@ -24,13 +24,14 @@ size_t serial_write(const void *buf, size_t offset, size_t len) {
 size_t events_read(void *buf, size_t offset, size_t len) {
   // Seek for $AM/am/include/amdev.h
   AM_INPUT_KEYBRD_T ev = io_read(AM_INPUT_KEYBRD);
-  if (ev.keycode == AM_KEY_NONE) {
+  int keycode = ev.keycode;
+  if (keycode == AM_KEY_NONE) {
     *(char*)buf = '\0';
     return 0;
   }
 
   char* key_state = ev.keydown? "kd": "ku";
-  return snprintf((char*)buf, len, "%s %s\n", key_state, keyname[ev.keycode]);
+  return snprintf((char*)buf, len, "%s %s %d\n", key_state, keyname[keycode], keycode);
 }
 
 size_t dispinfo_read(void *buf, size_t offset, size_t len) {
