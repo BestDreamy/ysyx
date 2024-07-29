@@ -69,7 +69,26 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
     w = s->w;
     h = s->h;
   }
-  NDL_DrawRect((uint32_t*)s->pixels, x, y, w, h);
+  
+  if (s->format->BitsPerPixel == 32) {
+    NDL_DrawRect((uint32_t*)s->pixels, x, y, w, h);
+  }
+  else if (s->format->BitsPerPixel == 8) {
+    int len = w * h;
+    uint32_t *pixels = (uint32_t *)malloc(4 * len);
+    for (int i = 0; i < len; i++) {
+      SDL_Color pixel = s->format->palette->colors[s->pixels[i]];
+      pixels[i] = (uint32_t)pixel.a << 24 |
+                  (uint32_t)pixel.r << 16 |
+                  (uint32_t)pixel.g <<  8 |
+                  (uint32_t)pixel.b;
+    }
+    NDL_DrawRect(pixels, x, y, w, h);
+    free(pixels);
+  }
+  else{
+    assert(0);
+  }
 }
 
 // APIs below are already implemented.

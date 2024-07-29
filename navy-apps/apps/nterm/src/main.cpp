@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
   assert(0);
 }
 
-static void draw_ch(int x, int y, char ch, uint32_t fg, uint32_t bg) {
+static void draw_ch(int16_t x, int16_t y, char ch, uint32_t fg, uint32_t bg) {
   SDL_Surface *s = BDF_CreateSurface(font, ch, fg, bg);
   SDL_Rect dstrect = { .x = x, .y = y };
   SDL_BlitSurface(s, NULL, screen, &dstrect);
