@@ -62,7 +62,7 @@ void do_syscall(Context *c) {
       panic("Unhandled syscall ID = %d", a[0]);
   }
 
-// #define STRACE 1
+#define STRACE 1
 #ifdef STRACE
   char *type = (a[0] ==         SYS_exit) ? "SYS_EXIT" :
                (a[0] ==        SYS_yield) ? "SYS_YIELD" :

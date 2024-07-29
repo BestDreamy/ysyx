@@ -70,6 +70,7 @@ int _write(int fd, void *buf, size_t count) {
 
 extern char _end;
 intptr_t brk_addr = (intptr_t)&_end;
+
 void *_sbrk(intptr_t increment) {
   extern char _end;
   // Check [program break, program break + increment) is available by _syscall_().
