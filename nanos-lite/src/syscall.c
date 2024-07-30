@@ -25,7 +25,7 @@ void do_syscall(Context *c) {
 
   // From navy-apps/libs/libos/src/syscall.c
   switch (a[0]) {
-    case SYS_exit: 
+    case SYS_exit:
       // printf("\tsyscall to SYS_exit\n"); 
       halt(c->GPRx);
       break;
@@ -55,6 +55,10 @@ void do_syscall(Context *c) {
       // printf("\tsyscall to SYS_brk\n"); 
       c->GPRx = 0; 
       break;
+    case SYS_execve:
+      printf("\tsyscall to SYS_execve\n"); 
+      // naive_uload(NULL, "/bin/menu");
+      break;
     case SYS_gettimeofday:
       c->GPRx = sys_gettimeofday((struct timeval*)a[1], (struct timezone*)a[2]);
       break;
@@ -62,7 +66,7 @@ void do_syscall(Context *c) {
       panic("Unhandled syscall ID = %d", a[0]);
   }
 
-#define STRACE 1
+/* #define STRACE 1 */
 #ifdef STRACE
   char *type = (a[0] ==         SYS_exit) ? "SYS_EXIT" :
                (a[0] ==        SYS_yield) ? "SYS_YIELD" :
