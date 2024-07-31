@@ -2,6 +2,8 @@
 #include "syscall.h"
 #include "fs.h"
 #include <sys/time.h>
+#include <proc.h>
+#include "loader.h"
 
 intptr_t sys_write (int fd, const void* buf, size_t len) {
   assert(fd == 1 || fd == 2);
@@ -18,6 +20,10 @@ int sys_gettimeofday(struct timeval *tv, struct timezone *tz) {
   return 0;
 }
 
+void sys_execve(const char* fname, char* const argv[], char* const envp[]) {
+  naive_uload(NULL, fname);
+}
+
 void do_syscall(Context *c) {
   uintptr_t a[4] = {
     c->GPR1, c->GPR2, c->GPR3, c->GPR4
@@ -27,7 +33,8 @@ void do_syscall(Context *c) {
   switch (a[0]) {
     case SYS_exit:
       // printf("\tsyscall to SYS_exit\n"); 
-      halt(c->GPRx);
+      /* halt(c->GPRx); */
+      naive_uload(NULL, "/bin/nterm");
       break;
     case SYS_yield: 
       // printf("\tsyscall to SYS_yield\n"); 
@@ -56,8 +63,7 @@ void do_syscall(Context *c) {
       c->GPRx = 0; 
       break;
     case SYS_execve:
-      printf("\tsyscall to SYS_execve\n"); 
-      // naive_uload(NULL, "/bin/menu");
+      sys_execve((char*)a[1], (char**)a[2], (char**)a[3]);
       break;
     case SYS_gettimeofday:
       c->GPRx = sys_gettimeofday((struct timeval*)a[1], (struct timezone*)a[2]);
@@ -66,7 +72,7 @@ void do_syscall(Context *c) {
       panic("Unhandled syscall ID = %d", a[0]);
   }
 
-/* #define STRACE 1 */
+// #define STRACE 1
 #ifdef STRACE
   char *type = (a[0] ==         SYS_exit) ? "SYS_EXIT" :
                (a[0] ==        SYS_yield) ? "SYS_YIELD" :
