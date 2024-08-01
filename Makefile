@@ -43,7 +43,7 @@ _default:
 
 git:
 	git add .
-	git commit -m "Finish pa3.5"
-	git push origin pa3
+	git commit -m "Start RT-Thread"
+	git push origin pa4
 
 .PHONY: .git_commit .clean_index _default git
