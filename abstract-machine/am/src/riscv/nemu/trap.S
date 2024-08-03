@@ -57,8 +57,15 @@ __am_asm_trap:
   or t1, t1, a0
   csrw mstatus, t1
 
+  # Set parameter of __am_irq_handle
+  # And you know:
+  # Compare with normal memory, stack's address have a rev direction. 
+  # stack(raise from high --> low)
   mv a0, sp
   jal __am_irq_handle
+
+  # Start restore the context
+
 
   LOAD t1, OFFSET_STATUS(sp)
   LOAD t2, OFFSET_EPC(sp)
