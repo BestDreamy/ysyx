@@ -40,7 +40,7 @@ bool cte_init(Context*(*handler)(Event, Context*)) {
 
 Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   Context* c = (Context*)kstack.end - 1;
-  user_handler = entry;
+  c->mepc = (uintptr_t)entry; // wait for mret
   return c;
 }
 
