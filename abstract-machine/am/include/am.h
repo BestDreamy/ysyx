@@ -56,7 +56,7 @@ void     ioe_write   (int reg, void *buf);
 
 // ---------- CTE: Interrupt Handling and Context Switching ----------
 bool     cte_init    (Context *(*handler)(Event ev, Context *ctx));
-void     yield       (void);
+void     yield       ();
 bool     ienabled    (void);
 void     iset        (bool enable);
 Context *kcontext    (Area kstack, void (*entry)(void *), void *arg);
