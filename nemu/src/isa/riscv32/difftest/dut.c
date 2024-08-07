@@ -33,7 +33,7 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
   int csr_addr[] = {0x300, 0x305, 0x341, 0x342};
   for (int i = 0; i < ARRLEN(csr_addr); i ++) {
     if (cpu.csr[i] == ref_r->csr[i]) continue;
-    printf("csr in %s: 0x%08x != 0x%08x\n", csrs[i], cpu.csr[i], ref_r->csr[i]);
+    printf("csr in %s: 0x%08x(dut) != 0x%08x(ref)\n", csrs[i], cpu.csr[i], ref_r->csr[i]);
     return false;
   }
   return true;
