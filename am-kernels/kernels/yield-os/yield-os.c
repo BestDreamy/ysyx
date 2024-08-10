@@ -39,8 +39,8 @@ int main() {
   cte_init(schedule);
   pcb[0].cp = kcontext((Area) { pcb[0].stack, &pcb[0] + 1 }, f, (void *)1L);
   pcb[1].cp = kcontext((Area) { pcb[1].stack, &pcb[1] + 1 }, f, (void *)2L);
-  printf("A: %x\n", pcb[0].cp->mepc);
-  printf("B: %x\n", pcb[1].cp->mepc);
+  /* printf("A: %x\n", pcb[0].cp->mepc); */
+  /* printf("B: %x\n", pcb[1].cp->mepc); */
   yield();
   panic("Should not reach here!");
 }

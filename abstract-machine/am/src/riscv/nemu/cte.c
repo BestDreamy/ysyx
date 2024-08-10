@@ -44,6 +44,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   Context* c = (Context*)kstack.end - 1;
   c->mepc = (uintptr_t)entry; // wait for mret
   c->GPR2 = (uintptr_t)arg;
+  c->mstatus = 0x1800;
   return c;
 }
 

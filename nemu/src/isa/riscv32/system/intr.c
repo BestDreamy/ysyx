@@ -21,9 +21,19 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
    */
   cpu.csr[mcause] = NO;
   cpu.csr[mepc] = epc;
-  cpu.csr[mstatus] = 0x1800;
+
+  cpu.csr[mstatus] |= (cpu.csr[mstatus] & 0x8) << 4;
+  cpu.csr[mstatus] &= ~0x8;
 
   return cpu.csr[mtvec];
+}
+
+word_t isa_ret_intr() {
+  /*define in ${NEMU}/include/isa.h*/
+  cpu.csr[mstatus] |= (cpu.csr[mstatus] & 0x80) >> 4;
+  cpu.csr[mstatus] &= ~0x80;
+
+  return cpu.csr[mepc];
 }
 
 word_t isa_query_intr() {
