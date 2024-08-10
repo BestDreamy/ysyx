@@ -1,11 +1,9 @@
 TOP_MODULE = top
 VERILATOR = verilator
 VERILATOR_INC_PATH = $(addprefix -I, $(abspath ./vsrc/core) $(abspath ./vsrc/perip))
-VERILATOR_FLAGS = -cc --exe --build
+VERILATOR_FLAGS = -cc --exe --build --trace-fst
 VERILATOR_FLAGS += $(VERILATOR_INC_PATH)
-VERILATOR_FLAGS += --trace-fst
-VERILATOR_FLAGS += -Wno-WIDTHEXPAND
-VERILATOR_FLAGS += -Wno-WIDTHTRUNC
+VERILATOR_FLAGS += -Wno-WIDTHEXPAND -Wno-WIDTHTRUNC
 
 WORK_DIR = $(shell pwd)
 
@@ -13,9 +11,11 @@ CSRC = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*.
 VSRC = -f $(shell find $(abspath ./vsrc) -name "vsrc.txt") 
 
 FILELIST_MK = $(shell find ./csrc -name filelist.mk)
-DIFFTEST_MK = $(shell find ./csrc -name difftest.mk)
 -include $(FILELIST_MK)
+
+DIFFTEST_MK = $(shell find ./csrc -name difftest.mk)
 -include $(DIFFTEST_MK)
+
 CXX_INC_PATH = $(addprefix -I, $(INC_PATH))
 CXX_FLAGS    = $(addprefix -CFLAGS , $(CXX_INC_PATH))
 CXX_FLAGS   += $(addprefix -CFLAGS , -Wno-pointer-arith)  # ignore warning: (void*) arithmetic
@@ -26,6 +26,7 @@ LD_FLAGS     = $(addprefix -LDFLAGS , $(LIB))
 
 default: run
 
+
 OBJ_DIR = obj_dir
 BIN = $(OBJ_DIR)/V$(TOP_MODULE)
 IMG ?= inst.txt
@@ -33,11 +34,12 @@ LOAD_IMG = $(abspath ./bin/$(notdir $(IMG)))
 ARGS += $(LOAD_IMG)
 
 run: $(CSRC)
-	@echo "\033[0;36mVerilator the project\033[0m"
+	@echo "\033[0;1;36mVerilator the project: \033[0m"
 	@rm -rf $(OBJ_DIR)
 	@cp $(IMG) $(LOAD_IMG)
-	@$(VERILATOR) $(VERILATOR_FLAGS) $(VSRC) $(CXX_FLAGS) $(LD_FLAGS) $(CSRC)
+	@$(VERILATOR) $(VERILATOR_FLAGS) $(VSRC) $(CXX_FLAGS) $(LD_FLAGS) $(CSRC) > /dev/null 2>&1
 	@# echo "\033[0;35m$(ARGS)\033[0m"
+	@echo -n "(npc run) "
 	$(BIN) $(ARGS)
 
 SIM = sim.fst
@@ -51,12 +53,3 @@ rm:
 .PHONY: run sim default rm
 
 include ../Makefile
-
-# COLOR_RESET = \033[0m
-# COLOR_RED = \033[0;31m
-# COLOR_GREEN = \033[0;32m
-# COLOR_YELLOW = \033[0;33m
-# COLOR_BLUE = \033[0;34m
-# COLOR_MAGENTA = \033[0;35m
-# COLOR_CYAN = \033[0;36m
-# COLOR_WHITE = \033[0;37m

@@ -6,7 +6,7 @@ module top (
     output wire[`ysyx_23060251_inst_bus] inst
 );
 
-    pcReg ysyx_23060251_pcReg (
+    pcu ysyx_23060251_pcu (
         .clk_i(clk),
         .rst_i(rst),
         .npc_i(npc),

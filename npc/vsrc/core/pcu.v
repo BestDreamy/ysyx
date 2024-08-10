@@ -1,4 +1,4 @@
-module pcReg (
+module pcu (
     input wire clk_i,
     input wire rst_i,
     input wire[`ysyx_23060251_pc_bus] npc_i,
@@ -7,7 +7,7 @@ module pcReg (
     always @(posedge clk_i) begin
         if (rst_i == `ysyx_23060251_rst_enable) 
             pc_o <= `ysyx_23060251_pc'h8000_0000;
-        else 
+        else
             pc_o <= npc_i;
     end
 endmodule
