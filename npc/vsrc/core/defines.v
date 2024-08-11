@@ -77,7 +77,8 @@
 `define ysyx_23060251_opinfo_lui    9
 `define ysyx_23060251_opinfo_auipc  10
 `define ysyx_23060251_opinfo_sys    11
-`define ysyx_23060251_opinfo 12
+`define ysyx_23060251_opinfo_csr    12
+`define ysyx_23060251_opinfo 13
 `define ysyx_23060251_opinfo_bus `ysyx_23060251_opinfo - 1: 0
 
 // 1. add
@@ -163,9 +164,16 @@ parameter ysyx_23060251_mul =      `ysyx_23060251_xlen << 1;
 `define ysyx_23060251_store 4
 `define ysyx_23060251_store_bus `ysyx_23060251_store - 1: 0
 
-// 1. ecall
-// 2. ebreak
-`define ysyx_23060251_sys_ecall  0
-`define ysyx_23060251_sys_ebreak 1
-`define ysyx_23060251_sys 2
+// 1. ebreak
+// 2. ecall
+// 3. mret
+`define ysyx_23060251_sys_ebreak 0
+`define ysyx_23060251_sys_ecall  1
+`define ysyx_23060251_sys_mret   2
+`define ysyx_23060251_sys 3
 `define ysyx_23060251_sys_bus `ysyx_23060251_sys - 1: 0
+
+`define ysyx_23060251_csr_csrrw 0
+`define ysyx_23060251_csr_csrrs 1
+`define ysyx_23060251_csr 2
+`define ysyx_23060251_csr_bus `ysyx_23060251_csr - 1: 0

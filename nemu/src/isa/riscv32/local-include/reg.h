@@ -27,21 +27,6 @@ static inline int check_reg_idx(int idx) {
   return idx;
 }
 
-// static inline int check_csr_idx(word_t idx) {
-//   int csrs[4] = {
-//     0x300,
-//     0x305,
-//     0x341, 
-//     0x342
-//   };
-//   bool ok = 0;
-//   for (int i = 0; i < ARRLEN(csrc); i ++) {
-//     if (csrs[i] == idx) ok = 1;
-//   }
-//   IDDEF(CONFIG_RT_CHECK, assert(! ok));
-//   return idx;
-// }
-
 #define gpr(idx) cpu.gpr[check_reg_idx(idx)]
 #define csr(imm) cpu.csr[csr2idx(imm)]
 

@@ -43,7 +43,7 @@ _default:
 
 git:
 	git add .
-	git commit -m "Start RT-Thread"
+	git commit -m "Add csr for npc"
 	git push origin pa4
 
 .PHONY: .git_commit .clean_index _default git

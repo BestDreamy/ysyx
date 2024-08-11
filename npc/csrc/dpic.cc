@@ -37,7 +37,7 @@ word_t vaddr_read(bool is_signed, paddr_t addr, uint8_t mask) {
         int size_of_word = sizeof(data) * 8;
         switch (mask) {
             case 0: data = (data << size_of_word -  8) >> size_of_word -  8; break;
-            case 1: data = (data << size_of_word - 16) >> size_of_word - 16; printf("data: %x\n", (0x8000 << 16) >> 16); break;
+            case 1: data = (data << size_of_word - 16) >> size_of_word - 16; break;
             // lwu: rv64
             IFDEF(CONFIG_ISA64, case 2: data = (data << size_of_word - 32) >> size_of_word - 32; break;);
         }
