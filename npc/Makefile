@@ -37,7 +37,8 @@ run: $(CSRC)
 	@echo "\033[0;1;36mVerilator the project: \033[0m"
 	@rm -rf $(OBJ_DIR)
 	@cp $(IMG) $(LOAD_IMG)
-	@$(VERILATOR) $(VERILATOR_FLAGS) $(VSRC) $(CXX_FLAGS) $(LD_FLAGS) $(CSRC) > /dev/null 2>&1
+	@$(VERILATOR) $(VERILATOR_FLAGS) $(VSRC) $(CXX_FLAGS) $(LD_FLAGS) $(CSRC)
+	# > /dev/null 2>&1
 	@# echo "\033[0;35m$(ARGS)\033[0m"
 	@echo -n "(npc run) "
 	$(BIN) $(ARGS)

@@ -4,52 +4,61 @@ module csr (
     input wire is_ecall_i,
     input wire is_mret_i,
     input wire[`ysyx_23060251_imm_bus] imm_i, // csr
-    input wire[`ysyx_23060251_xlen_bus] res_i, // csr
+    input wire[`ysyx_23060251_reg_bus] src1_i, // csr
     input wire[`ysyx_23060251_reg_bus] mepc_i, // ecall
     input wire[`ysyx_23060251_reg_bus] mcause_i, // ecall
 
-    output reg[`ysyx_23060251_reg_bus] mstatus_o,
-    output reg[`ysyx_23060251_reg_bus] mtvec_o,
-    output reg[`ysyx_23060251_reg_bus] mepc_o,
-    output reg[`ysyx_23060251_reg_bus] mcause_o
+    output wire[`ysyx_23060251_reg_bus] data_o
 );
+
+    reg[`ysyx_23060251_reg_bus] mstatus;
+    reg[`ysyx_23060251_reg_bus] mtvec;
+    reg[`ysyx_23060251_reg_bus] mepc;
+    reg[`ysyx_23060251_reg_bus] mcause;
+
+    assign data_o = {`ysyx_23060251_xlen{imm_i == `ysyx_23060251_mstatus}} & mstatus
+                  | {`ysyx_23060251_xlen{imm_i == `ysyx_23060251_mtvec | is_ecall_i}}   & mtvec
+                  | {`ysyx_23060251_xlen{imm_i == `ysyx_23060251_mepc  | is_mret_i}}    & mepc
+                  | {`ysyx_23060251_xlen{imm_i == `ysyx_23060251_mcause}}  & mcause
+                  ;
+
     always @(posedge clk_i) begin
         if (rst_i == `ysyx_23060251_rst_enable) begin
-            mstatus_o[`ysyx_23060251_mstatus_xIE_bus]  <= 'b0000;
-            mstatus_o[`ysyx_23060251_mstatus_xPIE_bus] <= 'b0000;
-            mstatus_o[`ysyx_23060251_mstatus_xPP_bus]  <= 'b11000;
+            mstatus[`ysyx_23060251_mstatus_xIE_bus]  <= 'b0000;
+            mstatus[`ysyx_23060251_mstatus_xPIE_bus] <= 'b0000;
+            mstatus[`ysyx_23060251_mstatus_xPP_bus]  <= 'b11000;
         end else if (is_ecall_i) begin
-            mstatus_o[`ysyx_23060251_mstatus_xIE_bus]  <= 'b0000;
-            mstatus_o[`ysyx_23060251_mstatus_xPIE_bus] <= mstatus_o[`ysyx_23060251_mstatus_xIE_bus];
+            mstatus[`ysyx_23060251_mstatus_xIE_bus]  <= 'b0000;
+            mstatus[`ysyx_23060251_mstatus_xPIE_bus] <= mstatus[`ysyx_23060251_mstatus_xIE_bus];
             // mstatus_o[`ysyx_23060251_mstatus_xPP_bus]  <= 'b11000;
         end else if (is_mret_i) begin
-            mstatus_o[`ysyx_23060251_mstatus_xIE_bus]  <= mstatus_o[`ysyx_23060251_mstatus_xPIE_bus];
-            mstatus_o[`ysyx_23060251_mstatus_xPIE_bus] <= 'b0001;
+            mstatus[`ysyx_23060251_mstatus_xIE_bus]  <= mstatus[`ysyx_23060251_mstatus_xPIE_bus];
+            mstatus[`ysyx_23060251_mstatus_xPIE_bus] <= 'b0001;
             // mstatus_o[`ysyx_23060251_mstatus_xPP_bus]  <= 'b11000;
-        end else if (imm_o == `ysyx_23060251_mstatus) begin
-            mstatus_o <= res_i;
+        end else if (imm_i == `ysyx_23060251_mstatus) begin
+            mstatus <= src1_i;
         end
     end
 
     always @(posedge clk_i) begin
         if (is_ecall_i) begin
-            mcause_o <= mcause_i;
-        end else if (imm_o == `ysyx_23060251_mcause) begin
-            mcause_o <= res_i;
+            mcause <= mcause_i;
+        end else if (imm_i == `ysyx_23060251_mcause) begin
+            mcause <= src1_i;
         end
     end
 
     always @(posedge clk_i) begin
         if (is_ecall_i) begin
-            mepc_o <= mepc_i;
-        end else if (imm_o == `ysyx_23060251_mepc) begin
-            mepc_o <= res_i;
+            mepc <= mepc_i;
+        end else if (imm_i == `ysyx_23060251_mepc) begin
+            mepc <= src1_i;
         end
     end
 
     always @(posedge clk_i) begin
-        if (imm_o == `ysyx_23060251_mtvec) begin
-            mtvec_o <= res_i;
+        if (imm_i == `ysyx_23060251_mtvec) begin
+            mtvec <= src1_i;
         end
     end
 

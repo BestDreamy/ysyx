@@ -1,12 +1,14 @@
 module alu (
     input  wire[`ysyx_23060251_opinfo_bus] opinfo_i,
-    input  wire[`ysyx_23060251_alu_bus] alu_i,
+    input  wire[`ysyx_23060251_alu_bus]    alu_i,
     input  wire[`ysyx_23060251_branch_bus] branch_info_i,
+    input  wire[`ysyx_23060251_csr_bus]    csr_info_i,
 
     input  wire[`ysyx_23060251_pc_bus]  pc_i,
     input  wire[`ysyx_23060251_reg_bus] src1_i,
     input  wire[`ysyx_23060251_reg_bus] src2_i,
     input  wire[`ysyx_23060251_imm_bus] imm_i,
+    input  wire[`ysyx_23060251_reg_bus] csr_data_i,
 
     output wire[`ysyx_23060251_xlen_bus] res_o,
     output wire                          cnd_o
@@ -27,13 +29,14 @@ module alu (
     wire rv32_store     = opinfo_i[`ysyx_23060251_opinfo_store];
     wire rv32_lui       = opinfo_i[`ysyx_23060251_opinfo_lui];
     wire rv32_auipc     = opinfo_i[`ysyx_23060251_opinfo_auipc];
-    wire rv32_sys       = opinfo_i[`ysyx_23060251_opinfo_sys];
+    wire rv32_csr       = opinfo_i[`ysyx_23060251_opinfo_csr];
 
     wire[`ysyx_23060251_xlen_bus] op1 = (rv32_jal | rv32_jalr | rv32_auipc)? pc_i
-                                      : (rv32_lui)? `ysyx_23060251_xlen'b0
+                                      : (rv32_lui | rv32_csr)? `ysyx_23060251_xlen'b0
                                       : src1_i;
     wire[`ysyx_23060251_xlen_bus] op2 = (rv32_alui | rv32_aluiw | rv32_lui | rv32_auipc | rv32_load | rv32_store)? imm_i
                                       : (rv32_jalr | rv32_jal)? 4
+                                      : (rv32_csr)? csr_data_i
                                       : src2_i;
     /****************************************************************************************
                                             sel op
@@ -46,7 +49,8 @@ module alu (
                          | (rv32_lui)
                          | (rv32_auipc)
                          | (rv32_load)
-                         | (rv32_store);
+                         | (rv32_store)
+                         | (rv32_csr);
     wire rv32_sub_sel    = (rv32_is_alu & alu_i[`ysyx_23060251_alu_sub]);
     wire rv32_xor_sel    = (rv32_is_alu & alu_i[`ysyx_23060251_alu_xor]);
     wire rv32_or_sel     = (rv32_is_alu & alu_i[`ysyx_23060251_alu_or]);

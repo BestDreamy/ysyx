@@ -7,6 +7,7 @@ module idu (
     output wire[`ysyx_23060251_load_bus] load_o,
     output wire[`ysyx_23060251_store_bus] store_o,
     output wire[`ysyx_23060251_sys_bus] sys_o,
+    output wire[`ysyx_23060251_csr_bus] csr_o,
 
     output wire                         wenReg_o,
     output wire                         wenCsr_o,
@@ -205,7 +206,7 @@ module idu (
     assign csr_o = {
         rv32_csrrs,
         rv32_csrrw
-    }
+    };
 
 
     /****************************************************************************************
