@@ -35,15 +35,25 @@ __EXPORT void difftest_regcpy(void *dut, bool direction) {
     }
     cpu.pc = cpu_dut->pc;
 
-    // {
-    //   cpu.csr[mstatus]
-    // }
+    {
+      cpu.csr[mstatus] = cpu_dut->csr[mstatus];
+      cpu.csr[mtvec] = cpu_dut->csr[mtvec];
+      cpu.csr[mepc] = cpu_dut->csr[mepc];
+      cpu.csr[mcause] = cpu_dut->csr[mcause];
+    }
   }
   else {
     for (int i = 0; i < ARRLEN(cpu.gpr); i ++) {
       cpu_dut->gpr[i] = cpu.gpr[i];
     }
     cpu_dut->pc = cpu.pc;
+
+    {
+      cpu_dut->csr[mstatus] = cpu.csr[mstatus];
+      cpu_dut->csr[mtvec] = cpu.csr[mtvec];
+      cpu_dut->csr[mepc] = cpu.csr[mepc];
+      cpu_dut->csr[mcause] = cpu.csr[mcause];
+    }
   }
 }
 
@@ -62,7 +72,7 @@ __EXPORT void difftest_init(int port) {
   /* Perform ISA dependent initialization. */
   init_isa();
   // #ifdef CONFIG_DEVICE
-    void init_device();
-    init_device();
+  //   void init_device();
+  //   init_device();
   // #endif
 }

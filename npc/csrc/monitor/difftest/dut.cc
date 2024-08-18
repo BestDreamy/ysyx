@@ -61,6 +61,11 @@ bool checkregs(CPU_state ref, paddr_t pc) {
         ok = 0;
     }
     if (ref.pc != npc_cpu.pc) ok = 0;
+
+    if (ref.mstatus != npc_cpu.mstatus) ok = 0;
+    if (ref.mtvec != npc_cpu.mtvec) ok = 0;
+    if (ref.mepc != npc_cpu.mepc) ok = 0;
+    if (ref.mcause != npc_cpu.mcause) ok = 0;
     return ok;
 }
 

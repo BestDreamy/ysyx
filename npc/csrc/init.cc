@@ -22,7 +22,7 @@ uint64_t load_image() {
     fseek(fp, 0, SEEK_END);
     size_t size = ftell(fp);
     fseek(fp, 0, SEEK_SET);
-    IFDEF(CONFIG_VIRTUAL_PMEM, init_pmem());
+    // IFDEF(CONFIG_VIRTUAL_PMEM, init_pmem());
     bool ret = fread(guest_to_host(RESET_VECTOR), size, 1, fp);
     Assert(ret == 1, "Load the instrction to the pmem error!\n");
     fclose(fp);
@@ -40,7 +40,7 @@ void welcome(int argc, char *argv[]) {
     parse_args(argc, argv);
     img_size = load_image();
 
-    init_device();
+    IFDEF(CONFIG_DEVICE, init_device());
 
     printf("Welcome to %s-NPC!\n", ANSI_FMT(GREEN_TXT, "riscv32"));
     printf("For help, type \"help\"\n");

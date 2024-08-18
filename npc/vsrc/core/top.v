@@ -80,10 +80,6 @@ wire[`ysyx_23060251_mask_bus] mask;
         .src2_o(src2)
     );
 
-// wire[`ysyx_23060251_reg_bus] mstatus;
-// wire[`ysyx_23060251_reg_bus] mtvec;
-// wire[`ysyx_23060251_reg_bus] mepc;
-// wire[`ysyx_23060251_reg_bus] mcause;
 wire[`ysyx_23060251_reg_bus] csr_data;
     csr ysyx_23060251_csr (
         .clk_i(clk),

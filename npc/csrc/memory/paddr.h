@@ -21,5 +21,4 @@ void out_of_bound(paddr_t addr);
 word_t paddr_read(paddr_t addr, int len);
 void  paddr_write(paddr_t addr, int len, word_t data);
 
-void init_pmem();
 #endif
