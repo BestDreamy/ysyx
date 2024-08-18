@@ -177,3 +177,10 @@ parameter ysyx_23060251_mul =      `ysyx_23060251_xlen << 1;
 `define ysyx_23060251_csr_csrrs 1
 `define ysyx_23060251_csr 2
 `define ysyx_23060251_csr_bus `ysyx_23060251_csr - 1: 0
+
+
+// csr info
+`define ysyx_23060251_mstatus 'h300
+`define ysyx_23060251_mtvec   'h305
+`define ysyx_23060251_mepc    'h341
+`define ysyx_23060251_mcause  'h345

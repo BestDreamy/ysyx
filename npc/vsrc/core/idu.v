@@ -12,9 +12,9 @@ module idu (
     output wire                         wenCsr_o,
     output wire[`ysyx_23060251_rs_bus]  rd_o,
     output wire[`ysyx_23060251_rs_bus]  rs1_o,
-    output wire[`ysyx_23060251_reg_bus] src1_o,
+    // output wire[`ysyx_23060251_reg_bus] src1_o,
     output wire[`ysyx_23060251_rs_bus]  rs2_o,
-    output wire[`ysyx_23060251_reg_bus] src2_o,
+    // output wire[`ysyx_23060251_reg_bus] src2_o,
     output wire[`ysyx_23060251_imm_bus] imm_o,
 
     output wire is_load_signed_o,
