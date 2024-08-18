@@ -27,8 +27,8 @@ wire[`ysyx_23060251_load_bus] load_info;
 wire[`ysyx_23060251_store_bus] store_info;
 wire[`ysyx_23060251_sys_bus] sys_info;
 wire[`ysyx_23060251_csr_bus] csr_info;
-wire wenCsr;
 wire wenReg;
+wire wenCsr;
 wire[`ysyx_23060251_rs_bus] rd;
 wire[`ysyx_23060251_rs_bus] rs1;
 wire[`ysyx_23060251_rs_bus] rs2;
@@ -88,6 +88,7 @@ wire[`ysyx_23060251_reg_bus] csr_data;
     csr ysyx_23060251_csr (
         .clk_i(clk),
         .rst_i(rst),
+        .wenCsr_i(wenCsr),
         .is_ecall_i(sys_info[`ysyx_23060251_sys_ecall]),
         .is_mret_i(sys_info[`ysyx_23060251_sys_mret]),
         .imm_i(imm),

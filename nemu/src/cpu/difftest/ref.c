@@ -34,6 +34,10 @@ __EXPORT void difftest_regcpy(void *dut, bool direction) {
       cpu.gpr[i] = cpu_dut->gpr[i];
     }
     cpu.pc = cpu_dut->pc;
+
+    // {
+    //   cpu.csr[mstatus]
+    // }
   }
   else {
     for (int i = 0; i < ARRLEN(cpu.gpr); i ++) {

@@ -7,6 +7,11 @@
 typedef struct {
     word_t gpr[32];
     paddr_t pc;
+
+    word_t mstatus;
+    word_t mtvec;
+    word_t mepc;
+    word_t mcause;
 } CPU_state;
 extern word_t* gprs;
 extern CPU_state npc_cpu;

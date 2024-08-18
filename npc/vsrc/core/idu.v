@@ -50,8 +50,6 @@ module idu (
     assign wenReg_o = ~(opinfo_o[`ysyx_23060251_opinfo_branch] 
                       | opinfo_o[`ysyx_23060251_opinfo_store]
                       | opinfo_o[`ysyx_23060251_opinfo_sys]);
-    assign wenCsr_o =  (opinfo_o[`ysyx_23060251_opinfo_sys]
-                      | opinfo_o[`ysyx_23060251_opinfo_csr]);
     /****************************************************************************************
                                             optype
     ****************************************************************************************/
@@ -121,15 +119,15 @@ module idu (
     wire rv32_sd = rv32_store & (func3 == 3'b011);
 
     // 6. system
-    wire rv32_ecall  = rv32_sys & (func3 == 3'b000) & (inst_i[31:20] == 12'b0000_0000_0000);
     wire rv32_ebreak = rv32_sys & (func3 == 3'b000) & (inst_i[31:20] == 12'b0000_0000_0001);
+    wire rv32_ecall  = rv32_sys & (func3 == 3'b000) & (inst_i[31:20] == 12'b0000_0000_0000);
     wire rv32_mret   = rv32_sys & (func3 == 3'b000) & (inst_i[31:20] == 12'b0011_0000_0010);
 
     // 7. csr
     wire rv32_csrrw = rv32_csr & (func3 == 3'b001);
     wire rv32_csrrs = rv32_csr & (func3 == 3'b010);
 
-
+    assign wenCsr_o = rv32_csrrw;
     /****************************************************************************************
                                             info
     ****************************************************************************************/
@@ -218,7 +216,7 @@ module idu (
         rv32_lui | rv32_auipc, // U-type
         rv32_branch, // B-type
         rv32_store,  // S-type
-        rv32_alui | rv32_aluiw | rv32_load | rv32_jalr | rv32_csr // I-type (omit a series of sys instruction)
+        rv32_alui | rv32_aluiw | rv32_load | rv32_jalr | rv32_sys | rv32_csr // I-type (omit a series of sys instruction)
     };
 
     igu ysyx_23060251_igu (

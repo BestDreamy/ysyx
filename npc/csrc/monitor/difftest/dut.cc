@@ -73,6 +73,6 @@ void dump_gpr(CPU_state ref) {
 }
 
 void cmp_reg () {
-    isa_reg_display();
-    dump_gpr(ref);
+    isa_reg_display(); // show dut
+    dump_gpr(ref); // show ref
 }
