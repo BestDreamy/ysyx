@@ -17,6 +17,18 @@ module csr (
     reg[`ysyx_23060251_reg_bus] mepc;
     reg[`ysyx_23060251_reg_bus] mcause;
 
+    import "DPI-C" function void set_csr(
+        // input: sv --> c
+        input bit[`ysyx_23060251_reg_bus] mstatus,
+        input bit[`ysyx_23060251_reg_bus] mtvec,
+        input bit[`ysyx_23060251_reg_bus] mepc,
+        input bit[`ysyx_23060251_reg_bus] mcause
+    );
+    initial begin
+        // Set the npc_cpu.gpr[i] to 0
+        set_csr(mstatus, mtvec, mepc, mcause);
+    end
+
     assign data_o = {`ysyx_23060251_xlen{imm_i == `ysyx_23060251_mstatus}}              & mstatus
                   | {`ysyx_23060251_xlen{imm_i == `ysyx_23060251_mtvec | is_ecall_i}}   & mtvec
                   | {`ysyx_23060251_xlen{imm_i == `ysyx_23060251_mepc  | is_mret_i}}    & mepc

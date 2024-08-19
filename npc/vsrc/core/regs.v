@@ -15,6 +15,7 @@ module regs (
 );
     reg[`ysyx_23060251_reg_bus] gpr[`ysyx_23060251_reg_num];
     import "DPI-C" function void set_gpr_ptr(
+        // input: sv --> c
         input bit[`ysyx_23060251_reg_bus] gpr[]
     );
     initial begin

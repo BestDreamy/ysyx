@@ -50,34 +50,42 @@ void difftest_step(paddr_t pc, paddr_t npc) {
     if(checkregs(ref, pc) == 0) {
         npc_state.state = NPC_ABORT;
         npc_state.halt_pc = pc;
-        cmp_reg();
     }
 }
+
+#define dump(s, x, y) printf("%4s -->", s); \
+                      printf(" npc: 0x%08x(%010d) !=", x, x); \
+                      printf(" nemu: 0x%08x(%010d)\n", y, y);
 
 bool checkregs(CPU_state ref, paddr_t pc) {
     bool ok = 1;
     for (int i = 0; i < 32; i ++) {
         if (ref.gpr[i] == npc_cpu.gpr[i]) continue;
+        isa_reg_display(npc_cpu);
+        isa_reg_display(ref);
         ok = 0;
     }
-    if (ref.pc != npc_cpu.pc) ok = 0;
 
-    if (ref.mstatus != npc_cpu.mstatus) ok = 0;
-    if (ref.mtvec != npc_cpu.mtvec) ok = 0;
-    if (ref.mepc != npc_cpu.mepc) ok = 0;
-    if (ref.mcause != npc_cpu.mcause) ok = 0;
-    return ok;
-}
-
-void dump_gpr(CPU_state ref) {
-    printf(BOLD_TXT "NEMU Registers:\n" RESET_TXT);
-    printf("pc\t0x%x(%d)\n", ref.pc, ref.pc);
-    for (int i = 0; i < 32; i ++) {
-        printf("%4s: 0x%08x(%010d)%c", regs[i], ref.gpr[i], ref.gpr[i], i % 4 == 3? '\n': ' ');
+    if (ref.pc != npc_cpu.pc) {
+        dump("PC", npc_cpu.pc, ref.pc);
+        ok = 0;
     }
-}
 
-void cmp_reg () {
-    isa_reg_display(); // show dut
-    dump_gpr(ref); // show ref
+    if (ref.mstatus != npc_cpu.mstatus) {
+        dump("mstatus", npc_cpu.mstatus, ref.mstatus);
+        ok = 0;
+    }
+    if (ref.mtvec != npc_cpu.mtvec) {
+        dump("mtvec", npc_cpu.mtvec, ref.mtvec);
+        ok = 0;
+    }
+    if (ref.mepc != npc_cpu.mepc) {
+        dump("mepc", npc_cpu.mepc, ref.mepc);
+        ok = 0;
+    }
+    if (ref.mcause != npc_cpu.mcause) {
+        dump("mcause", npc_cpu.mcause, ref.mcause);
+        ok = 0;
+    }
+    return ok;
 }
