@@ -22,8 +22,6 @@ void cpu_init() { // exe the first instruction
 
     init_disasm("riscv32-pc-linux-gnu");
 
-    npc_cpu.pc = dut->pc;
-
     npc_eval();
 
     IFDEF(CONFIG_DIFFTEST, init_difftest(diff_so_file, img_size, difftest_port));
@@ -98,4 +96,8 @@ void npc_eval() {
     for (int i = 0; i < 32; i ++) {
         npc_cpu.gpr[i] = gprs[i];
     }
+    npc_cpu.mstatus = dut->mstatus;
+    npc_cpu.mtvec = dut->mtvec;
+    npc_cpu.mepc = dut->mepc;
+    npc_cpu.mcause = dut->mcause;
 }

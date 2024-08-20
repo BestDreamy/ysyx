@@ -51,9 +51,9 @@ void vaddr_write(paddr_t addr, uint8_t mask, word_t data) {
     paddr_write(addr, 1 << mask, data);
 }
 
-void set_csr(word_t mstatus, word_t mtvec, word_t mepc, word_t mcause) {
-    npc_cpu.mstatus = mstatus;
-    npc_cpu.mtvec = mtvec;
-    npc_cpu.mepc = mepc;
-    npc_cpu.mcause = mcause;
-}
+// void set_csr(word_t mstatus, word_t mtvec, word_t mepc, word_t mcause) {
+//     npc_cpu.mstatus = mstatus;
+//     npc_cpu.mtvec = mtvec;
+//     npc_cpu.mepc = mepc;
+//     npc_cpu.mcause = mcause;
+// }

@@ -18,10 +18,7 @@ module regs (
         // input: sv --> c
         input bit[`ysyx_23060251_reg_bus] gpr[]
     );
-    initial begin
-        // Set the npc_cpu.gpr[i] to 0
-        set_gpr_ptr(gpr);
-    end
+    initial set_gpr_ptr(gpr);
 
     assign src1_o = gpr[rs1_i];
     assign src2_o = gpr[rs2_i];

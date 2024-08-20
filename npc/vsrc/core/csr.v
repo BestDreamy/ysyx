@@ -9,69 +9,66 @@ module csr (
     input wire[`ysyx_23060251_reg_bus] mepc_i, // ecall
     input wire[`ysyx_23060251_reg_bus] mcause_i, // ecall
 
+    output reg[`ysyx_23060251_reg_bus] mstatus_o,
+    output reg[`ysyx_23060251_reg_bus] mtvec_o,
+    output reg[`ysyx_23060251_reg_bus] mepc_o,
+    output reg[`ysyx_23060251_reg_bus] mcause_o,
     output wire[`ysyx_23060251_reg_bus] data_o
 );
 
-    reg[`ysyx_23060251_reg_bus] mstatus;
-    reg[`ysyx_23060251_reg_bus] mtvec;
-    reg[`ysyx_23060251_reg_bus] mepc;
-    reg[`ysyx_23060251_reg_bus] mcause;
 
-    import "DPI-C" function void set_csr(
-        // input: sv --> c
-        input bit[`ysyx_23060251_reg_bus] mstatus,
-        input bit[`ysyx_23060251_reg_bus] mtvec,
-        input bit[`ysyx_23060251_reg_bus] mepc,
-        input bit[`ysyx_23060251_reg_bus] mcause
-    );
-    initial begin
-        // Set the npc_cpu.gpr[i] to 0
-        set_csr(mstatus, mtvec, mepc, mcause);
-    end
+    // import "DPI-C" function void set_csr(
+    //     // input: sv --> c
+    //     input bit[`ysyx_23060251_reg_bus] mstatus,
+    //     input bit[`ysyx_23060251_reg_bus] mtvec,
+    //     input bit[`ysyx_23060251_reg_bus] mepc,
+    //     input bit[`ysyx_23060251_reg_bus] mcause
+    // );
+    // initial set_csr(mstatus, mtvec, mepc, mcause);
 
-    assign data_o = {`ysyx_23060251_xlen{imm_i == `ysyx_23060251_mstatus}}              & mstatus
-                  | {`ysyx_23060251_xlen{imm_i == `ysyx_23060251_mtvec | is_ecall_i}}   & mtvec
-                  | {`ysyx_23060251_xlen{imm_i == `ysyx_23060251_mepc  | is_mret_i}}    & mepc
-                  | {`ysyx_23060251_xlen{imm_i == `ysyx_23060251_mcause}}               & mcause
+    assign data_o = {`ysyx_23060251_xlen{imm_i == `ysyx_23060251_mstatus}}              & mstatus_o
+                  | {`ysyx_23060251_xlen{imm_i == `ysyx_23060251_mtvec | is_ecall_i}}   & mtvec_o
+                  | {`ysyx_23060251_xlen{imm_i == `ysyx_23060251_mepc  | is_mret_i}}    & mepc_o
+                  | {`ysyx_23060251_xlen{imm_i == `ysyx_23060251_mcause}}               & mcause_o
                   ;
 
     always @(posedge clk_i) begin
         if (rst_i == `ysyx_23060251_rst_enable) begin
-            mstatus[`ysyx_23060251_mstatus_xIE_bus]  <= 'b0000;
-            mstatus[`ysyx_23060251_mstatus_xPIE_bus] <= 'b0000;
-            mstatus[`ysyx_23060251_mstatus_xPP_bus]  <= 'b11000;
+            mstatus_o[`ysyx_23060251_mstatus_xIE_bus]  <= 'b0000;
+            mstatus_o[`ysyx_23060251_mstatus_xPIE_bus] <= 'b0000;
+            mstatus_o[`ysyx_23060251_mstatus_xPP_bus]  <= 'b11000;
         end else if (is_ecall_i) begin
-            mstatus[`ysyx_23060251_mstatus_xIE_bus]  <= 'b0000;
-            mstatus[`ysyx_23060251_mstatus_xPIE_bus] <= mstatus[`ysyx_23060251_mstatus_xIE_bus];
+            mstatus_o[`ysyx_23060251_mstatus_xIE_bus]  <= 'b0000;
+            mstatus_o[`ysyx_23060251_mstatus_xPIE_bus] <= mstatus_o[`ysyx_23060251_mstatus_xIE_bus];
             // mstatus_o[`ysyx_23060251_mstatus_xPP_bus]  <= 'b11000;
         end else if (is_mret_i) begin
-            mstatus[`ysyx_23060251_mstatus_xIE_bus]  <= mstatus[`ysyx_23060251_mstatus_xPIE_bus];
-            mstatus[`ysyx_23060251_mstatus_xPIE_bus] <= 'b0000;
+            mstatus_o[`ysyx_23060251_mstatus_xIE_bus]  <= mstatus_o[`ysyx_23060251_mstatus_xPIE_bus];
+            mstatus_o[`ysyx_23060251_mstatus_xPIE_bus] <= 'b0000;
             // mstatus_o[`ysyx_23060251_mstatus_xPP_bus]  <= 'b11000;
         end else if (imm_i == `ysyx_23060251_mstatus & wenCsr_i) begin
-            mstatus <= src1_i;
+            mstatus_o <= src1_i;
         end
     end
 
     always @(posedge clk_i) begin
         if (is_ecall_i) begin
-            mcause <= mcause_i;
+            mcause_o <= mcause_i;
         end else if (imm_i == `ysyx_23060251_mcause & wenCsr_i) begin
-            mcause <= src1_i;
+            mcause_o <= src1_i;
         end
     end
 
     always @(posedge clk_i) begin
         if (is_ecall_i) begin
-            mepc <= mepc_i;
+            mepc_o <= mepc_i;
         end else if (imm_i == `ysyx_23060251_mepc & wenCsr_i) begin
-            mepc <= src1_i;
+            mepc_o <= src1_i;
         end
     end
 
     always @(posedge clk_i) begin
         if (imm_i == `ysyx_23060251_mtvec & wenCsr_i) begin
-            mtvec <= src1_i;
+            mtvec_o <= src1_i;
         end
     end
 

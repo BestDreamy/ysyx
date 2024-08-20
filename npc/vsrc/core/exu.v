@@ -3,7 +3,6 @@ module exu (
     input  wire[`ysyx_23060251_alu_bus]    alu_i,
     input  wire[`ysyx_23060251_branch_bus] branch_info_i,
     input  wire[`ysyx_23060251_sys_bus]    sys_info_i,
-    input  wire[`ysyx_23060251_csr_bus]    csr_info_i,
 
     input  wire[`ysyx_23060251_pc_bus]  pc_i,
     input  wire[`ysyx_23060251_reg_bus] src1_i,
@@ -20,7 +19,7 @@ module exu (
         .opinfo_i(opinfo_i),
         .alu_i(alu_i),
         .branch_info_i(branch_info_i),
-        .csr_info_i(csr_info_i),
+        .sys_info_i(sys_info_i),
         .pc_i(pc_i),
         .src1_i(src1_i),
         .src2_i(src2_i),

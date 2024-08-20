@@ -2,7 +2,7 @@ module alu (
     input  wire[`ysyx_23060251_opinfo_bus] opinfo_i,
     input  wire[`ysyx_23060251_alu_bus]    alu_i,
     input  wire[`ysyx_23060251_branch_bus] branch_info_i,
-    input  wire[`ysyx_23060251_csr_bus]    csr_info_i,
+    input  wire[`ysyx_23060251_sys_bus]    sys_info_i,
 
     input  wire[`ysyx_23060251_pc_bus]  pc_i,
     input  wire[`ysyx_23060251_reg_bus] src1_i,
@@ -29,14 +29,14 @@ module alu (
     wire rv32_store     = opinfo_i[`ysyx_23060251_opinfo_store];
     wire rv32_lui       = opinfo_i[`ysyx_23060251_opinfo_lui];
     wire rv32_auipc     = opinfo_i[`ysyx_23060251_opinfo_auipc];
-    wire rv32_csr       = opinfo_i[`ysyx_23060251_opinfo_csr];
+    wire rv32_sys       = opinfo_i[`ysyx_23060251_opinfo_sys];
 
     wire[`ysyx_23060251_xlen_bus] op1 = (rv32_jal | rv32_jalr | rv32_auipc)? pc_i
-                                      : (rv32_lui | rv32_csr)? `ysyx_23060251_xlen'b0
+                                      : (rv32_lui | rv32_sys)? `ysyx_23060251_xlen'b0
                                       : src1_i;
     wire[`ysyx_23060251_xlen_bus] op2 = (rv32_alui | rv32_aluiw | rv32_lui | rv32_auipc | rv32_load | rv32_store)? imm_i
                                       : (rv32_jalr | rv32_jal)? 4
-                                      : (rv32_csr)? csr_data_i
+                                      : (rv32_sys)? csr_data_i
                                       : src2_i;
     /****************************************************************************************
                                             sel op
@@ -50,7 +50,7 @@ module alu (
                          | (rv32_auipc)
                          | (rv32_load)
                          | (rv32_store)
-                         | (rv32_csr);
+                         | (rv32_sys);
     wire rv32_sub_sel    = (rv32_is_alu & alu_i[`ysyx_23060251_alu_sub]);
     wire rv32_xor_sel    = (rv32_is_alu & alu_i[`ysyx_23060251_alu_xor]);
     wire rv32_or_sel     = (rv32_is_alu & alu_i[`ysyx_23060251_alu_or]);
@@ -61,7 +61,7 @@ module alu (
     wire rv32_slt_sel    = (rv32_is_alu & alu_i[`ysyx_23060251_alu_slt]);
     wire rv32_sltu_sel   = (rv32_is_alu & alu_i[`ysyx_23060251_alu_sltu]);
     wire rv32_mul_sel    = (rv32_is_alu & alu_i[`ysyx_23060251_alu_mul]);
-    wire rv32_mulh_sel   = (rv32_is_alu & alu_i[`ysyx_23060251_alu_mulh]);
+    // wire rv32_mulh_sel   = (rv32_is_alu & alu_i[`ysyx_23060251_alu_mulh]);
     wire rv32_mulhsu_sel = (rv32_is_alu & alu_i[`ysyx_23060251_alu_mulhsu]);
     wire rv32_mulhu_sel  = (rv32_is_alu & alu_i[`ysyx_23060251_alu_mulhu]);
     wire rv32_div_sel    = (rv32_is_alu & alu_i[`ysyx_23060251_alu_div]);

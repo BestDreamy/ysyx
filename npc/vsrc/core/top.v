@@ -3,6 +3,10 @@ module top (
     input clk,
     input rst,
     output wire[`ysyx_23060251_pc_bus]   pc,
+    output wire[`ysyx_23060251_reg_bus]  mstatus,
+    output wire[`ysyx_23060251_reg_bus]  mtvec,
+    output wire[`ysyx_23060251_reg_bus]  mepc,
+    output wire[`ysyx_23060251_reg_bus]  mcause,
     output wire[`ysyx_23060251_inst_bus] inst
 );
 
@@ -26,7 +30,6 @@ wire[`ysyx_23060251_branch_bus] branch_info;
 wire[`ysyx_23060251_load_bus] load_info;
 wire[`ysyx_23060251_store_bus] store_info;
 wire[`ysyx_23060251_sys_bus] sys_info;
-wire[`ysyx_23060251_csr_bus] csr_info;
 wire wenReg;
 wire wenCsr;
 wire[`ysyx_23060251_rs_bus] rd;
@@ -47,7 +50,6 @@ wire[`ysyx_23060251_mask_bus] mask;
         .load_o(load_info),
         .store_o(store_info),
         .sys_o(sys_info),
-        .csr_o(csr_info),
         .wenCsr_o(wenCsr),
         .wenReg_o(wenReg),
         .rd_o(rd),
@@ -92,6 +94,10 @@ wire[`ysyx_23060251_reg_bus] csr_data;
         .mepc_i(pc),
         .mcause_i('hb),
 
+        .mstatus_o(mstatus),
+        .mtvec_o(mtvec),
+        .mepc_o(mepc),
+        .mcause_o(mcause),
         .data_o(csr_data)
     );
     /****************************************************************************************
@@ -106,7 +112,6 @@ wire cnd;
         .alu_i(alu_info),
         .branch_info_i(branch_info),
         .sys_info_i(sys_info),
-        .csr_info_i(csr_info),
         .pc_i(pc),
         .src1_i(src1),
         .src2_i(src2),
