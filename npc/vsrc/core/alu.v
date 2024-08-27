@@ -61,7 +61,7 @@ module alu (
     wire rv32_slt_sel    = (rv32_is_alu & alu_i[`ysyx_23060251_alu_slt]);
     wire rv32_sltu_sel   = (rv32_is_alu & alu_i[`ysyx_23060251_alu_sltu]);
     wire rv32_mul_sel    = (rv32_is_alu & alu_i[`ysyx_23060251_alu_mul]);
-    // wire rv32_mulh_sel   = (rv32_is_alu & alu_i[`ysyx_23060251_alu_mulh]);
+    wire rv32_mulh_sel   = (rv32_is_alu & alu_i[`ysyx_23060251_alu_mulh]);
     wire rv32_mulhsu_sel = (rv32_is_alu & alu_i[`ysyx_23060251_alu_mulhsu]);
     wire rv32_mulhu_sel  = (rv32_is_alu & alu_i[`ysyx_23060251_alu_mulhu]);
     wire rv32_div_sel    = (rv32_is_alu & alu_i[`ysyx_23060251_alu_div]);

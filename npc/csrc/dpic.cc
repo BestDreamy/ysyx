@@ -14,14 +14,12 @@ void halt(uint32_t inst) {
 }
 
 static int cnt = 0;
-uint32_t fetch(bool clk, bool rst, paddr_t pc) {
-    // printf("clk=%d, rst=%d, pc=" FMT_PADDR "\n", clk, rst, pc);
+uint32_t fetch(bool rst, paddr_t pc) {
     if (rst && pc == 0) { 
         return NOP;
     }
     Assert(in_pmem(pc), "Out of bounds memory accsee!\n");
     uint32_t inst = paddr_read(pc, 4);
-    // printf("pc = " FMT_PADDR ": " FMT_WORD " at %d\n", pc, inst, cnt ++);
     return inst;
 }
 
@@ -39,7 +37,7 @@ word_t vaddr_read(bool is_signed, paddr_t addr, uint8_t mask) {
             case 0: data = (data << size_of_word -  8) >> size_of_word -  8; break;
             case 1: data = (data << size_of_word - 16) >> size_of_word - 16; break;
             // lwu: rv64
-            IFDEF(CONFIG_ISA64, case 2: data = (data << size_of_word - 32) >> size_of_word - 32; break;);
+            // IFDEF(CONFIG_ISA64, case 2: data = (data << size_of_word - 32) >> size_of_word - 32; break;);
         }
     }
     IFDEF(CONFIG_MTRACE, mtrace('r', addr, data));
