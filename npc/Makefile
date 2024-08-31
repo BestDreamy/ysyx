@@ -1,6 +1,6 @@
 TOP_MODULE = top
 VERILATOR = verilator
-VERILATOR_INC_PATH = $(addprefix -I, $(abspath ./vsrc/core) $(abspath ./vsrc/perip))
+VERILATOR_INC_PATH = $(addprefix -I, $(abspath ./vsrc/core) $(abspath ./vsrc/perip) $(abspath ./vsrc/include))
 VERILATOR_FLAGS = -cc --exe --build --trace-fst
 VERILATOR_FLAGS += $(VERILATOR_INC_PATH)
 VERILATOR_FLAGS += -Wno-WIDTHEXPAND -Wno-WIDTHTRUNC

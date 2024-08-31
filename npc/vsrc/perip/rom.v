@@ -15,6 +15,6 @@ module rom (
     // );
     
     always_comb begin
-        inst_o = fetch(clk_i, rst_i, pc_i);
+        inst_o = fetch(rst_i, pc_i);
     end
 endmodule
