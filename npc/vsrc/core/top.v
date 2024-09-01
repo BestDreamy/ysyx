@@ -9,6 +9,10 @@ module top (
     output wire[`ysyx_23060251_reg_bus]  mcause,
     output wire[`ysyx_23060251_inst_bus] inst
 );
+    axi_if #(
+        .ADDR_W(`ysyx_23060251_xlen),
+        .DATA_W(`ysyx_23060251_xlen)
+    ) ysyx_23060251_axi_if;
 
     pcu ysyx_23060251_pcu (
         .clk_i(clk),
