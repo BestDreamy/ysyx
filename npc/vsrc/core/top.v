@@ -1,5 +1,5 @@
 `include "defines"
-module core (
+module top (
     input clk,
     input rst,
     output wire[`ysyx_23060251_pc_bus]   pc,

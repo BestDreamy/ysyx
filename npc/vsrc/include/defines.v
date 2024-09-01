@@ -1,3 +1,6 @@
+`ifndef AXI_DEFINES_H
+`define AXI_DEFINES_H
+
 `define ysyx_23060251_xlen 32
 `define ysyx_23060251_xlen_bus `ysyx_23060251_xlen - 1: 0
 `define ysyx_23060251_rst_enable  1
@@ -186,3 +189,5 @@ parameter ysyx_23060251_mul =      `ysyx_23060251_xlen << 1;
 `define ysyx_23060251_mstatus_xIE_bus 3: 0
 `define ysyx_23060251_mstatus_xPIE_bus 7: 4
 `define ysyx_23060251_mstatus_xPP_bus 12: 8
+
+`endif
