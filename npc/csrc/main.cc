@@ -14,6 +14,7 @@ VerilatedFstC* tfp = NULL;
 uint32_t time_counter = TIME_RESET;
 
 int main(int argc, char** argv) {
+    Verilated::commandArgs(argc, argv);
     welcome(argc, argv);
     dut = new Vtop;
     tfp = new VerilatedFstC;

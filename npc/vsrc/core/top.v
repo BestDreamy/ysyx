@@ -59,7 +59,6 @@ module top (
     );
 
 wire ifu_valid;
-wire ifu_ready;
 
     ifu ysyx_23060251_ifu (
         .clk_i(clk),
@@ -173,7 +172,6 @@ wire cnd;
         .cnd_o(cnd)
     );
 
-wire lsu_valid;
 wire lsu_ready;
 // wire[`ysyx_23060251_xlen_bus] wdata;
 wire[`ysyx_23060251_xlen_bus] rdata;
