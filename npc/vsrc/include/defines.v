@@ -190,4 +190,7 @@ parameter ysyx_23060251_mul =      `ysyx_23060251_xlen << 1;
 `define ysyx_23060251_mstatus_xPIE_bus 7: 4
 `define ysyx_23060251_mstatus_xPP_bus 12: 8
 
+`define ysyx_23060251_axi_addr `ysyx_23060251_xlen
+`define ysyx_23060251_axi_data `ysyx_23060251_xlen
+
 `endif

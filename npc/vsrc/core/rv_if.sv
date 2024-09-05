@@ -1,6 +1,6 @@
 interface uni_if;
   parameter ADDR_W = 32;
-  parameter DATA_W = 64;
+  parameter DATA_W = 32;
 
   logic               valid ;
   logic               ready ;
