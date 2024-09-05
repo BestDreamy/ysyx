@@ -46,10 +46,10 @@ module top (
     input          io_master_rlast  , output          io_slave_rlast,
     input[3:0]     io_master_rid    , output[3:0]     io_slave_rid
 );
-    axi_if #(
-        .ADDR_W(`ysyx_23060251_xlen),
-        .DATA_W(`ysyx_23060251_xlen)
-    ) ysyx_23060251_axi_if;
+    // axi_if #(
+    //     .ADDR_W(`ysyx_23060251_xlen),
+    //     .DATA_W(`ysyx_23060251_xlen)
+    // ) ysyx_23060251_axi_if;
 
     pcu ysyx_23060251_pcu (
         .clk_i(clk),
@@ -196,4 +196,6 @@ wire[`ysyx_23060251_xlen_bus] rdata;
         .res_i(res)
     );
 */
+
+
 endmodule
