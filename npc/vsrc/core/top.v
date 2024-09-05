@@ -58,6 +58,9 @@ module top (
         .pc_o(pc)
     );
 
+wire ifu_valid;
+wire ifu_ready;
+
     ifu ysyx_23060251_ifu (
         .clk_i(clk),
         .rst_i(rst),
@@ -65,6 +68,8 @@ module top (
         .inst_o(inst)
     );
 
+wire idu_valid;
+wire idu_ready;
 wire[`ysyx_23060251_opinfo_bus] opinfo;
 wire[`ysyx_23060251_alu_bus] alu_info;
 wire[`ysyx_23060251_branch_bus] branch_info;
@@ -83,6 +88,7 @@ wire is_load_signed;
 wire wenMem;
 wire renMem;
 wire[`ysyx_23060251_mask_bus] mask;
+
     idu ysyx_23060251_idu (
         .inst_i(inst),
         .opinfo_o(opinfo),
@@ -124,6 +130,7 @@ wire[`ysyx_23060251_mask_bus] mask;
     );
 
 wire[`ysyx_23060251_reg_bus] csr_data;
+
     csr ysyx_23060251_csr (
         .clk_i(clk),
         .rst_i(rst),
@@ -145,9 +152,12 @@ wire[`ysyx_23060251_reg_bus] csr_data;
                                           src && csr &&wb
     ****************************************************************************************/
 
+wire exu_valid;
+wire exu_ready;
 wire[`ysyx_23060251_pc_bus] npc;
 wire[`ysyx_23060251_xlen_bus] res;
 wire cnd;
+
     exu ysyx_23060251_exu (
         .opinfo_i(opinfo),
         .alu_i(alu_info),
@@ -163,8 +173,11 @@ wire cnd;
         .cnd_o(cnd)
     );
 
+wire lsu_valid;
+wire lsu_ready;
 // wire[`ysyx_23060251_xlen_bus] wdata;
 wire[`ysyx_23060251_xlen_bus] rdata;
+
     lsu ysyx_23060251_lsu (
         .clk_i(clk),
         .is_load_signed_i(is_load_signed),
