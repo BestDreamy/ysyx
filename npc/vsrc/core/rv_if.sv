@@ -1,4 +1,4 @@
-interface uni_if;
+interface rv_if;
   parameter ADDR_W = 32;
   parameter DATA_W = 32;
 

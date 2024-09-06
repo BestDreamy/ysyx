@@ -47,20 +47,20 @@ module top (
     input[3:0]     io_master_rid    , output[3:0]     io_slave_rid
 );
     axi_if #(
-        .ADDR_W(`ysyx_23060251_addr),
-        .DATA_W(`ysyx_23060251_data)
-    ) ysyx_23060251_axi_mst;
+        .ADDR_W(`ysyx_23060251_axi_addr),
+        .DATA_W(`ysyx_23060251_axi_data)
+    ) ysyx_23060251_axi_if();
 
     rv_if #(
-        .ADDR_W(`ysyx_23060251_addr),
-        .DATA_W(`ysyx_23060251_data)
-    ) ysyx_23060251_rv_slv;
+        .ADDR_W(`ysyx_23060251_axi_addr),
+        .DATA_W(`ysyx_23060251_axi_data)
+    ) ysyx_23060251_rv_if();
     
     icn ysyx_23060251_icn (
         .clk_i(clk),
         .rst_i(rst),
-        .axi_mst(ysyx_23060251_axi_mst)
-        .rv_slv(ysyx_23060251_rv_slv),
+        .axi_mst(ysyx_23060251_axi_if),
+        .rv_slv(ysyx_23060251_rv_if)
     );
 
     pcu ysyx_23060251_pcu (
