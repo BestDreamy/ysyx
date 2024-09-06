@@ -55,6 +55,13 @@ module top (
         .ADDR_W(`ysyx_23060251_addr),
         .DATA_W(`ysyx_23060251_data)
     ) ysyx_23060251_rv_slv;
+    
+    icn ysyx_23060251_icn (
+        .clk_i(clk),
+        .rst_i(rst),
+        .axi_mst(ysyx_23060251_axi_mst)
+        .rv_slv(ysyx_23060251_rv_slv),
+    );
 
     pcu ysyx_23060251_pcu (
         .clk_i(clk),
@@ -201,12 +208,5 @@ wire[`ysyx_23060251_xlen_bus] rdata;
         .res_i(res)
     );
 */
-
-    axi2rv ysyx_23060251_axi2rv (
-        .clk_i(clk),
-        .rst_i(rst),
-        .axi_mst(ysyx_23060251_axi_mst)
-        .rv_slv(ysyx_23060251_rv_slv),
-    );
 
 endmodule
