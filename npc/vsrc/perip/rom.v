@@ -5,7 +5,7 @@ module rom (
     output reg[`ysyx_23060251_inst_bus] inst_o
 );
     import "DPI-C" function int fetch(
-        bit rst, 
+        bit rst,
         int pc
     );
     // import "DPI-C" function int vaddr_read(
@@ -13,7 +13,7 @@ module rom (
     //     int addr,
     //     byte mask
     // );
-    
+
     always_comb begin
         inst_o = fetch(rst_i, pc_i);
     end

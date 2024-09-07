@@ -6,10 +6,10 @@ module top (
     input clk,
     input rst,
     output wire[`ysyx_23060251_pc_bus]   pc,
-    output wire[`ysyx_23060251_reg_bus]  mstatus, // diff
-    output wire[`ysyx_23060251_reg_bus]  mtvec,   // diff
-    output wire[`ysyx_23060251_reg_bus]  mepc,    // diff
-    output wire[`ysyx_23060251_reg_bus]  mcause,  // diff
+    output wire[`ysyx_23060251_reg_bus]  mstatus, // just for diff
+    output wire[`ysyx_23060251_reg_bus]  mtvec,   // just for diff
+    output wire[`ysyx_23060251_reg_bus]  mepc,    // just for diff
+    output wire[`ysyx_23060251_reg_bus]  mcause,  // just for diff
     output wire[`ysyx_23060251_inst_bus] inst,
 
     input          io_master_awready, output          io_slave_awready,
@@ -55,12 +55,12 @@ module top (
         .ADDR_W(`ysyx_23060251_axi_addr),
         .DATA_W(`ysyx_23060251_axi_data)
     ) ysyx_23060251_rv_if();
-    
+
     icn ysyx_23060251_icn (
         .clk_i(clk),
         .rst_i(rst),
         .axi_mst(ysyx_23060251_axi_if),
-        .rv_slv(ysyx_23060251_rv_if)
+        .axi_slv(ysyx_23060251_axi_if)
     );
 
     pcu ysyx_23060251_pcu (
