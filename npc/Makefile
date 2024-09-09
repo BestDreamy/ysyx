@@ -49,7 +49,7 @@ sim:
 	@echo "Run sim"
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 
-rm:
+clean:
 	rm -rf $(OBJ)
 .PHONY: run sim default rm
 

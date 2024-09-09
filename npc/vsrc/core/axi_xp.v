@@ -1,6 +1,6 @@
 module axi_xp
 #(
-    parameter DATA_WIDTH    = 16
+    parameter DATA_WIDTH    = 32
 )
 (
     input                                   clk,
