@@ -64,7 +64,7 @@ __am_asm_trap:
   mv a0, sp
   jal __am_irq_handle
 
-  # Start restore the context
+  # Start other the context
   mv sp, a0
 
   LOAD t1, OFFSET_STATUS(sp)
@@ -75,4 +75,4 @@ __am_asm_trap:
   MAP(REGS, POP)
 
   addi sp, sp, CONTEXT_SIZE
-  mret
+  mret // to (mepc)

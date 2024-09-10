@@ -31,16 +31,20 @@ static void f(void *arg) {
 static Context *schedule(Event ev, Context *prev) {
   current->cp = prev;
   current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
-  return current->cp;
+  // printf("schedule to %x\n", current);
+  return current->cp; // retrun the addr of context
 }
 
 // boot --> pcb0 -> 'A' --> pcb1 -> 'B' --> pcb0 -> 'A' ..
 int main() {
+  // printf("%x\n", &pcb_boot.cp);
+  // printf("%x\n", &pcb[0].cp);
+  // printf("%x\n", &pcb[1].cp);
   cte_init(schedule);
   pcb[0].cp = kcontext((Area) { pcb[0].stack, &pcb[0] + 1 }, f, (void *)1L);
   pcb[1].cp = kcontext((Area) { pcb[1].stack, &pcb[1] + 1 }, f, (void *)2L);
   /* printf("A: %x\n", pcb[0].cp->mepc); */
   /* printf("B: %x\n", pcb[1].cp->mepc); */
-  yield();
+  yield(); // ecall to (mtvec)
   panic("Should not reach here!");
 }

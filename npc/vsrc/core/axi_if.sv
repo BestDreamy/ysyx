@@ -33,7 +33,7 @@ interface axi_if;
   logic                   w_ready   ;
   logic                   w_last    ;
 
-  logic   [1:0]           b_resp    ;
+  axi_resp_t              b_resp    ;
   logic                   b_ready   ;
   logic                   b_valid   ;
   axi_id_t                b_id      ;
