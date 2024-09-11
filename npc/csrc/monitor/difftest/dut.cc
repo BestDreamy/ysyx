@@ -12,6 +12,12 @@ void (*ref_difftest_regcpy)(void *dut, bool direction) = NULL;
 void (*ref_difftest_exec)(uint64_t n) = NULL;
 CPU_state ref;
 
+static bool is_skip_ref = false;
+
+void difftest_skip_ref() {
+    is_skip_ref = true;
+}
+
 void init_difftest(const char *ref_so_file, long img_size, int port) {
     Assert(ref_so_file != NULL, "Difftest file not found!");
 
@@ -43,7 +49,12 @@ void init_difftest(const char *ref_so_file, long img_size, int port) {
 }
 
 void difftest_step(paddr_t pc, paddr_t npc) {
-    ref_difftest_exec(1);
+    if (is_skip_ref == 0) {
+        ref_difftest_exec(1);
+    } else {
+        ref_difftest_regcpy(&npc_cpu, DIFFTEST_TO_REF);
+        is_skip_ref = false;
+    }
 
     ref_difftest_regcpy(&ref, DIFFTEST_TO_DUT);
 
