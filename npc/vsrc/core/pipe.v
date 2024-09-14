@@ -25,7 +25,7 @@ module pipe
     assign data_en  = pin_ready & pin_valid;
 
     always @(posedge clk) begin
-        if (rstn == `ysyx_23060251_rst_enable)
+        if (rst == `ysyx_23060251_rst_enable)
             valid_q <= 0;
         else if (valid_en)
             valid_q <=  pin_valid;

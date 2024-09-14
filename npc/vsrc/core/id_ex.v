@@ -35,8 +35,21 @@ module id_ex (
     output                                 E_valid_o, // to exu
     input                                  e_ready_i, // from exu
 
-    input                                  clk_i,
+    input   							   clk_i,
     input 								   rst_i
 );
-    PIPE_INST 
+    `PIPE_INST(`ysyx_23060251_opinfo, opinfo, d, E, e)
+    `PIPE_INST(`ysyx_23060251_alu, alu_info, d, E, e)
+    `PIPE_INST(`ysyx_23060251_branch, branch_info, d, E, e)
+    `PIPE_INST(`ysyx_23060251_sys, sys_info, d, E, e)
+    `PIPE_INST(1, wenReg, d, E, e)
+    `PIPE_INST(1, wenCsr, d, E, e)
+    `PIPE_INST(`ysyx_23060251_rs, rd, d, E, e)
+    `PIPE_INST(`ysyx_23060251_reg, src1, d, E, e)
+    `PIPE_INST(`ysyx_23060251_reg, src2, d, E, e)
+    `PIPE_INST(`ysyx_23060251_imm, imm, d, E, e)
+    `PIPE_INST(1, is_load_signed, d, E, e)
+    `PIPE_INST(1, wenMem, d, E, e)
+    `PIPE_INST(1, wenMem, d, E, e)
+    `PIPE_INST(`ysyx_23060251_mask, mask, d, E, e)
 endmodule

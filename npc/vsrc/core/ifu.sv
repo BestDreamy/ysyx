@@ -1,3 +1,5 @@
+`include "typedefs"
+
 module ifu (
     input                                   clk_i,
     input                                   rst_i,
@@ -17,7 +19,7 @@ module ifu (
 
     input                                   mst_r_valid_i,
     input   [`ysyx_23060251_axi_data_bus]   mst_r_data_i,
-    input   axi_mst_resp_t                  mst_r_resp_i,
+    input   [1:0]                  mst_r_resp_i,
     output                                  mst_r_ready_o
 );
 
@@ -70,10 +72,10 @@ module ifu (
     assign ar_hs = mst_ar_valid_o & mst_ar_ready_i;
     assign r_hs  = mst_r_valid_i  & mst_r_ready_o ;
 
-    assign mst_ar_valid_o = (state == WAIT_REQ);
+    assign mst_ar_valid_o = (state == WAIT_BUS_REQ);
     assign mst_ar_addr_o  = pc_o;
 
-    assign mst_r_ready_o  = (state == WAIT_RSP);
+    assign mst_r_ready_o  = (state == WAIT_BUS_RSP);
     // ------------------------------  AXI  -----------------------------------
 
     assign pc_o = pc;
