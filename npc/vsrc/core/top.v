@@ -116,6 +116,8 @@ module top (
         .rst_i     (rst)
     );
 
+    wire                                d_valid;
+    wire                                E_ready;
     wire [`ysyx_23060251_opinfo_bus]    d_opinfo; // to exu
     wire [`ysyx_23060251_alu_bus]       d_alu_info; // to exu
     wire [`ysyx_23060251_branch_bus]    d_branch_info; // to exu
