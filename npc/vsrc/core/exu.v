@@ -1,19 +1,27 @@
 module exu (
-    input  wire[`ysyx_23060251_opinfo_bus] opinfo_i,
-    input  wire[`ysyx_23060251_alu_bus]    alu_i,
-    input  wire[`ysyx_23060251_branch_bus] branch_info_i,
-    input  wire[`ysyx_23060251_sys_bus]    sys_info_i,
+    input  [`ysyx_23060251_opinfo_bus]      opinfo_i,
+    input  [`ysyx_23060251_alu_bus]         alu_i,
+    input  [`ysyx_23060251_branch_bus]      branch_info_i,
+    input  [`ysyx_23060251_sys_bus]         sys_info_i,
 
-    input  wire[`ysyx_23060251_pc_bus]  pc_i,
-    input  wire[`ysyx_23060251_reg_bus] src1_i,
-    input  wire[`ysyx_23060251_reg_bus] src2_i,
-    input  wire[`ysyx_23060251_imm_bus] imm_i, //offset
-    input  wire[`ysyx_23060251_reg_bus] csr_data_i,
+    input  [`ysyx_23060251_pc_bus]          pc_i,
+    input  [`ysyx_23060251_reg_bus]         src1_i,
+    input  [`ysyx_23060251_reg_bus]         src2_i,
+    input  [`ysyx_23060251_imm_bus]         imm_i, //offset
+    input  [`ysyx_23060251_reg_bus]         csr_data_i,
 
-    output wire[`ysyx_23060251_pc_bus]   npc_o,
-    output wire[`ysyx_23060251_xlen_bus] res_o,
-    output wire                          cnd_o
+    input                                   e_valid_i, // from idu
+    output                                  e_ready_o, // from idu
+
+    output                                  e_valid_o, // to lsu
+    input                                   e_ready_i, // to lsu
+
+    output [`ysyx_23060251_pc_bus]          npc_o,
+    output [`ysyx_23060251_xlen_bus]        res_o,
+    output                                  cnd_o
 );
+    assign e_valid_o = e_valid_i;
+    assign e_ready_o = e_valid_i;
 
     alu ysyx_23060251_alu (
         .opinfo_i(opinfo_i),

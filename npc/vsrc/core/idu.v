@@ -1,27 +1,36 @@
 module idu (
-    input wire[`ysyx_23060251_inst_bus] inst_i,
+    input   [`ysyx_23060251_inst_bus]       inst_i,
 
-    output wire[`ysyx_23060251_opinfo_bus] opinfo_o,
-    output wire[`ysyx_23060251_alu_bus] alu_o,
-    output wire[`ysyx_23060251_branch_bus] branch_o,
-    output wire[`ysyx_23060251_load_bus] load_o,
-    output wire[`ysyx_23060251_store_bus] store_o,
-    output wire[`ysyx_23060251_sys_bus] sys_o,
+    input                                   d_valid_i, // from ifu
+    output                                  d_ready_o, // from ifu
 
-    output wire                         wenReg_o,
-    output wire                         wenCsr_o,
-    output wire[`ysyx_23060251_rs_bus]  rd_o,
-    output wire[`ysyx_23060251_rs_bus]  rs1_o,
-    // output wire[`ysyx_23060251_reg_bus] src1_o,
-    output wire[`ysyx_23060251_rs_bus]  rs2_o,
-    // output wire[`ysyx_23060251_reg_bus] src2_o,
-    output wire[`ysyx_23060251_imm_bus] imm_o,
+    output                                  d_valid_o, // to exu
+    input                                   d_ready_i, // to exu
 
-    output wire is_load_signed_o,
-    output wire wenMem_o,
-    output wire renMem_o,
-    output wire[`ysyx_23060251_mask_bus] mask_o
+    output  [`ysyx_23060251_opinfo_bus]     opinfo_o,
+    output  [`ysyx_23060251_alu_bus]        alu_info_o,
+    output  [`ysyx_23060251_branch_bus]     branch_info_o,
+    output  [`ysyx_23060251_load_bus]       load_info_o,
+    output  [`ysyx_23060251_store_bus]      store_info_o,
+    output  [`ysyx_23060251_sys_bus]        sys_info_o,
+
+    output                                  wenReg_o,
+    output                                  wenCsr_o,
+    output  [`ysyx_23060251_rs_bus]         rd_o,
+    output  [`ysyx_23060251_rs_bus]         rs1_o,
+    // output  [`ysyx_23060251_reg_bus] src1_o,
+    output  [`ysyx_23060251_rs_bus]         rs2_o,
+    // output  [`ysyx_23060251_reg_bus] src2_o,
+    output  [`ysyx_23060251_imm_bus]        imm_o,
+
+    output                                  is_load_signed_o,
+    output                                  wenMem_o,
+    output                                  renMem_o,
+    output  [`ysyx_23060251_mask_bus]       mask_o
 );
+    assign d_valid_o = d_valid_i;
+    assign d_ready_o = d_valid_i;
+    
     wire[`ysyx_23060251_opcode_bus] opcode = inst_i[6: 0];
     assign                           rs1_o = inst_i[19: 15];
     assign                           rs2_o = inst_i[24: 20];
@@ -143,7 +152,7 @@ module idu (
         rv32_alu          // 0
     };
     // 2. reg op imm
-    assign alu_o = {
+    assign alu_info_o = {
         rv32_remu,
         rv32_rem,
         rv32_divu,
@@ -164,7 +173,7 @@ module idu (
         rv32_add | rv32_addw | rv32_addi | rv32_addiw
     };
     // 3. branch
-    assign branch_o = {
+    assign branch_info_o = {
         rv32_bgeu,
         rv32_bltu,
         rv32_bge,
@@ -173,7 +182,7 @@ module idu (
         rv32_beq
     };
     // 4. load
-    assign load_o = {
+    assign load_info_o = {
         rv32_lwu,
         rv32_lhu,
         rv32_lbu,
@@ -183,14 +192,14 @@ module idu (
         rv32_lb
     };
     // 5. store
-    assign store_o = {
+    assign store_info_o = {
         rv32_sd,
         rv32_sw,
         rv32_sh,
         rv32_sb
     };
     // 6. sys
-    assign sys_o = {
+    assign sys_info_o = {
         rv32_csrrs,
         rv32_csrrw,
         rv32_mret,

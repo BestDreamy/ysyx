@@ -1,10 +1,10 @@
-module axi_xp
+module pipe
 #(
     parameter DATA_WIDTH    = 32
 )
 (
     input                                   clk,
-    input                                   rstn,
+    input                                   rst,
     
     input                                   pin_valid,
     input           [DATA_WIDTH-1:0]        pin_data,
@@ -24,8 +24,8 @@ module axi_xp
     assign valid_en = (~valid_q & pin_valid) | (valid_q & pout_ready);
     assign data_en  = pin_ready & pin_valid;
 
-    always @(posedge clk or negedge rstn) begin
-        if (rstn == 0)
+    always @(posedge clk) begin
+        if (rstn == `ysyx_23060251_rst_enable)
             valid_q <= 0;
         else if (valid_en)
             valid_q <=  pin_valid;
