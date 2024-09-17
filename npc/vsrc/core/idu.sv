@@ -30,6 +30,7 @@ module idu (
 );
     assign d_valid_o = d_valid_i;
     assign d_ready_o = d_valid_i;
+    always @(*) $display("%h\n", inst_i);
     
     wire[`ysyx_23060251_opcode_bus] opcode = inst_i[6: 0];
     assign                           rs1_o = inst_i[19: 15];

@@ -3,8 +3,6 @@
 `include "assign"
 
 module top (
-    input clk,
-    input rst,
     output wire[`ysyx_23060251_pc_bus]   pc, // to wb
     output wire[`ysyx_23060251_reg_bus]  mstatus, // just for diff
     output wire[`ysyx_23060251_reg_bus]  mtvec,   // just for diff
@@ -12,39 +10,42 @@ module top (
     output wire[`ysyx_23060251_reg_bus]  mcause,  // just for diff
     output wire[`ysyx_23060251_inst_bus] inst, // to idu
 
-    input          io_master_awready, output          io_slave_awready,
-    output         io_master_awvalid, input           io_slave_awvalid,
-    output[31:0]   io_master_awaddr , input[31:0]     io_slave_awaddr,
-    output[3:0]    io_master_awid   , input[3:0]      io_slave_awid,
-    output[7:0]    io_master_awlen  , input[7:0]      io_slave_awlen,
-    output[2:0]    io_master_awsize , input[2:0]      io_slave_awsize,
-    output[1:0]    io_master_awburst, input[1:0]      io_slave_awburst,
+    // input          io_master_awready, output          io_slave_awready,
+    // output         io_master_awvalid, input           io_slave_awvalid,
+    // output[31:0]   io_master_awaddr , input[31:0]     io_slave_awaddr,
+    // output[3:0]    io_master_awid   , input[3:0]      io_slave_awid,
+    // output[7:0]    io_master_awlen  , input[7:0]      io_slave_awlen,
+    // output[2:0]    io_master_awsize , input[2:0]      io_slave_awsize,
+    // output[1:0]    io_master_awburst, input[1:0]      io_slave_awburst,
 
-    input          io_master_wready , output          io_slave_wready,
-    output         io_master_wvalid , input           io_slave_wvalid,
-    output[31:0]   io_master_wdata  , input[31:0]     io_slave_wdata,
-    output[3:0]    io_master_wstrb  , input[3:0]      io_slave_wstrb,
-    output         io_master_wlast  , input           io_slave_wlast,
+    // input          io_master_wready , output          io_slave_wready,
+    // output         io_master_wvalid , input           io_slave_wvalid,
+    // output[31:0]   io_master_wdata  , input[31:0]     io_slave_wdata,
+    // output[3:0]    io_master_wstrb  , input[3:0]      io_slave_wstrb,
+    // output         io_master_wlast  , input           io_slave_wlast,
 
-    output         io_master_bready , input           io_slave_bready,
-    input          io_master_bvalid , output          io_slave_bvalid,
-    input[1:0]     io_master_bresp  , output[1:0]     io_slave_bresp,
-    input[3:0]     io_master_bid    , output[3:0]     io_slave_bid,
+    // output         io_master_bready , input           io_slave_bready,
+    // input          io_master_bvalid , output          io_slave_bvalid,
+    // input[1:0]     io_master_bresp  , output[1:0]     io_slave_bresp,
+    // input[3:0]     io_master_bid    , output[3:0]     io_slave_bid,
 
-    input          io_master_arready, output          io_slave_arready,
-    output         io_master_arvalid, input           io_slave_arvalid,
-    output[31:0]   io_master_araddr , input[31:0]     io_slave_araddr,
-    output[3:0]    io_master_arid   , input[3:0]      io_slave_arid,
-    output[7:0]    io_master_arlen  , input[7:0]      io_slave_arlen,
-    output[2:0]    io_master_arsize , input[2:0]      io_slave_arsize,
-    output[1:0]    io_master_arburst, input[1:0]      io_slave_arburst,
+    // input          io_master_arready, output          io_slave_arready,
+    // output         io_master_arvalid, input           io_slave_arvalid,
+    // output[31:0]   io_master_araddr , input[31:0]     io_slave_araddr,
+    // output[3:0]    io_master_arid   , input[3:0]      io_slave_arid,
+    // output[7:0]    io_master_arlen  , input[7:0]      io_slave_arlen,
+    // output[2:0]    io_master_arsize , input[2:0]      io_slave_arsize,
+    // output[1:0]    io_master_arburst, input[1:0]      io_slave_arburst,
 
-    output         io_master_rready , input           io_slave_rready,
-    input          io_master_rvalid , output          io_slave_rvalid,
-    input[1:0]     io_master_rresp  , output[1:0]     io_slave_rresp,
-    input[31:0]    io_master_rdata  , output[31:0]    io_slave_rdata,
-    input          io_master_rlast  , output          io_slave_rlast,
-    input[3:0]     io_master_rid    , output[3:0]     io_slave_rid
+    // output         io_master_rready , input           io_slave_rready,
+    // input          io_master_rvalid , output          io_slave_rvalid,
+    // input[1:0]     io_master_rresp  , output[1:0]     io_slave_rresp,
+    // input[31:0]    io_master_rdata  , output[31:0]    io_slave_rdata,
+    // input          io_master_rlast  , output          io_slave_rlast,
+    // input[3:0]     io_master_rid    , output[3:0]     io_slave_rid,
+
+    input clk,
+    input rst
 );
     // axi_if #(
     //     .ADDR_W(`ysyx_23060251_axi_addr),
@@ -70,6 +71,19 @@ module top (
     wire                                f_valid;
     wire                                D_ready;
 
+    wire          io_master_awready;
+    wire          io_master_awvalid;
+    wire [31:0]   io_master_awaddr ;
+
+    wire          io_master_arready;
+    wire          io_master_arvalid;
+    wire [31:0]   io_master_araddr ;
+
+    wire          io_master_rready ;
+    wire          io_master_rvalid ;
+    wire[1:0]     io_master_rresp  ;
+    wire[31:0]    io_master_rdata  ;
+
     ifu ysyx_ifu
     (
         .clk_i          (clk),
@@ -89,7 +103,14 @@ module top (
         .mst_r_ready_o  (io_master_rready)
     );
 
+    assign io_master_arready = 1;
+    assign io_master_rvalid = 1;
+    assign io_master_rdata = 1000;
+    assign io_master_rresp = 2'b00;
+    assign inst_wb = 1;
+    assign npc = pc + 4;
 
+/*
     // ifu ysyx_23060251_ifu (
     //     .clk_i(clk),
     //     .rst_i(rst),
@@ -161,7 +182,7 @@ module top (
         .renMem_o         (d_renMem),
         .mask_o           (d_mask)
     );
-
+*/
     // idu ysyx_23060251_idu (
     //     .inst_i(inst),
     //     .opinfo_o(opinfo),

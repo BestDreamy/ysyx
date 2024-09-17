@@ -14,20 +14,34 @@ module if_id (
     input 									clk_i,
     input 									rst_i
 );
-    `PIPE_INST(`ysyx_23060251_inst, inst, f, D, d)
-    `PIPE_INST(`ysyx_23060251_pc, pc, f, D, d)
-	// pipe #(
-	// 	.DATA_WIDTH(`ysyx_23060251_inst)
-	// ) inst_pipe (
-	// 	.clk        (clk_i),
-	// 	.rstn       (rst_i),
-	// 	.pin_valid  (f_valid_i),
-	// 	.pin_data   (f_inst_i),
-	// 	.pin_ready  (D_ready_o),
-	// 	.pout_valid (D_valid_o),
-	// 	.pout_data  (d_inst_o),
-	// 	.pout_ready (d_ready_i)
-	// );
+	pipe if_id_pipe 
+	(
+		.clk        (clk_i),
+		.rst        (rst_i),
+		.pin_valid  (f_valid_i),
+		// .pin_data   (f_inst_i),
+		.pin_ready  (D_ready_o),
+		.pout_valid (D_valid_o),
+		// .pout_data  (d_inst_o),
+		.pout_ready (d_ready_i)
+	);
+
+	wire en; // stall or bubble
+
+	reg [`ysyx_23060251_inst_bus] D_inst;
+	reg [`ysyx_23060251_pc_bus]   D_pc;
+
+	assign en = f_valid_i & D_ready_o;
+
+	always @(posedge clk_i) begin
+		if (en) begin
+			D_inst <= f_inst_i;
+			D_pc   <= f_pc_i;
+		end
+	end
+
+	assign d_inst_o  = {`ysyx_23060251_inst{D_valid_o}} & D_inst;
+	assign d_pc_o    = {`ysyx_23060251_pc{D_valid_o}}   & D_pc;
 
 	// pipe #(
 	// 	.DATA_WIDTH(`ysyx_23060251_pc)

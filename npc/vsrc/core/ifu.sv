@@ -19,7 +19,7 @@ module ifu (
 
     input                                   mst_r_valid_i,
     input   [`ysyx_23060251_axi_data_bus]   mst_r_data_i,
-    input   [1:0]                  mst_r_resp_i,
+    input   [1:0]                           mst_r_resp_i,
     output                                  mst_r_ready_o
 );
 
@@ -96,17 +96,15 @@ module ifu (
             inst = mst_r_data_i;
     end
 
-    // rom ysyx_23060251_rom (
-    //     .clk_i(clk_i),
-    //     .rst_i(rst_i),
-    //     .pc_i(pc_i),
-    //     .inst_o(inst_o)
-    // );
+    rom ysyx_23060251_rom (
+        .clk_i(clk_i),
+        .rst_i(rst_i),
+        .pc_i(pc_o),
+        .inst_o(inst_o)
+    );
 
-    // import "DPI-C" function void halt(
-    //     int inst
-    // );
+    import "DPI-C" function void halt(int inst);
 
-    // always_comb halt(inst_o);
+    always_comb halt(inst_o);
 
 endmodule
