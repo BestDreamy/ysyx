@@ -107,4 +107,6 @@ module ifu (
 
     always_comb halt(inst_o);
 
+    always_comb $display("pc: %h\n", pc);
+
 endmodule
