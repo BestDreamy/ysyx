@@ -105,10 +105,11 @@ module top (
 
     assign io_master_arready = 1;
     assign io_master_rvalid = 1;
-    assign io_master_rdata = 1000;
+    assign io_master_rdata = 32'h100073;
     assign io_master_rresp = 2'b00;
     assign inst_wb = 1;
     assign npc = pc + 4;
+    assign inst_wb = 1;
 
 /*
     // ifu ysyx_23060251_ifu (

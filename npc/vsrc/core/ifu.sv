@@ -93,20 +93,20 @@ module ifu (
 
     always @(posedge clk_i) begin
         if (r_hs)
-            inst = mst_r_data_i;
+            inst <= mst_r_data_i;
     end
 
-    rom ysyx_23060251_rom (
-        .clk_i(clk_i),
-        .rst_i(rst_i),
-        .pc_i(pc_o),
-        .inst_o(inst_o)
-    );
+    // rom ysyx_23060251_rom (
+    //     .clk_i(clk_i),
+    //     .rst_i(rst_i),
+    //     .pc_i(pc_o),
+    //     .inst_o(mst_r_data_i)
+    // );
 
     import "DPI-C" function void halt(int inst);
 
     always_comb halt(inst_o);
 
-    always_comb $display("pc: %h\n", pc);
+    always_comb $display("(%h->%h) pc: %h -> %h [%h]\n", state, next_state, pc, inst, pre_inst_wb);
 
 endmodule

@@ -26,6 +26,7 @@ void cpu_init() { // exe the first instruction
 
     IFDEF(CONFIG_DIFFTEST, init_difftest(diff_so_file, img_size, difftest_port));
 
+
     cpu_exec(-1);
 }
 
@@ -93,9 +94,9 @@ void npc_eval() {
     // 1. In the top's interface
     npc_cpu.pc = dut->pc;
     // 2. Use dpic
-    for (int i = 0; i < 32; i ++) {
-        npc_cpu.gpr[i] = gprs[i];
-    }
+    // for (int i = 0; i < 32; i ++) {
+    //     npc_cpu.gpr[i] = gprs[i];
+    // }
     npc_cpu.mstatus = dut->mstatus;
     npc_cpu.mtvec = dut->mtvec;
     npc_cpu.mepc = dut->mepc;
