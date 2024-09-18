@@ -107,6 +107,4 @@ module ifu (
 
     always_comb halt(inst_o);
 
-    always_comb $display("(%h->%h) pc: %h -> %h [%h]\n", state, next_state, pc, inst, pre_inst_wb);
-
 endmodule

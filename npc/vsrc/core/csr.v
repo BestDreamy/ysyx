@@ -1,19 +1,20 @@
 module csr (
-    input clk_i,
-    input rst_i,
-    input wire wenCsr_i,
-    input wire is_ecall_i,
-    input wire is_mret_i,
-    input wire[`ysyx_23060251_imm_bus] imm_i, // csr
-    input wire[`ysyx_23060251_reg_bus] src1_i, // csr
-    input wire[`ysyx_23060251_reg_bus] mepc_i, // ecall
-    input wire[`ysyx_23060251_reg_bus] mcause_i, // ecall
+    input                              wenCsr_i,
+    input                              is_ecall_i,
+    input                              is_mret_i,
+    input     [`ysyx_23060251_imm_bus] imm_i,     // csr
+    input     [`ysyx_23060251_reg_bus] src1_i,    // csr
+    input     [`ysyx_23060251_reg_bus] mepc_i,    // ecall
+    input     [`ysyx_23060251_reg_bus] mcause_i,  // ecall
 
     output reg[`ysyx_23060251_reg_bus] mstatus_o,
     output reg[`ysyx_23060251_reg_bus] mtvec_o,
     output reg[`ysyx_23060251_reg_bus] mepc_o,
     output reg[`ysyx_23060251_reg_bus] mcause_o,
-    output wire[`ysyx_23060251_reg_bus] data_o
+    output    [`ysyx_23060251_reg_bus] data_o,
+
+    input                              clk_i,
+    input                              rst_i
 );
 
 

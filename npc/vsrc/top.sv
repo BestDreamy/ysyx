@@ -71,18 +71,18 @@ module top (
     wire                                f_valid;
     wire                                D_ready;
 
-    wire          io_master_awready;
-    wire          io_master_awvalid;
-    wire [31:0]   io_master_awaddr ;
+    // wire          io_master_awready;
+    // wire          io_master_awvalid;
+    // wire [31:0]   io_master_awaddr ;
 
-    wire          io_master_arready;
-    wire          io_master_arvalid;
-    wire [31:0]   io_master_araddr ;
+    // wire          io_master_arready;
+    // wire          io_master_arvalid;
+    // wire [31:0]   io_master_araddr ;
 
-    wire          io_master_rready ;
-    wire          io_master_rvalid ;
-    wire[1:0]     io_master_rresp  ;
-    wire[31:0]    io_master_rdata  ;
+    // wire          io_master_rready ;
+    // wire          io_master_rvalid ;
+    // wire[1:0]     io_master_rresp  ;
+    // wire[31:0]    io_master_rdata  ;
 
     ifu ysyx_ifu
     (

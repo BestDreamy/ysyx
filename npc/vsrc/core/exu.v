@@ -10,18 +10,18 @@ module exu (
     input  [`ysyx_23060251_imm_bus]         imm_i, //offset
     input  [`ysyx_23060251_reg_bus]         csr_data_i,
 
-    input                                   e_valid_i, // from idu
-    output                                  e_ready_o, // from idu
+    input                                   E_valid_i, // from E-pipe
+    output                                  e_ready_o, // to E-pipe
 
-    output                                  e_valid_o, // to lsu
-    input                                   e_ready_i, // to lsu
+    output                                  e_valid_o, // to M-pipe
+    input                                   M_ready_i, // from M-pipe
 
     output [`ysyx_23060251_pc_bus]          npc_o,
     output [`ysyx_23060251_xlen_bus]        res_o,
     output                                  cnd_o
 );
-    assign e_valid_o = e_valid_i;
-    assign e_ready_o = e_valid_i;
+    assign e_valid_o = E_valid_i;
+    assign e_ready_o = M_ready_i;
 
     alu ysyx_23060251_alu (
         .opinfo_i(opinfo_i),

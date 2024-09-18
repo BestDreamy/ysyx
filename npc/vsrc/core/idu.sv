@@ -1,11 +1,11 @@
 module idu (
     input   [`ysyx_23060251_inst_bus]       inst_i,
 
-    input                                   d_valid_i, // from ifu
-    output                                  d_ready_o, // from ifu
+    input                                   D_valid_i, // from D-pipe
+    output                                  d_ready_o, // to D-pipe
 
-    output                                  d_valid_o, // to exu
-    input                                   d_ready_i, // to exu
+    output                                  d_valid_o, // to E
+    input                                   E_ready_i, // from E
 
     output  [`ysyx_23060251_opinfo_bus]     opinfo_o,
     output  [`ysyx_23060251_alu_bus]        alu_info_o,
@@ -28,9 +28,8 @@ module idu (
     output                                  renMem_o,
     output  [`ysyx_23060251_mask_bus]       mask_o
 );
-    assign d_valid_o = d_valid_i;
-    assign d_ready_o = d_valid_i;
-    always @(*) $display("%h\n", inst_i);
+    assign d_valid_o = D_valid_i;
+    assign d_ready_o = E_ready_i;
     
     wire[`ysyx_23060251_opcode_bus] opcode = inst_i[6: 0];
     assign                           rs1_o = inst_i[19: 15];
