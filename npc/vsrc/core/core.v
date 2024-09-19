@@ -185,6 +185,26 @@ module core (
         .data_o     (d_csr_data)
     );
 
+
+    wire [`ysyx_23060251_opinfo_bus]    e_opinfo;
+    wire [`ysyx_23060251_alu_bus]       e_alu_info;
+    wire [`ysyx_23060251_branch_bus]    e_branch_info;
+    wire [`ysyx_23060251_sys_bus]       e_sys_info;
+    wire                                e_wenReg;
+    wire                                e_wenCsr;
+    wire [`ysyx_23060251_reg_bus]       e_csr_data;
+    wire [`ysyx_23060251_rs_bus]        e_rd;
+    wire [`ysyx_23060251_reg_bus]       e_src1;
+    wire [`ysyx_23060251_reg_bus]       e_src2;
+    wire [`ysyx_23060251_imm_bus]       e_imm;
+    wire                                e_is_load_signed;
+    wire                                e_wenMem;
+    wire                                e_renMem;
+    wire [`ysyx_23060251_mask_bus]      e_mask;
+    wire [`ysyx_23060251_pc_bus]        e_pc;
+    wire                                E_valid;
+    wire                                e_ready;
+
     id_ex inst_id_ex
     (
         .d_opinfo_i         (d_opinfo),
@@ -202,6 +222,7 @@ module core (
         .d_wenMem_i         (d_wenMem),
         .d_renMem_i         (d_renMem),
         .d_mask_i           (d_mask),
+        .d_pc_i             (d_pc),
         .d_valid_i          (d_valid),
         .E_ready_o          (E_ready),
         .e_opinfo_o         (e_opinfo),
@@ -219,6 +240,7 @@ module core (
         .e_wenMem_o         (e_wenMem),
         .e_renMem_o         (e_renMem),
         .e_mask_o           (e_mask),
+        .e_pc_o             (e_pc),
         .E_valid_o          (E_valid),
         .e_ready_i          (e_ready),
         .clk_i              (clk),
@@ -228,29 +250,29 @@ module core (
                                           src && csr && wb
     ****************************************************************************************/
 
-//     wire exu_valid;
-//     wire exu_ready;
-//     wire[`ysyx_23060251_pc_bus] npc;
-//     wire[`ysyx_23060251_xlen_bus] res;
-//     wire cnd;
+    wire                            e_valid;
+    wire                            e_ready;
+    wire [`ysyx_23060251_pc_bus]    e_npc;
+    wire [`ysyx_23060251_xlen_bus]  e_res;
+    wire                            e_cnd;
 
     exu ysyx_23060251_exu (
-        .opinfo_i         (opinfo),
-        .alu_i            (alu_info),
-        .branch_info_i    (branch_info),
-        .sys_info_i       (sys_info),
-        .pc_i             (pc),
-        .src1_i           (src1),
-        .src2_i           (src2),
-        .imm_i            (imm),
-        .csr_data_i       (csr_data),
+        .opinfo_i         (e_opinfo),
+        .alu_i            (e_alu_info),
+        .branch_info_i    (e_branch_info),
+        .sys_info_i       (e_sys_info),
+        .pc_i             (e_pc),
+        .src1_i           (e_src1),
+        .src2_i           (e_src2),
+        .imm_i            (e_imm),
+        .csr_data_i       (e_csr_data),
         .E_valid_i        (E_valid),
         .e_ready_o        (e_ready),
         .e_valid_o        (e_valid),
         .M_ready_i        (M_ready),
-        .npc_o            (npc),
-        .res_o            (res),
-        .cnd_o            (cnd)
+        .npc_o            (e_npc),
+        .res_o            (e_res),
+        .cnd_o            (e_cnd)
     );
 
 // wire lsu_ready;
