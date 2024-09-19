@@ -47,7 +47,7 @@ module core (
     input clk,
     input rst
 );
-    wire                                inst_wb;
+    wire                                wb_en;
     wire [`ysyx_23060251_pc_bus]        npc;
     wire                                f_valid;
     wire                                D_ready;
@@ -64,7 +64,7 @@ module core (
     (
         .clk_i          (clk),
         .rst_i          (rst),
-        .pre_inst_wb    (inst_wb),
+        .pre_inst_wb    (wb_en),
         .npc_i          (npc),
         .f_valid_o      (f_valid),
         .D_ready_i      (D_ready),
@@ -323,18 +323,18 @@ module core (
 
     lsu ysyx_lsu
     (
-        .clk_i            (clk_i),
-        .rst_i            (rst_i),
-        .is_load_signed_i (is_load_signed_i),
-        .wenMem_i         (wenMem_i),
-        .renMem_i         (renMem_i),
-        .addr_i           (addr_i),
-        .mask_i           (mask_i),
-        .wdata_i          (wdata_i),
+        .clk_i            (clk),
+        .rst_i            (rst),
+        .is_load_signed_i (m_is_load_signed),
+        .wenMem_i         (m_wenMem),
+        .renMem_i         (m_renMem),
+        .addr_i           (m_res),
+        .mask_i           (m_mask),
+        .wdata_i          (m_src2),
         .m_valid_i        (m_valid_i),
         .m_ready_o        (m_ready_o),
         .wb_en            (wb_en),
-        .rdata_o          (rdata_o),
+        .rdata_o          (m_rdata),
         .mst_ar_valid_o   (mst_ar_valid_o),
         .mst_ar_addr_o    (mst_ar_addr_o),
         .mst_ar_ready_i   (mst_ar_ready_i),
@@ -354,26 +354,30 @@ module core (
         .mst_b_ready_o    (mst_b_ready_o)
     );
 
-
-//     lsu ysyx_23060251_lsu (
-//         .clk_i(clk),
-//         .is_load_signed_i(is_load_signed),
-//         .wenMem_i(wenMem),
-//         .renMem_i(renMem),
-//         .addr_i(res),
-//         .mask_i(mask),
-//         .wdata_i(src2),
-//         .rdata_o(rdata)
-//     );
-
-/*
-    wb ysyx_23060251_wb (
-        .clk_i(clk),
-        .rst_i(rst),
-        .opinfo_i(opinfo),
-        .dst_i(dst),
-        .res_i(res)
+    wbu inst_wbu
+    (
+        .wb_en_i      (wb_en),
+        .m_wenReg_i   (m_wenReg),
+        .m_wenCsr_i   (m_wenCsr),
+        .m_rd_i       (m_rd),
+        .m_res_i      (m_res),
+        .m_renMem_i   (m_renMem),
+        .m_rdata_i    (m_rdata),
+        .m_sys_info_i (m_sys_info),
+        .m_imm_i      (m_imm),
+        .m_src1_i     (m_src1),
+        .m_pc_i       (m_pc),
+        .w_rd_o       (w_rd),
+        .w_res_o      (w_res),
+        .w_renMem_o   (w_renMem),
+        .w_rdata_o    (w_rdata),
+        .w_sys_info_o (w_sys_info),
+        .w_imm_o      (w_imm),
+        .w_src1_o     (w_src1),
+        .w_pc_o       (w_pc),
+        .w_wenReg_o   (w_wenReg),
+        .w_wenCsr_o   (w_wenCsr)
     );
-*/
+
 
 endmodule

@@ -10,7 +10,7 @@ module lsu (
     input  [`ysyx_23060251_mask_bus]        mask_i,
     input  [`ysyx_23060251_xlen_bus]        wdata_i,
 
-    input                                   m_valid_i, // from exu
+    input                                   M_valid_i, // from exu
     output                                  m_ready_o, // from exu
 
     output                                  wb_en,
@@ -46,7 +46,7 @@ module lsu (
 
     reg[6: 0] state, next_state;
 
-    wire rx_valid, r_en, w_en;
+    wire rx_valid, r_en, w_en, mem_dis;
 
     wire ar_hs, r_hs, aw_hs, w_hs, b_hs;
 
@@ -63,6 +63,10 @@ module lsu (
         if (state == IDLE) begin
             if (r_en)
                 next_state = WAIT_AR_REQ;
+            else if (w_en)
+                next_state = WAIT_AW_REQ;
+            else if (mem_dis)
+                next_state = WAIT_WB;
             else
                 next_state = state;
         end else if (state == WAIT_AR_REQ) begin
@@ -75,17 +79,6 @@ module lsu (
                 next_state = WAIT_WB;
             else 
                 next_state = state;
-        end else begin // state == WAIT_WB
-            next_state = IDLE;
-        end
-    end
-
-    always_comb begin
-        if (state == IDLE) begin
-            if (w_en)
-                next_state = WAIT_AW_REQ;
-            else
-                next_state = state;
         end else if (state == WAIT_AW_REQ) begin
             if (aw_hs) 
                 next_state = WAIT_W_REQ;
@@ -96,18 +89,22 @@ module lsu (
                 next_state = WAIT_B_RSP;
             else 
                 next_state = state;
-        end else begin // state == WAIT_B_RSP
+        end else if (state == WAIT_B_RSP) begin
             if (b_hs)
                 next_state = IDLE;
             else 
                 next_state = state;
+        end else begin // state == WAIT_WB
+            next_state = IDLE;
         end
     end
     // ---------------------- state machine end -------------------------------
 
-    assign rx_valid = m_valid_i & m_ready_o;
-    assign r_en = rx_valid & renMem_i;
-    assign w_en = rx_valid & wenMem_i;
+    assign m_ready_o = (state == IDLE);
+    assign rx_valid = M_valid_i & m_ready_o;
+    assign r_en     = rx_valid & renMem_i;
+    assign w_en     = rx_valid & wenMem_i;
+    assign mem_dis  = rx_valid & (~renMem_i) & (~wenMem);
 
     // ------------------------------  AXI  -----------------------------------
     assign mst_ar_valid_o = (state == WAIT_AR_REQ);

@@ -24,31 +24,31 @@ module exu (
     assign e_ready_o = M_ready_i;
 
     alu ysyx_23060251_alu (
-        .opinfo_i(opinfo_i),
-        .alu_i(alu_i),
-        .branch_info_i(branch_info_i),
-        .sys_info_i(sys_info_i),
-        .pc_i(pc_i),
-        .src1_i(src1_i),
-        .src2_i(src2_i),
-        .imm_i(imm_i),
-        .csr_data_i(csr_data_i),
-        .res_o(res_o),
-        .cnd_o(cnd_o)
+        .opinfo_i       (opinfo_i),
+        .alu_i          (alu_i),
+        .branch_info_i  (branch_info_i),
+        .sys_info_i     (sys_info_i),
+        .pc_i           (pc_i),
+        .src1_i         (src1_i),
+        .src2_i         (src2_i),
+        .imm_i          (imm_i),
+        .csr_data_i     (csr_data_i),
+        .res_o          (res_o),
+        .cnd_o          (cnd_o)
     );
 
     bjp ysyx_23060251_bjp (
-        .is_branch_i(opinfo_i[`ysyx_23060251_opinfo_branch]),
-        .is_jal_i(opinfo_i[`ysyx_23060251_opinfo_jal]),
-        .is_jalr_i(opinfo_i[`ysyx_23060251_opinfo_jalr]),
-        .is_ecall_i(sys_info_i[`ysyx_23060251_sys_ecall]),
-        .is_mret_i(sys_info_i[`ysyx_23060251_sys_mret]),
-        .pc_i(pc_i),
-        .src1_i(src1_i),
-        .imm_i(imm_i),
-        .cnd_i(cnd_o),
-        .csr_data_i(csr_data_i),
-        .npc_o(npc_o)
+        .is_branch_i    (opinfo_i[`ysyx_23060251_opinfo_branch]),
+        .is_jal_i       (opinfo_i[`ysyx_23060251_opinfo_jal]),
+        .is_jalr_i      (opinfo_i[`ysyx_23060251_opinfo_jalr]),
+        .is_ecall_i     (sys_info_i[`ysyx_23060251_sys_ecall]),
+        .is_mret_i      (sys_info_i[`ysyx_23060251_sys_mret]),
+        .pc_i           (pc_i),
+        .src1_i         (src1_i),
+        .imm_i          (imm_i),
+        .cnd_i          (cnd_o),
+        .csr_data_i     (csr_data_i),
+        .npc_o          (npc_o)
     );
 
     // agu ysyx_23060251_agu (

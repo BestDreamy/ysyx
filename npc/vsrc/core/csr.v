@@ -16,8 +16,6 @@ module csr (
     input                              clk_i,
     input                              rst_i
 );
-
-
     // import "DPI-C" function void set_csr(
     //     // input: sv --> c
     //     input bit[`ysyx_23060251_reg_bus] mstatus,
@@ -38,11 +36,11 @@ module csr (
             mstatus_o[`ysyx_23060251_mstatus_xIE_bus]  <= 'b0000;
             mstatus_o[`ysyx_23060251_mstatus_xPIE_bus] <= 'b0000;
             mstatus_o[`ysyx_23060251_mstatus_xPP_bus]  <= 'b11000;
-        end else if (is_ecall_i) begin
+        end else if (is_ecall_i & wenCsr_i) begin
             mstatus_o[`ysyx_23060251_mstatus_xIE_bus]  <= 'b0000;
             mstatus_o[`ysyx_23060251_mstatus_xPIE_bus] <= mstatus_o[`ysyx_23060251_mstatus_xIE_bus];
             // mstatus_o[`ysyx_23060251_mstatus_xPP_bus]  <= 'b11000;
-        end else if (is_mret_i) begin
+        end else if (is_mret_i & wenCsr_i) begin
             mstatus_o[`ysyx_23060251_mstatus_xIE_bus]  <= mstatus_o[`ysyx_23060251_mstatus_xPIE_bus];
             mstatus_o[`ysyx_23060251_mstatus_xPIE_bus] <= 'b0000;
             // mstatus_o[`ysyx_23060251_mstatus_xPP_bus]  <= 'b11000;
