@@ -53,11 +53,11 @@ module core (
     wire                                D_ready;
 
     wire                                f_mst_ar_valid;
-    wire                                f_mst_ar_addr;
+    wire [31:0]                         f_mst_ar_addr;
     wire                                f_mst_ar_ready;
     wire                                f_mst_r_valid;
-    wire                                f_mst_r_data;
-    wire                                f_mst_r_resp;
+    wire [31:0]                         f_mst_r_data;
+    wire [1:0]                          f_mst_r_resp;
     wire                                f_mst_r_ready;
 
     ifu ysyx_ifu
@@ -283,6 +283,9 @@ module core (
         .cnd_o            (e_cnd)
     );
 
+    wire                                M_valid;
+    wire                                m_ready;
+
     ex_ls ysyx_ex_ls
     (
         .e_sys_info_i       (e_sys_info),
@@ -298,8 +301,8 @@ module core (
         .e_npc_i            (e_npc),
         .e_res_i            (e_res),
         .e_cnd_i            (e_cnd),
-        .e_valid_i          (e_valid_i),
-        .M_ready_o          (M_ready_o),
+        .e_valid_i          (e_valid),
+        .M_ready_o          (M_ready),
         .m_sys_info_o       (m_sys_info),
         .m_wenReg_o         (m_wenReg),
         .m_wenCsr_o         (m_wenCsr),
@@ -313,13 +316,33 @@ module core (
         .m_npc_o            (m_npc),
         .m_res_o            (m_res),
         .m_cnd_o            (m_cnd),
+        .M_valid_o          (M_valid),
+        .m_ready_i          (m_ready),
         .clk_i              (clk),
         .rst_i              (rst)
     );
 
 // wire lsu_ready;
 // // wire[`ysyx_23060251_xlen_bus] wdata;
-// wire[`ysyx_23060251_xlen_bus] rdata;
+    wire [`ysyx_23060251_xlen_bus]      m_rdata;
+
+    wire                                m_mst_ar_valid;
+    wire [31:0]                         m_mst_ar_addr;
+    wire                                m_mst_ar_ready;
+    wire                                m_mst_r_valid;
+    wire [31:0]                         m_mst_r_data;
+    wire [1:0]                          m_mst_r_resp;
+    wire                                m_mst_aw_valid;
+    wire [31:0]                         m_mst_aw_addr;
+    wire                                m_mst_aw_ready;
+    wire                                m_mst_w_valid;
+    wire [31:0]                         m_mst_w_data;
+    wire [3:0]                          m_mst_w_strb;
+    wire                                m_mst_w_ready;
+    wire                                m_mst_b_valid;
+    wire [1:0]                          m_mst_b_resp;
+    wire                                m_mst_b_ready;
+
 
     lsu ysyx_lsu
     (
@@ -331,27 +354,27 @@ module core (
         .addr_i           (m_res),
         .mask_i           (m_mask),
         .wdata_i          (m_src2),
-        .m_valid_i        (m_valid_i),
-        .m_ready_o        (m_ready_o),
+        .m_valid_i        (m_valid),
+        .m_ready_o        (m_ready),
         .wb_en            (wb_en),
         .rdata_o          (m_rdata),
-        .mst_ar_valid_o   (mst_ar_valid_o),
-        .mst_ar_addr_o    (mst_ar_addr_o),
-        .mst_ar_ready_i   (mst_ar_ready_i),
-        .mst_r_valid_i    (mst_r_valid_i),
-        .mst_r_data_i     (mst_r_data_i),
-        .mst_r_resp_i     (mst_r_resp_i),
-        .mst_r_ready_o    (mst_r_ready_o),
-        .mst_aw_valid_o   (mst_aw_valid_o),
-        .mst_aw_addr_o    (mst_aw_addr_o),
-        .mst_aw_ready_i   (mst_aw_ready_i),
-        .mst_w_valid_o    (mst_w_valid_o),
-        .mst_w_data_o     (mst_w_data_o),
-        .mst_w_strb_o     (mst_w_strb_o),
-        .mst_w_ready_i    (mst_w_ready_i),
-        .mst_b_valid_i    (mst_b_valid_i),
-        .mst_b_resp_i     (mst_b_resp_i),
-        .mst_b_ready_o    (mst_b_ready_o)
+        .mst_ar_valid_o   (m_ar_valid),
+        .mst_ar_addr_o    (m_ar_addr),
+        .mst_ar_ready_i   (m_ar_ready),
+        .mst_r_valid_i    (m_r_valid),
+        .mst_r_data_i     (m_r_data),
+        .mst_r_resp_i     (m_r_resp),
+        .mst_r_ready_o    (m_r_ready),
+        .mst_aw_valid_o   (m_aw_valid),
+        .mst_aw_addr_o    (m_aw_addr),
+        .mst_aw_ready_i   (m_aw_ready),
+        .mst_w_valid_o    (m_w_valid),
+        .mst_w_data_o     (m_w_data),
+        .mst_w_strb_o     (m_w_strb),
+        .mst_w_ready_i    (m_w_ready),
+        .mst_b_valid_i    (m_b_valid),
+        .mst_b_resp_i     (m_b_resp),
+        .mst_b_ready_o    (m_b_ready)
     );
 
     wbu inst_wbu
