@@ -377,7 +377,7 @@ module core (
         .mst_b_ready_o    (m_b_ready)
     );
 
-    wbu inst_wbu
+    wbu ysyx_wbu
     (
         .wb_en_i      (wb_en),
         .m_wenReg_i   (m_wenReg),
