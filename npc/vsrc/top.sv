@@ -10,7 +10,29 @@ module top (
     input                                rst
 );
 
-	core inst_core
+    wire          io_master_awready; wire           io_slave_awready;
+    wire          io_master_awvalid; wire           io_slave_awvalid;
+    wire [31:0]   io_master_awaddr ; wire [31:0]    io_slave_awaddr ;
+
+    wire          io_master_wready ; wire           io_slave_wready ;
+    wire          io_master_wvalid ; wire           io_slave_wvalid ;
+    wire [31:0]   io_master_wdata  ; wire [31:0]    io_slave_wdata  ;
+    wire [3:0]    io_master_wstrb  ; wire [3:0]     io_slave_wstrb  ;
+
+    wire          io_master_bready ; wire           io_slave_bready ;
+    wire          io_master_bvalid ; wire           io_slave_bvalid ;
+    wire [1:0]    io_master_bresp  ; wire [1:0]     io_slave_bresp  ;
+
+    wire          io_master_arready; wire           io_slave_arready;
+    wire          io_master_arvalid; wire           io_slave_arvalid;
+    wire [31:0]   io_master_araddr ; wire [31:0]    io_slave_araddr ;
+
+    wire          io_master_rready ; wire           io_slave_rready ;
+    wire          io_master_rvalid ; wire           io_slave_rvalid ;
+    wire [1:0]    io_master_rresp  ; wire [1:0]     io_slave_rresp  ;
+    wire [31:0]   io_master_rdata  ; wire [31:0]    io_slave_rdata  ;
+
+    core inst_core
     (
         .pc                (pc),
         .mstatus           (),

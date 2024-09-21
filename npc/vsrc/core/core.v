@@ -119,10 +119,10 @@ module core (
     idu ysyx_idu
     (
         .inst_i           (d_inst),
-        .d_valid_i        (D_valid),
+        .D_valid_i        (D_valid),
         .d_ready_o        (d_ready),
         .d_valid_o        (d_valid),
-        .d_ready_i        (E_ready),
+        .E_ready_i        (E_ready),
         .opinfo_o         (d_opinfo),
         .alu_info_o       (d_alu_info),
         .branch_info_o    (d_branch_info),
@@ -350,7 +350,7 @@ module core (
         .addr_i           (m_res),
         .mask_i           (m_mask),
         .wdata_i          (m_src2),
-        .m_valid_i        (m_valid),
+        .M_valid_i        (M_valid),
         .m_ready_o        (m_ready),
         .wb_en            (wb_en),
         .rdata_o          (m_rdata),

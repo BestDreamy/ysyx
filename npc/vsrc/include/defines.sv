@@ -192,8 +192,11 @@ parameter ysyx_23060251_mul =      `ysyx_23060251_xlen << 1;
 
 `define ysyx_23060251_axi_addr `ysyx_23060251_xlen
 `define ysyx_23060251_axi_data `ysyx_23060251_xlen
+localparam axi_strb = `ysyx_23060251_axi_data >> 3;
+`define ysyx_23060251_axi_strb axi_strb
 
 `define ysyx_23060251_axi_addr_bus `ysyx_23060251_axi_addr - 1: 0
 `define ysyx_23060251_axi_data_bus `ysyx_23060251_axi_data - 1: 0
+`define ysyx_23060251_axi_strb_bus `ysyx_23060251_axi_strb - 1: 0
 
 `endif

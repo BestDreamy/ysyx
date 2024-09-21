@@ -31,7 +31,7 @@ module axi_Arbiter (
     output                                 mst_r_ready_o
 );
 	localparam AXI_ARBITER_NR = 3;
-	localparam [AXI_ARBITER_NR-1: 0] IDLE = AXI_ARBITER_NR'b001, REQ_SEL = AXI_ARBITER_NR'b010, RSP_SEL = AXI_ARBITER_NR'b100;
+	localparam [AXI_ARBITER_NR-1: 0] IDLE = 3'b1, REQ_SEL = 3'b10, RSP_SEL = 3'b100;
 
     reg [AXI_ARBITER_NR-1: 0] state, next_state;
     wire ar_hs, r_hs;
