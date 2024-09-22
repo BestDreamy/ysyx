@@ -140,4 +140,10 @@ module axi_slave (
     assign slv_b_valid_o  = (state == WRITE_RSP);
     assign slv_b_resp_o   = 2'b00;
     // ---------------------- state machine end -------------------------------
+
+    assign ar_hs = slv_ar_valid_i & slv_ar_ready_o;
+    assign r_hs  = slv_r_valid_o  & slv_r_ready_i ;
+    assign aw_hs = slv_aw_valid_i & slv_aw_ready_o;
+    assign w_hs  = slv_w_valid_i  & slv_w_ready_o ;
+    assign b_hs  = slv_b_valid_o  & slv_b_ready_i ;  
 endmodule

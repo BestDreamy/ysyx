@@ -96,25 +96,25 @@ module core (
 
     wire                                d_valid;
     wire                                E_ready;
-    wire [`ysyx_23060251_opinfo_bus]    d_opinfo; // to exu
-    wire [`ysyx_23060251_alu_bus]       d_alu_info; // to exu
-    wire [`ysyx_23060251_branch_bus]    d_branch_info; // to exu
+    wire [`ysyx_23060251_opinfo_bus]    d_opinfo;         // to exu
+    wire [`ysyx_23060251_alu_bus]       d_alu_info;       // to exu
+    wire [`ysyx_23060251_branch_bus]    d_branch_info;    // to exu
     // wire [`ysyx_23060251_load_bus]      d_load_info;
     // wire [`ysyx_23060251_store_bus]     d_store_info;
-    wire [`ysyx_23060251_sys_bus]       d_sys_info; // to wb
-    wire                                d_wenReg; // to wb
-    wire                                d_wenCsr; // to wb
-    wire [`ysyx_23060251_rs_bus]        d_rd; // to wb
+    wire [`ysyx_23060251_sys_bus]       d_sys_info;       // to wb
+    wire                                d_wenReg;         // to wb
+    wire                                d_wenCsr;         // to wb
+    wire [`ysyx_23060251_rs_bus]        d_rd;             // to wb
     wire [`ysyx_23060251_rs_bus]        d_rs1;
     wire [`ysyx_23060251_rs_bus]        d_rs2;
-    wire [`ysyx_23060251_reg_bus]       d_src1; // to wb
-    wire [`ysyx_23060251_reg_bus]       d_src2; // to exu
-    wire [`ysyx_23060251_imm_bus]       d_imm;  // to wb
+    wire [`ysyx_23060251_reg_bus]       d_src1;           // to wb
+    wire [`ysyx_23060251_reg_bus]       d_src2;           // to exu
+    wire [`ysyx_23060251_imm_bus]       d_imm;            // to wb
     wire                                d_is_load_signed; // to lsu
-    wire                                d_wenMem; // to lsu
-    wire                                d_renMem; // to lsu
-    wire [`ysyx_23060251_mask_bus]      d_mask; // to lsu
-    wire [`ysyx_23060251_reg_bus]       d_csr_data; // to exu
+    wire                                d_wenMem;         // to lsu
+    wire                                d_renMem;         // to lsu
+    wire [`ysyx_23060251_mask_bus]      d_mask;           // to lsu
+    wire [`ysyx_23060251_reg_bus]       d_csr_data;       // to exu
 
     idu ysyx_idu
     (

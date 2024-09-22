@@ -22,6 +22,8 @@ module ifu (
     input   [1:0]                           mst_r_resp_i,
     output                                  mst_r_ready_o
 );
+    reg init;
+    always @(posedge clk_i) if (rst_i == `ysyx_23060251_rst_enable) init <= 1'b1;
 
     localparam [3: 0] IDLE = 4'b0001,           WAIT_BUS_REQ = 4'b0010, 
                       WAIT_BUS_RSP = 4'b0100,   WAIT_ID_HS   = 4'b1000;
@@ -45,7 +47,7 @@ module ifu (
 
     always_comb begin
         if (state == IDLE) begin
-            if (pre_inst_wb)
+            if (pre_inst_wb | init)
                 next_state = WAIT_BUS_REQ;
             else
                 next_state = state;
@@ -92,8 +94,10 @@ module ifu (
     assign inst_o    = inst;
 
     always @(posedge clk_i) begin
-        if (r_hs)
+        if (r_hs) begin
             inst <= mst_r_data_i;
+            init <= 1'b0;
+        end
     end
 
     // rom ysyx_23060251_rom (

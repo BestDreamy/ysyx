@@ -79,7 +79,7 @@ module axi_Arbiter (
 
 	wire arbiter;
 	assign arbiter = (f_slv_ar_valid_i & m_slv_ar_valid_i)? prior:
-					 f_slv_ar_valid_i? 1'b0: 1'b1;
+					 f_slv_ar_valid_i | f_slv_r_ready_i? 1'b0: 1'b1;
 
 	assign mst_ar_valid_o = (arbiter == 1'b0)? f_slv_ar_valid_i: m_slv_ar_valid_i;
 	assign mst_ar_addr_o  = (arbiter == 1'b0)? f_slv_ar_addr_i : m_slv_ar_addr_i ;

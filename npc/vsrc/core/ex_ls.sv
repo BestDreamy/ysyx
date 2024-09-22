@@ -37,4 +37,64 @@ module ex_ls (
     input                                  rst_i
 );
 
+    pipe ex_ls_pipe 
+	(
+		.clk        (clk_i),
+		.rst        (rst_i),
+		.pin_valid  (e_valid_i),
+		.pin_ready  (M_ready_o),
+		.pout_valid (M_valid_o),
+		.pout_ready (m_ready_i)
+	);
+
+    wire en; // stall or bubble
+
+    reg  [`ysyx_23060251_sys_bus]       M_sys_info;
+    reg                                 M_wenReg;
+    reg                                 M_wenCsr;
+    reg  [`ysyx_23060251_rs_bus]        M_rd;
+    reg  [`ysyx_23060251_reg_bus]       M_src1;
+    reg  [`ysyx_23060251_imm_bus]       M_imm;
+    reg                                 M_is_load_signed;
+    reg                                 M_wenMem;
+    reg                                 M_renMem;
+    reg  [`ysyx_23060251_mask_bus]      M_mask;
+    reg  [`ysyx_23060251_pc_bus]        M_npc;
+    reg  [`ysyx_23060251_xlen_bus]      M_res;
+    reg                                 M_cnd;
+
+    assign en = e_valid_i & M_ready_o;
+
+    always @(posedge clk_i) begin
+        if (en) begin
+            M_sys_info          <= e_sys_info_i;
+            M_wenReg            <= e_wenReg_i;
+            M_wenCsr            <= e_wenCsr_i;
+            M_rd                <= e_rd_i;
+            M_src1              <= e_src1_i;
+            M_imm               <= e_imm_i;
+            M_is_load_signed    <= e_is_load_signed_i;
+            M_wenMem            <= e_wenMem_i;
+            M_renMem            <= e_renMem_i;
+            M_mask              <= e_mask_i;
+            M_npc               <= e_npc_i;
+            M_res               <= e_res_i;
+            M_cnd               <= e_cnd_i;
+        end
+    end
+
+    assign m_sys_info_o          = M_sys_info;
+    assign m_wenReg_o            = M_wenReg;
+    assign m_wenCsr_o            = M_wenCsr;
+    assign m_rd_o                = M_rd;
+    assign m_src1_o              = M_src1;
+    assign m_imm_o               = M_imm;
+    assign m_is_load_signed_o    = M_is_load_signed;
+    assign m_wenMem_o            = M_wenMem;
+    assign m_renMem_o            = M_renMem;
+    assign m_mask_o              = M_mask;
+    assign m_npc_o               = M_npc;
+    assign m_res_o               = M_res;
+    assign m_cnd_o               = M_cnd;
+
 endmodule

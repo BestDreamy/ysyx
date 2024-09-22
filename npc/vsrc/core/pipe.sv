@@ -27,7 +27,7 @@ module pipe
 
     always @(posedge clk) begin
         if (rst == `ysyx_23060251_rst_enable)
-            valid_q <=  pin_valid;
+            valid_q <= pin_valid;
     end
 
     // always @(posedge clk) begin
