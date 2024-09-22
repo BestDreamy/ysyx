@@ -6,7 +6,7 @@ module axi_slave (
 
     output                                 slv_r_valid_o,
     output [`ysyx_23060251_axi_data_bus]   slv_r_data_o,
-    output axi_mst_resp_t                  slv_r_resp_o,
+    output axi_resp_t                      slv_r_resp_o,
     input                                  slv_r_ready_i,
 
     input                                  slv_aw_valid_i,
@@ -19,7 +19,7 @@ module axi_slave (
     output                                 slv_w_ready_o,
 
     output                                 slv_b_valid_o,
-    output axi_mst_resp_t                  slv_b_resp_o,
+    output axi_resp_t                      slv_b_resp_o,
     input                                  slv_b_ready_i,
 
     input                                  clk_i,
@@ -31,9 +31,9 @@ module axi_slave (
 	localparam AXI_SLV_R_STATE_NR = 3;
 	localparam AXI_SLV_W_STATE_NR = 4;
 	localparam AXI_SLV_STATE_NR   = AXI_SLV_R_STATE_NR + AXI_SLV_W_STATE_NR - 1;
-    localparam [AXI_SLV_STATE_NR-1: 0] IDLE      = AXI_SLV_STATE_NR'b1;
-    localparam [AXI_SLV_STATE_NR-1: 0] READ_MEM  = AXI_SLV_STATE_NR'b10 ,  READ_RSP  = AXI_SLV_STATE_NR'b100;
-    localparam [AXI_SLV_STATE_NR-1: 0] WRITE_REQ = AXI_SLV_STATE_NR'h1000, WRITE_MEM = AXI_SLV_STATE_NR'b1_0000, WRITE_RSP = AXI_SLV_STATE_NR'b10_0000;
+    localparam [AXI_SLV_STATE_NR-1: 0] IDLE      = 6'b1;
+    localparam [AXI_SLV_STATE_NR-1: 0] READ_MEM  = 6'b10 ,  READ_RSP  = 6'b100;
+    localparam [AXI_SLV_STATE_NR-1: 0] WRITE_REQ = 6'b1000, WRITE_MEM = 6'b1_0000, WRITE_RSP = 6'b10_0000;
 
     reg [AXI_SLV_STATE_NR-1: 0] state, next_state;
     // reg [AXI_SLV_STATE_NR-1: 0] w_state, w_next_state;
@@ -59,6 +59,8 @@ module axi_slave (
         if (state == IDLE) begin
             if (ar_hs)
                 next_state = READ_MEM;
+            else if (aw_hs)
+                next_state = WRITE_REQ;
             else
                 next_state = state;
         end else if (state == READ_MEM) begin
@@ -66,11 +68,26 @@ module axi_slave (
                 next_state = READ_RSP;
             else 
                 next_state = state;
-        end else begin // state == READ_RSP
+        end else if (state == READ_RSP) begin
         	if (r_hs) 
             	next_state = IDLE;
             else 
             	next_state = state;
+        end else if (state == WRITE_REQ) begin
+            if (w_hs) 
+                next_state = WRITE_MEM;
+            else 
+                next_state = state;
+        end else if (state == WRITE_MEM) begin
+            if (count == 0)
+                next_state = WRITE_RSP;
+            else 
+                next_state = state;
+        end else begin // state == WRITE_RSP
+            if (b_hs)
+                next_state = IDLE;
+            else 
+                next_state = state;
         end
     end
 
@@ -96,30 +113,6 @@ module axi_slave (
 	assign slv_r_data_o   = data_buf;
 	assign slv_r_resp_o   = 2'b00;
 
-    always_comb begin
-        if (state == IDLE) begin
-            if (aw_hs)
-                next_state = WRITE_REQ;
-            else
-                next_state = state;
-        end else if (state == WRITE_REQ) begin
-            if (w_hs) 
-                next_state = WRITE_MEM;
-            else 
-                next_state = state;
-        end else if (state == WRITE_MEM) begin
-            if (count == 0)
-                next_state = WRITE_RSP;
-            else 
-                next_state = state;
-        end else begin // state == WRITE_RSP
-            if (b_hs)
-                next_state = IDLE;
-            else 
-                next_state = state;
-        end
-    end
-
     always @(posedge clk_i) begin
     	if (state == IDLE & next_state == WRITE_REQ)
     		addr_buf <= slv_aw_addr_i; 
@@ -139,7 +132,7 @@ module axi_slave (
     	if (state == WRITE_REQ & next_state == WRITE_MEM)
     		count <= $random;
     	else if (state == WRITE_MEM)
-    		count = count - 1;
+    		count <= count - 1;
     end
 
     assign slv_aw_ready_o = (state == IDLE);

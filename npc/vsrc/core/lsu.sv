@@ -24,7 +24,7 @@ module lsu (
 
     input                                   mst_r_valid_i,
     input   [`ysyx_23060251_axi_data_bus]   mst_r_data_i,
-    input   axi_mst_resp_t                  mst_r_resp_i,
+    input   axi_resp_t                      mst_r_resp_i,
     output                                  mst_r_ready_o,
 
     output                                  mst_aw_valid_o,
@@ -37,7 +37,7 @@ module lsu (
     input                                   mst_w_ready_i,
 
     input                                   mst_b_valid_i,
-    input   axi_mst_resp_t                  mst_b_resp_i,
+    input   axi_resp_t                      mst_b_resp_i,
     output                                  mst_b_ready_o
 );
     localparam [6: 0] IDLE = 7'h1;
@@ -104,7 +104,7 @@ module lsu (
     assign rx_valid = M_valid_i & m_ready_o;
     assign r_en     = rx_valid & renMem_i;
     assign w_en     = rx_valid & wenMem_i;
-    assign mem_dis  = rx_valid & (~renMem_i) & (~wenMem);
+    assign mem_dis  = rx_valid & (~renMem_i) & (~wenMem_i);
 
     // ------------------------------  AXI  -----------------------------------
     assign mst_ar_valid_o = (state == WAIT_AR_REQ);

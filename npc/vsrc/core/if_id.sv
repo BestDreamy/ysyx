@@ -40,7 +40,7 @@ module if_id (
 		end
 	end
 
-	assign d_inst_o  = {`ysyx_23060251_inst{D_valid_o}} & D_inst;
+	assign d_inst_o  = D_valid_o? D_inst: `ysyx_23060251_inst'h13;
 	assign d_pc_o    = {`ysyx_23060251_pc{D_valid_o}}   & D_pc;
 
 	// pipe #(

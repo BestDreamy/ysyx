@@ -13,12 +13,12 @@ module axi_Arbiter (
 
     output                                 f_slv_r_valid_o,
     output [`ysyx_23060251_axi_data_bus]   f_slv_r_data_o,
-    output axi_mst_resp_t                  f_slv_r_resp_o,
+    output axi_resp_t                      f_slv_r_resp_o,
     input                                  f_slv_r_ready_i,
 
     output                                 m_slv_r_valid_o,
     output [`ysyx_23060251_axi_data_bus]   m_slv_r_data_o,
-    output axi_mst_resp_t                  m_slv_r_resp_o,
+    output axi_resp_t                      m_slv_r_resp_o,
     input                                  m_slv_r_ready_i,
 
     output                                 mst_ar_valid_o,
@@ -27,7 +27,7 @@ module axi_Arbiter (
 
     input                                  mst_r_valid_i,
     input   [`ysyx_23060251_axi_data_bus]  mst_r_data_i,
-    input   axi_mst_resp_t                 mst_r_resp_i,
+    input   axi_resp_t                     mst_r_resp_i,
     output                                 mst_r_ready_o
 );
 	localparam AXI_ARBITER_NR = 3;

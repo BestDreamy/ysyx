@@ -3,8 +3,12 @@
 `include "assign"
 
 module top (
-    output [`ysyx_23060251_pc_bus]   pc,
-    // output [`ysyx_23060251_inst_bus] inst,
+    output [`ysyx_23060251_pc_bus]       pc,
+    output [`ysyx_23060251_inst_bus]     inst,    // just for itrace
+    output wire[`ysyx_23060251_reg_bus]  mstatus, // just for diff
+    output wire[`ysyx_23060251_reg_bus]  mtvec,   // just for diff
+    output wire[`ysyx_23060251_reg_bus]  mepc,    // just for diff
+    output wire[`ysyx_23060251_reg_bus]  mcause,  // just for diff
 
     input                                clk,
     input                                rst
@@ -32,14 +36,14 @@ module top (
     wire [1:0]    io_master_rresp  ; wire [1:0]     io_slave_rresp  ;
     wire [31:0]   io_master_rdata  ; wire [31:0]    io_slave_rdata  ;
 
-    core inst_core
+    core ysyx_core
     (
         .pc                (pc),
         .mstatus           (),
         .mtvec             (),
         .mepc              (),
         .mcause            (),
-        .inst              (),
+        .inst              (inst),
         .io_master_awready (io_master_awready),
         .io_slave_awready  (io_slave_awready),
         .io_master_awvalid (io_master_awvalid),
@@ -76,6 +80,29 @@ module top (
         .io_slave_rdata    (io_slave_rdata),
         .clk               (clk),
         .rst               (rst)
+    );
+
+    axi_slave ysyx_ram
+    (
+        .slv_ar_valid_i (io_slave_arvalid),
+        .slv_ar_addr_i  (io_slave_araddr),
+        .slv_ar_ready_o (io_slave_arready),
+        .slv_r_valid_o  (io_slave_rvalid),
+        .slv_r_data_o   (io_slave_rdata),
+        .slv_r_resp_o   (io_slave_rresp),
+        .slv_r_ready_i  (io_slave_rready),
+        .slv_aw_valid_i (io_slave_awvalid),
+        .slv_aw_addr_i  (io_slave_awaddr),
+        .slv_aw_ready_o (io_slave_awready),
+        .slv_w_valid_i  (io_slave_wvalid),
+        .slv_w_data_i   (io_slave_wdata),
+        .slv_w_strb_i   (io_slave_wstrb),
+        .slv_w_ready_o  (io_slave_wready),
+        .slv_b_valid_o  (io_slave_bvalid),
+        .slv_b_resp_o   (io_slave_bresp),
+        .slv_b_ready_i  (io_slave_bready),
+        .clk_i          (clk),
+        .rst_i          (rst)
     );
 
 endmodule

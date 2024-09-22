@@ -5,6 +5,7 @@ module id_ex (
     input  [`ysyx_23060251_sys_bus]        d_sys_info_i,
     input                                  d_wenReg_i,
     input                                  d_wenCsr_i,
+    input                                  d_csr_data_i,
     input  [`ysyx_23060251_rs_bus]         d_rd_i,
     input  [`ysyx_23060251_reg_bus]  	   d_src1_i,
     input  [`ysyx_23060251_reg_bus] 	   d_src2_i,
@@ -13,6 +14,7 @@ module id_ex (
     input                                  d_wenMem_i,
     input                                  d_renMem_i,
     input  [`ysyx_23060251_mask_bus]       d_mask_i,
+    input  [`ysyx_23060251_pc_bus]         d_pc_i,
 
     input                                  d_valid_i, // from idu
     output                                 E_ready_o, // to idu
@@ -23,6 +25,7 @@ module id_ex (
     output [`ysyx_23060251_sys_bus]        e_sys_info_o,
     output                                 e_wenReg_o,
     output                                 e_wenCsr_o,
+    input                                  e_csr_data_o,
     output [`ysyx_23060251_rs_bus]         e_rd_o,
     output [`ysyx_23060251_reg_bus]  	   e_src1_o,
     output [`ysyx_23060251_reg_bus] 	   e_src2_o,
@@ -31,6 +34,7 @@ module id_ex (
     output                                 e_wenMem_o,
     output                                 e_renMem_o,
     output [`ysyx_23060251_mask_bus]       e_mask_o,
+    output [`ysyx_23060251_pc_bus]         e_pc_o,
 
     output                                 E_valid_o, // to exu
     input                                  e_ready_i, // from exu
@@ -38,18 +42,5 @@ module id_ex (
     input   							   clk_i,
     input 								   rst_i
 );
-    // `PIPE_INST(`ysyx_23060251_opinfo, opinfo, d, E, e)
-    // `PIPE_INST(`ysyx_23060251_alu, alu_info, d, E, e)
-    // `PIPE_INST(`ysyx_23060251_branch, branch_info, d, E, e)
-    // `PIPE_INST(`ysyx_23060251_sys, sys_info, d, E, e)
-    // `PIPE_INST(1, wenReg, d, E, e)
-    // `PIPE_INST(1, wenCsr, d, E, e)
-    // `PIPE_INST(`ysyx_23060251_rs, rd, d, E, e)
-    // `PIPE_INST(`ysyx_23060251_reg, src1, d, E, e)
-    // `PIPE_INST(`ysyx_23060251_reg, src2, d, E, e)
-    // `PIPE_INST(`ysyx_23060251_imm, imm, d, E, e)
-    // `PIPE_INST(1, is_load_signed, d, E, e)
-    // `PIPE_INST(1, wenMem, d, E, e)
-    // `PIPE_INST(1, wenMem, d, E, e)
-    // `PIPE_INST(`ysyx_23060251_mask, mask, d, E, e)
+
 endmodule
