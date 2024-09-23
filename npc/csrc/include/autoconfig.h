@@ -9,8 +9,8 @@
 #define CONFIG_ITRACE   1
 #define CONFIG_MTRACE   1
 // #define CONFIG_FTRACE   1
-#define CONFIG_DEVICE 1
 
+#define CONFIG_DEVICE 1
 #define CONFIG_HAS_SERIAL 1
 #define CONFIG_HAS_TIMER  1
 #define CONFIG_SERIAL_MMIO 0xa00003f8

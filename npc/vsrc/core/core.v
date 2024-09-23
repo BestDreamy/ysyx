@@ -402,6 +402,7 @@ module core (
         .m_imm_i      (m_imm),
         .m_src1_i     (m_src1),
         .m_pc_i       (m_pc),
+        .m_npc_i      (m_npc),
         .w_rd_o       (w_rd),
         .w_res_o      (w_res),
         .w_renMem_o   (w_renMem),
@@ -410,6 +411,7 @@ module core (
         .w_imm_o      (w_imm),
         .w_src1_o     (w_src1),
         .w_pc_o       (w_pc),
+        .w_npc_o      (w_npc),
         .w_wenReg_o   (w_wenReg),
         .w_wenCsr_o   (w_wenCsr)
     );

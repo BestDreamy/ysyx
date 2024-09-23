@@ -28,6 +28,8 @@ module idu (
     output                                  renMem_o,
     output  [`ysyx_23060251_mask_bus]       mask_o
 );
+// always_comb $display("idu %h\n", inst_i);
+
     assign d_valid_o = D_valid_i;
     assign d_ready_o = E_ready_i;
     

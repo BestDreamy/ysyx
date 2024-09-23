@@ -22,12 +22,14 @@ module ifu (
     input   [1:0]                           mst_r_resp_i,
     output                                  mst_r_ready_o
 );
+// always_comb $display("ifu %h\n", pc_o);
+
     reg init;
     always @(posedge clk_i) if (rst_i == `ysyx_23060251_rst_enable) init <= 1'b1;
 
     localparam [3: 0] IDLE = 4'b0001,           WAIT_BUS_REQ = 4'b0010, 
                       WAIT_BUS_RSP = 4'b0100,   WAIT_ID_HS   = 4'b1000;
-    reg[2: 0] state, next_state;
+    reg[3: 0] state, next_state;
 
     reg[`ysyx_23060251_pc_bus]   pc;
     reg[`ysyx_23060251_inst_bus] inst;

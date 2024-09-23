@@ -40,6 +40,7 @@ module lsu (
     input   axi_resp_t                      mst_b_resp_i,
     output                                  mst_b_ready_o
 );
+// always_comb $display("lsu state: %h\n", state);
     localparam [6: 0] IDLE = 7'h1;
     localparam [6: 0] WAIT_AR_REQ = 7'h2 , WAIT_R_RSP = 7'h4 , WAIT_WB    = 7'h8 ;
     localparam [6: 0] WAIT_AW_REQ = 7'h10, WAIT_W_REQ = 7'h20, WAIT_B_RSP = 7'h40;

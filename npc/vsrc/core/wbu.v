@@ -11,6 +11,7 @@ module wbu (
     input  [`ysyx_23060251_imm_bus]     m_imm_i,
     input  [`ysyx_23060251_reg_bus]     m_src1_i,
     input  [`ysyx_23060251_pc_bus]      m_pc_i,
+    input  [`ysyx_23060251_pc_bus]      m_npc_i,
 
     output [`ysyx_23060251_rs_bus]      w_rd_o,
     output [`ysyx_23060251_xlen_bus]    w_res_o,
@@ -20,6 +21,7 @@ module wbu (
     output [`ysyx_23060251_imm_bus]     w_imm_o,
     output [`ysyx_23060251_reg_bus]     w_src1_o,
     output [`ysyx_23060251_pc_bus]      w_pc_o,
+    output [`ysyx_23060251_pc_bus]      w_npc_o,
 
     output                              w_wenReg_o,
     output                              w_wenCsr_o
@@ -38,5 +40,6 @@ module wbu (
     assign w_imm_o      = m_imm_i;
     assign w_src1_o     = m_src1_i;
     assign w_pc_o       = m_pc_i;
+    assign w_npc_o      = m_npc_i;
 endmodule
 
