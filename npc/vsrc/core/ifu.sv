@@ -22,8 +22,6 @@ module ifu (
     input   [1:0]                           mst_r_resp_i,
     output                                  mst_r_ready_o
 );
-// always_comb $display("ifu %h\n", pc_o);
-
     reg init;
     always @(posedge clk_i) if (rst_i == `ysyx_23060251_rst_enable) init <= 1'b1;
 

@@ -416,7 +416,7 @@ module core (
         .w_wenCsr_o   (w_wenCsr)
     );
 
-    axi_Arbiter inst_axi_Arbiter
+    axi_Arbiter ysyx_axi_Arbiter
     (
         .f_slv_ar_valid_i (f_mst_ar_valid),
         .f_slv_ar_addr_i  (f_mst_ar_addr),

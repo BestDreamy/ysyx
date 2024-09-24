@@ -10,8 +10,8 @@ module lsu (
     input  [`ysyx_23060251_mask_bus]        mask_i,
     input  [`ysyx_23060251_xlen_bus]        wdata_i,
 
-    input                                   M_valid_i, // from exu
-    output                                  m_ready_o, // from exu
+    input                                   M_valid_i,
+    output                                  m_ready_o,
 
     output                                  wb_en,
 
@@ -40,7 +40,8 @@ module lsu (
     input   axi_resp_t                      mst_b_resp_i,
     output                                  mst_b_ready_o
 );
-// always_comb $display("lsu state: %h\n", state);
+always_comb $display("lsu addr: (%h) %h(%h %h)\n", state, addr_i, wenMem_i, renMem_i);
+
     localparam [6: 0] IDLE = 7'h1;
     localparam [6: 0] WAIT_AR_REQ = 7'h2 , WAIT_R_RSP = 7'h4 , WAIT_WB    = 7'h8 ;
     localparam [6: 0] WAIT_AW_REQ = 7'h10, WAIT_W_REQ = 7'h20, WAIT_B_RSP = 7'h40;
