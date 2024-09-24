@@ -1,8 +1,9 @@
 module icn (
+    // axi_if.Slave  axi_slv,
+    // axi_if.Master axi_mst,
+    
     input clk_i,
-    input rst_i,
-    axi_if.Slave  axi_slv,
-    axi_if.Master axi_mst
+    input rst_i
 );
     // localparam [2: 0] R_WAIT_ADDR = 3'b001, R_WAIT_ACC = 3'b010, R_DONE = 3'b100;
     // // localparam [2: 0] W_WAIT_ADDR = 3'b001, W_WAIT_DATA = 3'b010, W_WAIT_DONE = 3'b100;

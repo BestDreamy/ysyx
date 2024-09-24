@@ -1,6 +1,6 @@
 `include "defines"
 `include "typedefs"
-`include "assign"
+`include "assigns"
 
 module top (
     output [`ysyx_23060251_pc_bus]       pc,

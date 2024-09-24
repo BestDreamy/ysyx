@@ -1,7 +1,4 @@
 module axi_Arbiter (
-	input								   clk_i,
-	input 								   rst_i,
-
     input                                  f_slv_ar_valid_i,
     input  [`ysyx_23060251_axi_addr_bus]   f_slv_ar_addr_i,
     // input  axi_id_t						   slv_ar_id_i,
@@ -28,7 +25,38 @@ module axi_Arbiter (
     input                                  mst_r_valid_i,
     input   [`ysyx_23060251_axi_data_bus]  mst_r_data_i,
     input   axi_resp_t                     mst_r_resp_i,
-    output                                 mst_r_ready_o
+    output                                 mst_r_ready_o,
+
+// W Channel
+// -----------------------------------------------------------------------
+    input                                  m_slv_aw_valid_i,
+    input  [`ysyx_23060251_axi_addr_bus]   m_slv_aw_addr_i,
+    output                                 m_slv_aw_ready_o,
+
+    input                                  m_slv_w_valid_i,
+    input  [`ysyx_23060251_axi_data_bus]   m_slv_w_data_i,
+    input  [`ysyx_23060251_axi_strb_bus]   m_slv_w_strb_i,
+    output                                 m_slv_w_ready_o,
+
+    output                                 m_slv_b_valid_o,
+    output axi_resp_t                      m_slv_b_resp_o,
+    input                                  m_slv_b_ready_i,
+
+    output                                 mst_aw_valid_o,
+    output  [`ysyx_23060251_axi_addr_bus]  mst_aw_addr_o,
+    input                                  mst_aw_ready_i,
+
+    output                                 mst_w_valid_o,
+    output  [`ysyx_23060251_axi_data_bus]  mst_w_data_o,
+    output  [`ysyx_23060251_axi_strb_bus]  mst_w_strb_o,
+    input                                  mst_w_ready_i,
+
+    input                                  mst_b_valid_i,
+    input   axi_resp_t                     mst_b_resp_i,
+    output                                 mst_b_ready_o,
+
+	input								   clk_i,
+	input 								   rst_i
 );
 	localparam AXI_ARBITER_NR = 3;
 	localparam [AXI_ARBITER_NR-1: 0] IDLE = 3'b1, REQ_SEL = 3'b10, RSP_SEL = 3'b100;
@@ -98,5 +126,12 @@ module axi_Arbiter (
 
 	assign ar_hs = mst_ar_valid_o & mst_ar_ready_i;
 	assign r_hs  = mst_r_valid_i  & mst_r_ready_o;
+
+
+// W Channel 
+// --------------------------------------------------------------------------------
+    `AXI_ASSIGN_AW(mst_, _, _o, m_slv_, _, _i)
+    `AXI_ASSIGN_W(mst_, _, _o, m_slv_, _, _i)
+    `AXI_ASSIGN_B(m_slv_, _, _o, mst_, _, _i)
 
 endmodule
