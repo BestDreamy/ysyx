@@ -92,7 +92,7 @@ module lsu (
                 next_state = state;
         end else if (state == WAIT_B_RSP) begin
             if (b_hs)
-                next_state = IDLE;
+                next_state = WAIT_WB; // just for multi-cycle
             else 
                 next_state = state;
         end else begin // state == WAIT_WB
