@@ -43,6 +43,15 @@
 `define ysyx_23060251_mask 2
 `define ysyx_23060251_mask_bus `ysyx_23060251_mask - 1: 0
 
+parameter byte_mask = `ysyx_23060251_xlen - 8;
+`define ysyx_23060251_byte_mask byte_mask
+parameter half_mask = `ysyx_23060251_xlen - 16;
+`define ysyx_23060251_half_mask half_mask
+
+`define ysyx_23060251_byte_bus `ysyx_23060251_byte - 1: 0
+`define ysyx_23060251_half_bus `ysyx_23060251_half - 1: 0
+`define ysyx_23060251_word_bus `ysyx_23060251_word - 1: 0
+
 
 `define ysyx_23060251_opcode 7
 `define ysyx_23060251_opcode_bus `ysyx_23060251_opcode - 1: 0

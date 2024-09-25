@@ -132,9 +132,18 @@ module lsu (
     // ------------------------------  AXI  -----------------------------------
 
     reg [`ysyx_23060251_xlen_bus]       load_buf;
+    wire                                load_byte;
+    wire                                load_half;
+    wire                                load_word;
 
     assign wb_en = (state == WAIT_WB);
-    assign rdata_o = load_buf;
+
+    assign load_byte = (mask_i == `ysyx_23060251_mask_byte);
+    assign load_half = (mask_i == `ysyx_23060251_mask_half);
+    assign load_word = (mask_i == `ysyx_23060251_mask_word);
+    assign rdata_o   = ({`ysyx_23060251_xlen{load_byte}} & {{`ysyx_23060251_byte_mask{is_load_signed_i}}, load_buf[`ysyx_23060251_byte_bus]}) |
+                       ({`ysyx_23060251_xlen{load_half}} & {{`ysyx_23060251_half_mask{is_load_signed_i}}, load_buf[`ysyx_23060251_half_bus]}) | 
+                       ({`ysyx_23060251_xlen{load_word}} & {load_buf[`ysyx_23060251_word_bus]})                                             ;
 
     always @(posedge clk_i) begin
         if (r_hs) begin
