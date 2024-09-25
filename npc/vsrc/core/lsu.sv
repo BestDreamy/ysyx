@@ -1,6 +1,4 @@
 module lsu (
-    input                                   clk_i,
-    input                                   rst_i,
     input                                   is_load_signed_i,
     input                                   wenMem_i,
     input                                   renMem_i,
@@ -38,9 +36,12 @@ module lsu (
 
     input                                   mst_b_valid_i,
     input   axi_resp_t                      mst_b_resp_i,
-    output                                  mst_b_ready_o
+    output                                  mst_b_ready_o,
+
+    input                                   clk_i,
+    input                                   rst_i
 );
-always_comb $display("lsu addr: (%h) %h(%h %h)\n", state, addr_i, wenMem_i, renMem_i);
+// always_comb $display("lsu addr: (%h) %h(%h %h)\n", state, addr_i, wenMem_i, renMem_i);
 
     localparam [6: 0] IDLE = 7'h1;
     localparam [6: 0] WAIT_AR_REQ = 7'h2 , WAIT_R_RSP = 7'h4 , WAIT_WB    = 7'h8 ;
@@ -130,7 +131,16 @@ always_comb $display("lsu addr: (%h) %h(%h %h)\n", state, addr_i, wenMem_i, renM
     assign b_hs  = mst_b_valid_i  & mst_b_ready_o;  
     // ------------------------------  AXI  -----------------------------------
 
+    reg [`ysyx_23060251_xlen_bus]       load_buf;
+
     assign wb_en = (state == WAIT_WB);
+    assign rdata_o = load_buf;
+
+    always @(posedge clk_i) begin
+        if (r_hs) begin
+            load_buf <= mst_r_data_i;
+        end
+    end 
 
     // import "DPI-C" function int vaddr_read(
     //     bit is_signed,
