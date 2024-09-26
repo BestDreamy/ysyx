@@ -20,7 +20,6 @@ module exu (
     output [`ysyx_23060251_xlen_bus]        res_o,
     output                                  cnd_o
 );
-always_comb $display("exu: %h\n", npc_o);
 
     assign e_valid_o = E_valid_i;
     assign e_ready_o = M_ready_i;

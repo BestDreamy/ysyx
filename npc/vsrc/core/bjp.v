@@ -12,7 +12,8 @@ module bjp (
 
     output wire[`ysyx_23060251_pc_bus]  npc_o
 );
-
+// always_comb $display("exu: (%h %h) %h\n", ((is_branch_i & cnd_i) | is_jal_i), (is_jalr_i), npc_o);
+// always_comb $display("exu src imm: %h %h\n", src1_i, imm_i);
     // branch  ( pc + imm)
     // jal     ( pc + imm)
     // jalr    (rs1 + imm)

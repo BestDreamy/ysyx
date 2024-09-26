@@ -13,8 +13,11 @@ CPU_state npc_cpu;
 void cpu_init() { // exe the first instruction
     dut->clk = 0; dut->rst = 1; dut->eval();
     tfp->dump(time_counter ++);
-    dut->clk = 1; dut->rst = 1; dut->eval();
+    dut->clk = 1; dut->rst = 1; dut->eval(); // pc -> 0x8000_0000
     tfp->dump(time_counter ++);
+
+    npc_cpu.pc = dut->pc;
+
     // Execute the first instruction
     dut->rst = 0;
     
@@ -25,7 +28,6 @@ void cpu_init() { // exe the first instruction
     npc_eval();
 
     IFDEF(CONFIG_DIFFTEST, init_difftest(diff_so_file, img_size, difftest_port));
-
 
     cpu_exec(-1);
 }
@@ -39,13 +41,15 @@ void exec_once() {
     dut->eval();
     tfp->dump(time_counter ++);
 
-    npc_cpu.pc = dut->pc;
+    if (npc_cpu.pc != dut->pc) {
+        npc_cpu.pc = dut->pc;
 
-    IFDEF(CONFIG_ITRACE, itrace(dut->pc, dut->inst));
+        IFDEF(CONFIG_ITRACE, itrace(dut->pc, dut->inst));
 
-    npc_eval();
+        npc_eval();
 
-    IFDEF(CONFIG_DIFFTEST, difftest_step(npc_cpu.pc, npc_cpu.pc + 4));
+        IFDEF(CONFIG_DIFFTEST, difftest_step(npc_cpu.pc, npc_cpu.pc + 4));
+    }
 }
 
 void cpu_exec(uint64_t n) {
