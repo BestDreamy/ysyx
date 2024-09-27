@@ -42,8 +42,6 @@ void exec_once() {
     tfp->dump(time_counter ++);
 
     if (npc_cpu.pc != dut->pc) {
-        npc_cpu.pc = dut->pc;
-
         IFDEF(CONFIG_ITRACE, itrace(dut->pc, dut->inst));
 
         npc_eval();

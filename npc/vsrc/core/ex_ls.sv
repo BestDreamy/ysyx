@@ -4,6 +4,7 @@ module ex_ls (
     input                                  e_wenCsr_i,
     input  [`ysyx_23060251_rs_bus]         e_rd_i,
     input  [`ysyx_23060251_reg_bus]        e_src1_i,
+    input  [`ysyx_23060251_reg_bus]        e_src2_i,
     input  [`ysyx_23060251_imm_bus]        e_imm_i,
     input                                  e_is_load_signed_i,
     input                                  e_wenMem_i,
@@ -21,6 +22,7 @@ module ex_ls (
     output                                 m_wenCsr_o,
     output  [`ysyx_23060251_rs_bus]        m_rd_o,
     output  [`ysyx_23060251_reg_bus]       m_src1_o,
+    output  [`ysyx_23060251_reg_bus]       m_src2_o,
     output  [`ysyx_23060251_imm_bus]       m_imm_o,
     output                                 m_is_load_signed_o,
     output                                 m_wenMem_o,
@@ -54,6 +56,7 @@ module ex_ls (
     reg                                 M_wenCsr;
     reg  [`ysyx_23060251_rs_bus]        M_rd;
     reg  [`ysyx_23060251_reg_bus]       M_src1;
+    reg  [`ysyx_23060251_reg_bus]       M_src2;
     reg  [`ysyx_23060251_imm_bus]       M_imm;
     reg                                 M_is_load_signed;
     reg                                 M_wenMem;
@@ -72,6 +75,7 @@ module ex_ls (
             M_wenCsr            <= e_wenCsr_i;
             M_rd                <= e_rd_i;
             M_src1              <= e_src1_i;
+            M_src2              <= e_src2_i;
             M_imm               <= e_imm_i;
             M_is_load_signed    <= e_is_load_signed_i;
             M_wenMem            <= e_wenMem_i;
@@ -88,6 +92,7 @@ module ex_ls (
     assign m_wenCsr_o            = M_wenCsr;
     assign m_rd_o                = M_rd;
     assign m_src1_o              = M_src1;
+    assign m_src2_o              = M_src2;
     assign m_imm_o               = M_imm;
     assign m_is_load_signed_o    = M_is_load_signed;
     assign m_wenMem_o            = M_wenMem;

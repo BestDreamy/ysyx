@@ -131,7 +131,7 @@ module lsu (
     assign b_hs  = mst_b_valid_i  & mst_b_ready_o;  
     // ------------------------------  AXI  -----------------------------------
 
-    reg [`ysyx_23060251_xlen_bus]       load_buf;
+    wire [`ysyx_23060251_xlen_bus]      load_buf;
     wire                                load_byte;
     wire                                load_half;
     wire                                load_word;
@@ -145,11 +145,7 @@ module lsu (
                        ({`ysyx_23060251_xlen{load_half}} & {{`ysyx_23060251_half_mask{is_load_signed_i}}, load_buf[`ysyx_23060251_half_bus]}) | 
                        ({`ysyx_23060251_xlen{load_word}} & {load_buf[`ysyx_23060251_word_bus]})                                             ;
 
-    always @(posedge clk_i) begin
-        if (r_hs) begin
-            load_buf <= mst_r_data_i;
-        end
-    end 
+    assign load_buf = mst_r_data_i; 
 
     // import "DPI-C" function int vaddr_read(
     //     bit is_signed,

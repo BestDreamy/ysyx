@@ -52,6 +52,7 @@ void difftest_step(paddr_t pc, paddr_t npc) {
     if (is_skip_ref == 0) {
         ref_difftest_exec(1);
     } else {
+        // save regs and stall one cycle for nemu
         ref_difftest_regcpy(&npc_cpu, DIFFTEST_TO_REF);
         is_skip_ref = false;
     }
@@ -72,7 +73,9 @@ bool checkregs(CPU_state ref, paddr_t pc) {
     bool ok = 1;
     for (int i = 0; i < 32; i ++) {
         if (ref.gpr[i] == npc_cpu.gpr[i]) continue;
+        printf("npc ");
         isa_reg_display(npc_cpu);
+        printf("nemu ");
         isa_reg_display(ref);
         ok = 0;
     }

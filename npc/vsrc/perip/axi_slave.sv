@@ -93,7 +93,8 @@ module axi_slave (
 
     always @(posedge clk_i) begin
     	if (state == IDLE & next_state == READ_MEM)
-    		count <= $random;
+    		// count <= $random;
+            count <= 4'd7;
     	else if (state == READ_MEM)
     		count <= count - 1;
     end
@@ -114,6 +115,14 @@ module axi_slave (
 	assign slv_r_resp_o   = 2'b00;
 
     always @(posedge clk_i) begin
+    	if (state == WRITE_REQ & next_state == WRITE_MEM)
+    		// count <= $random;
+            count <= 4'd7;
+    	else if (state == WRITE_MEM)
+    		count <= count - 1;
+    end
+
+    always @(posedge clk_i) begin
     	if (state == IDLE & next_state == WRITE_REQ)
     		addr_buf <= slv_aw_addr_i; 
     end
@@ -129,11 +138,9 @@ module axi_slave (
     end
 
     always @(posedge clk_i) begin
-    	if (state == WRITE_REQ & next_state == WRITE_MEM)
-    		count <= $random;
-    	else if (state == WRITE_MEM)
-    		count <= count - 1;
-    end
+		if (state == WRITE_MEM & next_state == WRITE_RSP)
+			vaddr_write(addr_buf, strb_buf, data_buf);
+	end
 
     assign slv_aw_ready_o = (state == IDLE);
     assign slv_w_ready_o  = (state == WRITE_REQ);
