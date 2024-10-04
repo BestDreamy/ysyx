@@ -1,9 +1,6 @@
-`include "typedefs"
-
 module ifu (
     input                                   clk_i,
     input                                   rst_i,
-    input                                   pre_inst_wb,
     input   [`ysyx_23060251_pc_bus]         npc_i,
 
     output                                  f_valid_o, // to D
@@ -11,6 +8,9 @@ module ifu (
 
     output  [`ysyx_23060251_pc_bus]         pc_o,
     output  [`ysyx_23060251_inst_bus]       inst_o,
+    output  [`ysyx_23060251_opinfo_bus]     opinfo_o,
+    output  [`ysyx_23060251_imm_bus]        imm_o,
+    output  [`ysyx_23060251_pc_bus]         pred_pc_o,
 
     // AXI LITE
     output                                  mst_ar_valid_o,
@@ -22,10 +22,21 @@ module ifu (
     input   [1:0]                           mst_r_resp_i,
     output                                  mst_r_ready_o
 );
-// always_comb $display("ifu addr: (%h) %h -> %h\n", state, pc_o, npc_i);
+    bjp ysyx_bjp
+    (
+        .opinfo_o  (opinfo_o),
+        .imm_o     (imm_o),
+        .pred_pc_o (pred_pc_o),
+        .inst_i    (inst_i),
+        .pc_i      (pc_i)
+    );
+
 
     reg init;
-    always @(posedge clk_i) if (rst_i == `ysyx_23060251_rst_enable) init <= 1'b1;
+    always @(posedge clk_i) begin
+        if (rst_i == `ysyx_23060251_rst_enable) 
+            init <= 1'b1;
+    end
 
     localparam [3: 0] IDLE = 4'b0001,           WAIT_BUS_REQ = 4'b0010, 
                       WAIT_BUS_RSP = 4'b0100,   WAIT_ID_HS   = 4'b1000;
@@ -49,7 +60,7 @@ module ifu (
 
     always_comb begin
         if (state == IDLE) begin
-            if (pre_inst_wb | init)
+            if (init)
                 next_state = WAIT_BUS_REQ;
             else
                 next_state = state;
@@ -65,7 +76,7 @@ module ifu (
                 next_state = state;
         end else begin // state == WAIT_ID_HS
             if (tx_valid)
-                next_state = IDLE;
+                next_state = WAIT_BUS_REQ;
             else
                 next_state = state;
         end

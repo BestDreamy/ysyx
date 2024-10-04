@@ -1,5 +1,5 @@
-`ifndef AXI_DEFINES_H
-`define AXI_DEFINES_H
+`ifndef YSYX_DEFINES_H
+`define YSYX_DEFINES_H
 
 `define ysyx_23060251_xlen 32
 `define ysyx_23060251_xlen_bus `ysyx_23060251_xlen - 1: 0
@@ -62,8 +62,10 @@ parameter half_mask = `ysyx_23060251_xlen - 16;
 `define ysyx_23060251_func3_bus `ysyx_23060251_func3 - 1: 0
 `define ysyx_23060251_func7  7
 `define ysyx_23060251_func7_bus `ysyx_23060251_func7 - 1: 0
+// shift
 `define ysyx_23060251_shamt 6
 `define ysyx_23060251_shamt_bus `ysyx_23060251_shamt - 1: 0
+`define ysyx_23060251_imm_field 31: 12
 
 // 1. alu      (reg op reg)
 // 2. alui     (reg op imm)

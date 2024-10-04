@@ -38,7 +38,7 @@ module exu (
         .cnd_o          (cnd_o)
     );
 
-    bjp ysyx_23060251_bjp (
+    bru ysyx_23060251_bru (
         .is_branch_i    (opinfo_i[`ysyx_23060251_opinfo_branch]),
         .is_jal_i       (opinfo_i[`ysyx_23060251_opinfo_jal]),
         .is_jalr_i      (opinfo_i[`ysyx_23060251_opinfo_jalr]),

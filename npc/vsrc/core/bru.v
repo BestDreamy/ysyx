@@ -1,4 +1,4 @@
-module bjp (
+module bru (
     input  wire                         is_branch_i,
     input  wire                         is_jal_i,
     input  wire                         is_jalr_i,

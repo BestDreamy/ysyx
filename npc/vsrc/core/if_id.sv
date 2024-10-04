@@ -1,12 +1,18 @@
 module if_id (
 	input   [`ysyx_23060251_inst_bus]       f_inst_i,
 	input	[`ysyx_23060251_pc_bus]			f_pc_i,
+    input   [`ysyx_23060251_opinfo_bus]     f_opinfo_i,
+    input   [`ysyx_23060251_imm_bus]        f_imm_i,
+    input   [`ysyx_23060251_pc_bus]         f_pred_pc_i,
 
     input                                   f_valid_i, // from ifu
     output                                  D_ready_o, // to ifu
 
 	output  [`ysyx_23060251_inst_bus]       d_inst_o,
 	output	[`ysyx_23060251_pc_bus]			d_pc_o,
+    output  [`ysyx_23060251_opinfo_bus]     d_opinfo_o,
+    output  [`ysyx_23060251_imm_bus]        d_imm_o,
+    output   [`ysyx_23060251_pc_bus]        d_pred_pc_o,
 
     output                                  D_valid_o, // to idu
     input                                   d_ready_i, // from idu
@@ -40,8 +46,11 @@ module if_id (
 		end
 	end
 
-	assign d_inst_o  = D_valid_o? D_inst: `ysyx_23060251_inst'h13;
-	assign d_pc_o    = {`ysyx_23060251_pc{D_valid_o}}   & D_pc;
+	assign d_inst_o  		= D_valid_o? D_inst: `ysyx_23060251_inst'h13;
+	assign d_pc_o    		= {`ysyx_23060251_pc{D_valid_o}}   & D_pc;
+	assign d_opinfo_o		= f_opinfo_i;
+	assign d_imm_o			= f_imm_i;
+	assign d_pred_pc_o 		= f_pred_pc_i;
 
 	// pipe #(
 	// 	.DATA_WIDTH(`ysyx_23060251_pc)

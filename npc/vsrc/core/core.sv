@@ -43,7 +43,7 @@ module core (
     input clk,
     input rst
 );
-    wire                                wb_en;
+    // wire                                wb_en;
     wire [`ysyx_23060251_pc_bus]        w_npc;
     wire                                f_valid;
     wire                                D_ready;
@@ -56,16 +56,22 @@ module core (
     wire [1:0]                          f_mst_r_resp;
     wire                                f_mst_r_ready;
 
+    wire [`ysyx_23060251_opinfo_bus]    f_opinfo;
+    wire [`ysyx_23060251_imm_bus]       f_imm;
+    wire [`ysyx_23060251_pc_bus]        f_pred_pc;
+
     ifu ysyx_ifu
     (
         .clk_i          (clk),
         .rst_i          (rst),
-        .pre_inst_wb    (wb_en),
         .npc_i          (w_npc),
         .f_valid_o      (f_valid),
         .D_ready_i      (D_ready),
         .pc_o           (pc),
         .inst_o         (inst),
+        .opinfo_o       (f_opinfo),
+        .imm_o          (f_imm),
+        .pred_pc_o      (f_pred_pc),
         .mst_ar_valid_o (f_mst_ar_valid),
         .mst_ar_addr_o  (f_mst_ar_addr),
         .mst_ar_ready_i (f_mst_ar_ready),
@@ -77,26 +83,37 @@ module core (
 
     wire                                D_valid;
     wire                                d_ready;
-    wire [`ysyx_23060251_inst_bus]      d_inst; // to idu
-    wire [`ysyx_23060251_pc_bus]        d_pc; // to exu
+    wire [`ysyx_23060251_inst_bus]      d_inst;     // to idu
+    wire [`ysyx_23060251_pc_bus]        d_pc;       // to exu
+    wire [`ysyx_23060251_opinfo_bus]    d_opinfo;   // to exu
+    wire [`ysyx_23060251_imm_bus]       d_imm;      // to wb
+    wire [`ysyx_23060251_pc_bus]        d_pred_pc;  // to exu
 
     if_id ysyx_if_id
     (
-        .f_inst_i  (inst),
-        .f_pc_i    (pc),
-        .f_valid_i (f_valid),
-        .D_ready_o (D_ready),
-        .d_inst_o  (d_inst),
-        .d_pc_o    (d_pc),
-        .D_valid_o (D_valid),
-        .d_ready_i (d_ready),
-        .clk_i     (clk),
-        .rst_i     (rst)
+        .f_inst_i    (inst),
+        .f_pc_i      (pc),
+        .f_opinfo_i  (f_opinfo_i),
+		.f_imm_i     (f_imm_i),
+		.f_pred_pc_i (f_pred_pc_i),
+        .f_valid_i   (f_valid),
+        .D_ready_o   (D_ready),
+        .d_inst_o    (d_inst),
+        .d_pc_o      (d_pc),
+        .d_opinfo_o  (d_opinfo_o),
+		.d_imm_o     (d_imm_o),
+		.d_pred_pc_o (d_pred_pc_o),
+        .D_valid_o   (D_valid),
+        .d_ready_i   (d_ready),
+        .clk_i       (clk),
+        .rst_i       (rst)
     );
+
 
     wire                                d_valid;
     wire                                E_ready;
     wire [`ysyx_23060251_opinfo_bus]    d_opinfo;         // to exu
+    wire [`ysyx_23060251_imm_bus]       d_imm;            // to wb
     wire [`ysyx_23060251_alu_bus]       d_alu_info;       // to exu
     wire [`ysyx_23060251_branch_bus]    d_branch_info;    // to exu
     // wire [`ysyx_23060251_load_bus]      d_load_info;
@@ -109,7 +126,6 @@ module core (
     wire [`ysyx_23060251_rs_bus]        d_rs2;
     wire [`ysyx_23060251_reg_bus]       d_src1;           // to wb
     wire [`ysyx_23060251_reg_bus]       d_src2;           // to exu
-    wire [`ysyx_23060251_imm_bus]       d_imm;            // to wb
     wire                                d_is_load_signed; // to lsu
     wire                                d_wenMem;         // to lsu
     wire                                d_renMem;         // to lsu
@@ -119,11 +135,12 @@ module core (
     idu ysyx_idu
     (
         .inst_i           (d_inst),
+        .opinfo_i         (d_opinfo),
+        .imm_i            (d_imm),
         .D_valid_i        (D_valid),
         .d_ready_o        (d_ready),
         .d_valid_o        (d_valid),
         .E_ready_i        (E_ready),
-        .opinfo_o         (d_opinfo),
         .alu_info_o       (d_alu_info),
         .branch_info_o    (d_branch_info),
         .load_info_o      (),
@@ -134,7 +151,6 @@ module core (
         .rd_o             (d_rd),
         .rs1_o            (d_rs1),
         .rs2_o            (d_rs2),
-        .imm_o            (d_imm),
         .is_load_signed_o (d_is_load_signed),
         .wenMem_o         (d_wenMem),
         .renMem_o         (d_renMem),

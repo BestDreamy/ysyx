@@ -1,5 +1,7 @@
 module idu (
     input   [`ysyx_23060251_inst_bus]       inst_i,
+    input   [`ysyx_23060251_opinfo_bus]     opinfo_i,
+    input   [`ysyx_23060251_imm_bus]        imm_i,
 
     input                                   D_valid_i, // from D-pipe
     output                                  d_ready_o, // to D-pipe
@@ -7,7 +9,6 @@ module idu (
     output                                  d_valid_o, // to E
     input                                   E_ready_i, // from E
 
-    output  [`ysyx_23060251_opinfo_bus]     opinfo_o,
     output  [`ysyx_23060251_alu_bus]        alu_info_o,
     output  [`ysyx_23060251_branch_bus]     branch_info_o,
     output  [`ysyx_23060251_load_bus]       load_info_o,
@@ -18,10 +19,7 @@ module idu (
     output                                  wenCsr_o,
     output  [`ysyx_23060251_rs_bus]         rd_o,
     output  [`ysyx_23060251_rs_bus]         rs1_o,
-    // output  [`ysyx_23060251_reg_bus] src1_o,
     output  [`ysyx_23060251_rs_bus]         rs2_o,
-    // output  [`ysyx_23060251_reg_bus] src2_o,
-    output  [`ysyx_23060251_imm_bus]        imm_o,
 
     output                                  is_load_signed_o,
     output                                  wenMem_o,
@@ -33,7 +31,6 @@ module idu (
     assign d_valid_o = D_valid_i;
     assign d_ready_o = E_ready_i;
     
-    wire[`ysyx_23060251_opcode_bus] opcode = inst_i[6: 0];
     assign                           rs1_o = inst_i[19: 15];
     assign                           rs2_o = inst_i[24: 20];
     assign                           rd_o  = inst_i[11: 7];
@@ -139,20 +136,6 @@ module idu (
                                             info
     ****************************************************************************************/
     // 1. reg op reg
-    assign opinfo_o = {
-        rv32_sys,         // 11
-        rv32_auipc,
-        rv32_lui,
-        rv32_store,
-        rv32_load,
-        rv32_jalr,
-        rv32_jal,
-        rv32_branch,
-        rv32_aluiw,
-        rv32_aluw,
-        rv32_alui,
-        rv32_alu          // 0
-    };
     // 2. reg op imm
     assign alu_info_o = {
         rv32_remu,
@@ -208,25 +191,6 @@ module idu (
         rv32_ecall,
         rv32_ebreak
     };
-
-
-    /****************************************************************************************
-                                            imm
-    ****************************************************************************************/
-    // I, S, B, U, J
-    wire[`ysyx_23060251_type - 1: 1] rv32_imm_sel = {
-        rv32_jal,    // J-type
-        rv32_lui | rv32_auipc, // U-type
-        rv32_branch, // B-type
-        rv32_store,  // S-type
-        rv32_alui | rv32_aluiw | rv32_load | rv32_jalr | rv32_sys // I-type (omit a series of sys instruction)
-    };
-
-    igu ysyx_23060251_igu (
-        .imm_sel_i(rv32_imm_sel),
-        .inst_i(inst_i),
-        .imm_o(imm_o)
-    );
 
     /****************************************************************************************
                                             mem
