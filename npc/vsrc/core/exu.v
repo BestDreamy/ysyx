@@ -9,6 +9,7 @@ module exu (
     input  [`ysyx_23060251_reg_bus]         src2_i,
     input  [`ysyx_23060251_imm_bus]         imm_i, //offset
     input  [`ysyx_23060251_reg_bus]         csr_data_i,
+    input  [`ysyx_23060251_pc_bus]          pred_pc_i,
 
     input                                   E_valid_i, // from E-pipe
     output                                  e_ready_o, // to E-pipe
@@ -40,11 +41,12 @@ module exu (
 
     bru ysyx_23060251_bru (
         .is_branch_i    (opinfo_i[`ysyx_23060251_opinfo_branch]),
-        .is_jal_i       (opinfo_i[`ysyx_23060251_opinfo_jal]),
+        // .is_jal_i       (opinfo_i[`ysyx_23060251_opinfo_jal]),
         .is_jalr_i      (opinfo_i[`ysyx_23060251_opinfo_jalr]),
         .is_ecall_i     (sys_info_i[`ysyx_23060251_sys_ecall]),
         .is_mret_i      (sys_info_i[`ysyx_23060251_sys_mret]),
         .pc_i           (pc_i),
+        .pred_pc_i      (pred_pc_i),
         .src1_i         (src1_i),
         .imm_i          (imm_i),
         .cnd_i          (cnd_o),

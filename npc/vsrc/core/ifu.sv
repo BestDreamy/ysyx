@@ -98,8 +98,8 @@ module ifu (
     always @(posedge clk_i) begin
         if (rst_i == `ysyx_23060251_rst_enable)
             pc <= `ysyx_23060251_pc'h8000_0000;
-        else if (pre_inst_wb)
-            pc <= npc_i;
+        else
+            pc <= pred_pc_o;
     end
 
     assign f_valid_o = (state == WAIT_ID_HS);

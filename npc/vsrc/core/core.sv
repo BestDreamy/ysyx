@@ -222,6 +222,7 @@ module core (
     wire                                e_renMem;
     wire [`ysyx_23060251_mask_bus]      e_mask;
     wire [`ysyx_23060251_pc_bus]        e_pc;
+    wire [`ysyx_23060251_pc_bus]        e_pred_pc;
     wire                                E_valid;
     wire                                e_ready;
 
@@ -243,6 +244,7 @@ module core (
         .d_renMem_i         (d_renMem),
         .d_mask_i           (d_mask),
         .d_pc_i             (d_pc),
+		.d_pred_pc_i        (d_pred_pc),
         .d_valid_i          (d_valid),
         .E_ready_o          (E_ready),
         .e_opinfo_o         (e_opinfo),
@@ -261,6 +263,7 @@ module core (
         .e_renMem_o         (e_renMem),
         .e_mask_o           (e_mask),
         .e_pc_o             (e_pc),
+        .e_pred_pc_o        (e_pred_pc),
         .E_valid_o          (E_valid),
         .e_ready_i          (e_ready),
         .clk_i              (clk),
@@ -286,6 +289,7 @@ module core (
         .src2_i           (e_src2),
         .imm_i            (e_imm),
         .csr_data_i       (e_csr_data),
+        .e_pred_pc_i      (e_pred_pc),
         .E_valid_i        (E_valid),
         .e_ready_o        (e_ready),
         .e_valid_o        (e_valid),

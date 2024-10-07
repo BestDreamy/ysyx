@@ -1,4 +1,4 @@
-// pre-decoder
+// Simple Instruction Decoder
 module bjp ( 
     output  [`ysyx_23060251_opinfo_bus]     opinfo_o,
     output  [`ysyx_23060251_imm_bus]        imm_o,
