@@ -1,7 +1,7 @@
 module igu (
     // I, S, B, U, J
     input  wire[`ysyx_23060251_type - 1: 1]     imm_sel_i,
-    input  wire[`ysyx_23060251_inst_field]      inst_i,
+    input  wire[`ysyx_23060251_imm_field]       inst_i,
     output wire[`ysyx_23060251_imm_bus]         imm_o
 );
     localparam int ext_I_imm = `ysyx_23060251_imm - 12;

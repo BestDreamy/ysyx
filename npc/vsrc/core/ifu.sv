@@ -9,6 +9,7 @@ module ifu (
     output  [`ysyx_23060251_pc_bus]         pc_o,
     output  [`ysyx_23060251_inst_bus]       inst_o,
     output  [`ysyx_23060251_opinfo_bus]     opinfo_o,
+    output  [`ysyx_23060251_sys_bus]        sys_info_o,
     output  [`ysyx_23060251_imm_bus]        imm_o,
     output  [`ysyx_23060251_pc_bus]         pred_pc_o,
 
@@ -22,15 +23,21 @@ module ifu (
     input   [1:0]                           mst_r_resp_i,
     output                                  mst_r_ready_o
 );
+    wire is_jalr, is_mret, is_ecall;
+
     bjp ysyx_bjp
     (
         .opinfo_o  (opinfo_o),
+        .sys_info_o(sys_info_o),
         .imm_o     (imm_o),
         .pred_pc_o (pred_pc_o),
-        .inst_i    (inst_i),
-        .pc_i      (pc_i)
+        .inst_i    (inst_o),
+        .pc_i      (pc_o)
     );
 
+    assign is_jalr   = opinfo_o[`ysyx_23060251_opinfo_jalr];
+    assign is_ecall  = sys_info_o[`ysyx_23060251_sys_ecall];
+    assign is_mret   = sys_info_o[`ysyx_23060251_sys_mret];
 
     reg init;
     always @(posedge clk_i) begin
@@ -65,18 +72,25 @@ module ifu (
             else
                 next_state = state;
         end else if (state == WAIT_BUS_REQ) begin
-            if (ar_hs) 
+            if (ar_hs)
                 next_state = WAIT_BUS_RSP;
-            else 
+            else
                 next_state = state;
         end else if (state == WAIT_BUS_RSP) begin
             if (r_hs)
                 next_state = WAIT_ID_HS;
-            else 
+            else
                 next_state = state;
         end else begin // state == WAIT_ID_HS
             if (tx_valid)
-                next_state = WAIT_BUS_REQ;
+                // 1. jalr     (IDLE) wait decode bypass for one cycle   [need stall]
+                // 2. csr      (IDLE) wait decode bypass for one cycle   [need stall]
+                // 3. branch   (WAIT_BUS_REQ) check condition in execute [need bubble]
+                // 4. other    (WAIT_BUS_REQ) accept
+                if (is_jalr | is_sys)
+                    next_state = IDLE;
+                else
+                    next_state = WAIT_BUS_REQ;
             else
                 next_state = state;
         end

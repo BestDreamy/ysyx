@@ -60,6 +60,8 @@ module core (
     wire [`ysyx_23060251_imm_bus]       f_imm;
     wire [`ysyx_23060251_pc_bus]        f_pred_pc;
 
+    wire 
+
     ifu ysyx_ifu
     (
         .clk_i          (clk),
@@ -289,7 +291,7 @@ module core (
         .src2_i           (e_src2),
         .imm_i            (e_imm),
         .csr_data_i       (e_csr_data),
-        .e_pred_pc_i      (e_pred_pc),
+        .pred_pc_i        (e_pred_pc),
         .E_valid_i        (E_valid),
         .e_ready_o        (e_ready),
         .e_valid_o        (e_valid),

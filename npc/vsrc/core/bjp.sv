@@ -1,10 +1,11 @@
 // Simple Instruction Decoder
-module bjp ( 
+module bjp (
     output  [`ysyx_23060251_opinfo_bus]     opinfo_o,
+    output  [`ysyx_23060251_sys_bus]        sys_info_o,
     output  [`ysyx_23060251_imm_bus]        imm_o,
     output  [`ysyx_23060251_pc_bus]         pred_pc_o,
 
-    input                                   inst_i,
+    input   [`ysyx_23060251_inst_bus]       inst_i,
     input   [`ysyx_23060251_pc_bus]         pc_i
 );
     // branch       ( pc + imm)
@@ -49,7 +50,27 @@ module bjp (
         rv32_alui,
         rv32_alu          // 0
     };
- 
+
+    /****************************************************************************************
+                                            optype
+    ****************************************************************************************/
+    wire rv32_ebreak = rv32_sys & (func3 == 3'b000) & (inst_i[31:20] == 12'b0000_0000_0001);
+    wire rv32_ecall  = rv32_sys & (func3 == 3'b000) & (inst_i[31:20] == 12'b0000_0000_0000);
+    wire rv32_mret   = rv32_sys & (func3 == 3'b000) & (inst_i[31:20] == 12'b0011_0000_0010);
+    wire rv32_csrrw  = rv32_sys & (func3 == 3'b001);
+    wire rv32_csrrs  = rv32_sys & (func3 == 3'b010);
+
+    /****************************************************************************************
+                                            info
+    ****************************************************************************************/
+    assign sys_info_o = {
+        rv32_csrrs,
+        rv32_csrrw,
+        rv32_mret,
+        rv32_ecall,
+        rv32_ebreak
+    };
+
     /****************************************************************************************
                                             imm
     ****************************************************************************************/

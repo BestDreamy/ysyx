@@ -2,6 +2,7 @@ module idu (
     input   [`ysyx_23060251_inst_bus]       inst_i,
     input   [`ysyx_23060251_opinfo_bus]     opinfo_i,
     input   [`ysyx_23060251_imm_bus]        imm_i,
+    input  [`ysyx_23060251_sys_bus]         sys_info_i,
 
     input                                   D_valid_i, // from D-pipe
     output                                  d_ready_o, // to D-pipe
@@ -13,7 +14,6 @@ module idu (
     output  [`ysyx_23060251_branch_bus]     branch_info_o,
     output  [`ysyx_23060251_load_bus]       load_info_o,
     output  [`ysyx_23060251_store_bus]      store_info_o,
-    output  [`ysyx_23060251_sys_bus]        sys_info_o,
 
     output                                  wenReg_o,
     output                                  wenCsr_o,
@@ -26,11 +26,10 @@ module idu (
     output                                  renMem_o,
     output  [`ysyx_23060251_mask_bus]       mask_o
 );
-// always_comb $display("idu %h\n", inst_i);
 
     assign d_valid_o = D_valid_i;
     assign d_ready_o = E_ready_i;
-    
+
     assign                           rs1_o = inst_i[19: 15];
     assign                           rs2_o = inst_i[24: 20];
     assign                           rd_o  = inst_i[11: 7];
@@ -53,7 +52,7 @@ module idu (
     wire rv32_auipc     = (opcode == 7'b00_101_11);
     wire rv32_sys       = (opcode == 7'b11_100_11);
 
-    assign wenReg_o = ~(opinfo_o[`ysyx_23060251_opinfo_branch] 
+    assign wenReg_o = ~(opinfo_o[`ysyx_23060251_opinfo_branch]
                       | opinfo_o[`ysyx_23060251_opinfo_store]
                         );
     /****************************************************************************************
@@ -125,11 +124,11 @@ module idu (
     wire rv32_sd = rv32_store & (func3 == 3'b011);
 
     // 6. system
-    wire rv32_ebreak = rv32_sys & (func3 == 3'b000) & (inst_i[31:20] == 12'b0000_0000_0001);
-    wire rv32_ecall  = rv32_sys & (func3 == 3'b000) & (inst_i[31:20] == 12'b0000_0000_0000);
-    wire rv32_mret   = rv32_sys & (func3 == 3'b000) & (inst_i[31:20] == 12'b0011_0000_0010);
-    wire rv32_csrrw  = rv32_sys & (func3 == 3'b001);
-    wire rv32_csrrs  = rv32_sys & (func3 == 3'b010);
+    wire rv32_ebreak = sys_info_i[`ysyx_23060251_sys_ebreak];
+    wire rv32_ecall  = sys_info_i[`ysyx_23060251_sys_ecall];
+    wire rv32_mret   = sys_info_i[`ysyx_23060251_sys_mret];
+    wire rv32_csrrw  = sys_info_i[`ysyx_23060251_csr_csrrw];
+    wire rv32_csrrs  = sys_info_i[`ysyx_23060251_csr_csrrs];
 
     assign wenCsr_o = rv32_csrrw | rv32_ecall | rv32_mret;
     /****************************************************************************************
@@ -184,13 +183,6 @@ module idu (
         rv32_sb
     };
     // 6. sys
-    assign sys_info_o = {
-        rv32_csrrs,
-        rv32_csrrw,
-        rv32_mret,
-        rv32_ecall,
-        rv32_ebreak
-    };
 
     /****************************************************************************************
                                             mem
@@ -202,4 +194,10 @@ module idu (
                   | ({`ysyx_23060251_mask{rv32_lh | rv32_lhu | rv32_sh}} & `ysyx_23060251_mask_half)
                   | ({`ysyx_23060251_mask{rv32_lw | rv32_lwu | rv32_sw}} & `ysyx_23060251_mask_word)
                   | ({`ysyx_23060251_mask{rv32_ld            | rv32_sd}} & `ysyx_23060251_mask_double);
+
+    /****************************************************************************************
+                                            fwd
+    ****************************************************************************************/
+    assign fwd_en = d_valid_o & (rv32_jalr | rv32_ecall | rv32_mret);
+
 endmodule
