@@ -1,17 +1,17 @@
 module regs (
-    input  wire clk_i,
-    input  wire rst_i,
+    input                               wen_i,
+    input  [`ysyx_23060251_rs_bus]      rd_i,
+    input  [`ysyx_23060251_reg_bus]     e_wdata_i,
+    input                               is_load_i,
+    input  [`ysyx_23060251_xlen_bus]    m_wdata_i,
 
-    input  wire wen_i,
-    input  wire[`ysyx_23060251_rs_bus]  rd_i,
-    input  wire[`ysyx_23060251_reg_bus] e_wdata_i,
-    input  wire is_load_i,
-    input  wire[`ysyx_23060251_xlen_bus] m_wdata_i,
+    input  [`ysyx_23060251_rs_bus]      rs1_i,
+    input  [`ysyx_23060251_rs_bus]      rs2_i,
+    output [`ysyx_23060251_reg_bus]     src1_o,
+    output [`ysyx_23060251_reg_bus]     src2_o,
 
-    input  wire[`ysyx_23060251_rs_bus]  rs1_i,
-    input  wire[`ysyx_23060251_rs_bus]  rs2_i,
-    output wire[`ysyx_23060251_reg_bus] src1_o,
-    output wire[`ysyx_23060251_reg_bus] src2_o
+    input                               clk_i,
+    input                               rst_i
 );
     reg[`ysyx_23060251_reg_bus] gpr[`ysyx_23060251_reg_num];
     import "DPI-C" function void set_gpr_ptr(

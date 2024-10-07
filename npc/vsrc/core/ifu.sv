@@ -13,6 +13,9 @@ module ifu (
     output  [`ysyx_23060251_imm_bus]        imm_o,
     output  [`ysyx_23060251_pc_bus]         pred_pc_o,
 
+    input                                   d_byp_en_i,
+    input                                   d_byp_npc_i,
+
     // AXI LITE
     output                                  mst_ar_valid_o,
     output  [`ysyx_23060251_axi_addr_bus]   mst_ar_addr_o,
@@ -39,11 +42,7 @@ module ifu (
     assign is_ecall  = sys_info_o[`ysyx_23060251_sys_ecall];
     assign is_mret   = sys_info_o[`ysyx_23060251_sys_mret];
 
-    reg init;
-    always @(posedge clk_i) begin
-        if (rst_i == `ysyx_23060251_rst_enable) 
-            init <= 1'b1;
-    end
+    reg stall;
 
     localparam [3: 0] IDLE = 4'b0001,           WAIT_BUS_REQ = 4'b0010, 
                       WAIT_BUS_RSP = 4'b0100,   WAIT_ID_HS   = 4'b1000;
@@ -67,10 +66,10 @@ module ifu (
 
     always_comb begin
         if (state == IDLE) begin
-            if (init)
-                next_state = WAIT_BUS_REQ;
+            if (stall)
+                next_state = state; // IDLE
             else
-                next_state = state;
+                next_state = WAIT_BUS_REQ;
         end else if (state == WAIT_BUS_REQ) begin
             if (ar_hs)
                 next_state = WAIT_BUS_RSP;
@@ -121,10 +120,8 @@ module ifu (
     assign inst_o    = inst;
 
     always @(posedge clk_i) begin
-        if (r_hs) begin
-            inst <= mst_r_data_i;
-            init <= 1'b0;
-        end
+        if (rst_i == `ysyx_23060251_rst_enable) 
+            stall <= 1'b0;
     end
 
     // rom ysyx_23060251_rom (

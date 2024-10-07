@@ -139,6 +139,8 @@ module core (
         .inst_i           (d_inst),
         .opinfo_i         (d_opinfo),
         .imm_i            (d_imm),
+        .src1_i           (d_src1),
+        .csr_data_i       (d_csr_data),
         .D_valid_i        (D_valid),
         .d_ready_o        (d_ready),
         .d_valid_o        (d_valid),

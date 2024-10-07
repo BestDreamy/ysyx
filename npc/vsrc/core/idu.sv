@@ -2,7 +2,12 @@ module idu (
     input   [`ysyx_23060251_inst_bus]       inst_i,
     input   [`ysyx_23060251_opinfo_bus]     opinfo_i,
     input   [`ysyx_23060251_imm_bus]        imm_i,
-    input  [`ysyx_23060251_sys_bus]         sys_info_i,
+    input   [`ysyx_23060251_sys_bus]        sys_info_i,
+
+    input   [`ysyx_23060251_reg_bus]        src1_i,
+    input   [`ysyx_23060251_reg_bus]        csr_data_i,
+    output                                  byp_en_o,
+    output  [`ysyx_23060251_pc_bus]         d_byp_npc_o,
 
     input                                   D_valid_i, // from D-pipe
     output                                  d_ready_o, // to D-pipe
@@ -196,8 +201,9 @@ module idu (
                   | ({`ysyx_23060251_mask{rv32_ld            | rv32_sd}} & `ysyx_23060251_mask_double);
 
     /****************************************************************************************
-                                            fwd
+                                            byp
     ****************************************************************************************/
-    assign fwd_en = d_valid_o & (rv32_jalr | rv32_ecall | rv32_mret);
-
+    assign byp_en_o    = d_valid_o & (rv32_jalr | rv32_ecall | rv32_mret);
+    assign d_byp_npc_o = rv32_jalr? (src1_i + imm_i): csr_data_i;
+    
 endmodule
