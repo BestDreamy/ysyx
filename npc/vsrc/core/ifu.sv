@@ -42,7 +42,10 @@ module ifu (
     assign is_ecall  = sys_info_o[`ysyx_23060251_sys_ecall];
     assign is_mret   = sys_info_o[`ysyx_23060251_sys_mret];
 
+    wire wait_decode_en;
+
     reg stall;
+    reg bubble;
 
     localparam [3: 0] IDLE = 4'b0001,           WAIT_BUS_REQ = 4'b0010, 
                       WAIT_BUS_RSP = 4'b0100,   WAIT_ID_HS   = 4'b1000;
@@ -51,7 +54,7 @@ module ifu (
     reg[`ysyx_23060251_pc_bus]   pc;
     reg[`ysyx_23060251_inst_bus] inst;
 
-    wire tx_valid; // ifu <--> idu
+    wire tx_valid; // ifu --> idu
 
     wire ar_hs, r_hs;
 
@@ -84,9 +87,9 @@ module ifu (
             if (tx_valid)
                 // 1. jalr     (IDLE) wait decode bypass for one cycle   [need stall]
                 // 2. csr      (IDLE) wait decode bypass for one cycle   [need stall]
-                // 3. branch   (WAIT_BUS_REQ) check condition in execute [need bubble]
+                // 3. branch   (WAIT_BUS_REQ) check condition in execute [need bubble maybe]
                 // 4. other    (WAIT_BUS_REQ) accept
-                if (is_jalr | is_sys)
+                if (wait_decode_en)
                     next_state = IDLE;
                 else
                     next_state = WAIT_BUS_REQ;
@@ -122,6 +125,14 @@ module ifu (
     always @(posedge clk_i) begin
         if (rst_i == `ysyx_23060251_rst_enable) 
             stall <= 1'b0;
+        else if (wait_decode_en)
+            stall <= 1'b1;
+    end
+
+    always @(posedge clk_i) begin
+        if (r_hs) begin
+            inst <= mst_r_data_i;
+        end
     end
 
     // rom ysyx_23060251_rom (

@@ -59,8 +59,9 @@ module core (
     wire [`ysyx_23060251_opinfo_bus]    f_opinfo;
     wire [`ysyx_23060251_imm_bus]       f_imm;
     wire [`ysyx_23060251_pc_bus]        f_pred_pc;
+    wire [`ysyx_23060251_sys_bus]       f_sys_info;
 
-    wire 
+    // wire 
 
     ifu ysyx_ifu
     (
@@ -72,6 +73,7 @@ module core (
         .pc_o           (pc),
         .inst_o         (inst),
         .opinfo_o       (f_opinfo),
+        .sys_info_o     (f_sys_info),
         .imm_o          (f_imm),
         .pred_pc_o      (f_pred_pc),
         .mst_ar_valid_o (f_mst_ar_valid),
@@ -90,6 +92,7 @@ module core (
     wire [`ysyx_23060251_opinfo_bus]    d_opinfo;   // to exu
     wire [`ysyx_23060251_imm_bus]       d_imm;      // to wb
     wire [`ysyx_23060251_pc_bus]        d_pred_pc;  // to exu
+    wire [`ysyx_23060251_sys_bus]       d_sys_info;
 
     if_id ysyx_if_id
     (
@@ -98,6 +101,7 @@ module core (
         .f_opinfo_i  (f_opinfo_i),
 		.f_imm_i     (f_imm_i),
 		.f_pred_pc_i (f_pred_pc_i),
+        .f_sys_info_i(f_sys_info),
         .f_valid_i   (f_valid),
         .D_ready_o   (D_ready),
         .d_inst_o    (d_inst),
@@ -105,6 +109,7 @@ module core (
         .d_opinfo_o  (d_opinfo_o),
 		.d_imm_o     (d_imm_o),
 		.d_pred_pc_o (d_pred_pc_o),
+        .d_sys_info_o(d_sys_info),
         .D_valid_o   (D_valid),
         .d_ready_i   (d_ready),
         .clk_i       (clk),
@@ -133,14 +138,19 @@ module core (
     wire                                d_renMem;         // to lsu
     wire [`ysyx_23060251_mask_bus]      d_mask;           // to lsu
     wire [`ysyx_23060251_reg_bus]       d_csr_data;       // to exu
+    wire                                d_byp_en;
+    wire [`ysyx_23060251_pc_bus]        d_byp_npc;
 
     idu ysyx_idu
     (
         .inst_i           (d_inst),
         .opinfo_i         (d_opinfo),
         .imm_i            (d_imm),
+        .sys_info_i       ()
         .src1_i           (d_src1),
         .csr_data_i       (d_csr_data),
+        .byp_en_o         (d_byp_en),
+        .byp_npc_o        (d_byp_npc),
         .D_valid_i        (D_valid),
         .d_ready_o        (d_ready),
         .d_valid_o        (d_valid),

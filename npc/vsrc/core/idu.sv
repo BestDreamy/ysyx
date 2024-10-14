@@ -4,10 +4,12 @@ module idu (
     input   [`ysyx_23060251_imm_bus]        imm_i,
     input   [`ysyx_23060251_sys_bus]        sys_info_i,
 
+    // bypass
     input   [`ysyx_23060251_reg_bus]        src1_i,
     input   [`ysyx_23060251_reg_bus]        csr_data_i,
     output                                  byp_en_o,
-    output  [`ysyx_23060251_pc_bus]         d_byp_npc_o,
+    output  [`ysyx_23060251_pc_bus]         byp_npc_o,
+    // bypass end
 
     input                                   D_valid_i, // from D-pipe
     output                                  d_ready_o, // to D-pipe
