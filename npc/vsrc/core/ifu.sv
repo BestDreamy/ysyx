@@ -14,7 +14,7 @@ module ifu (
     output  [`ysyx_23060251_pc_bus]         pred_pc_o,
 
     input                                   d_byp_en_i,
-    input                                   d_byp_npc_i,
+    input   [`ysyx_23060251_pc_bus]         d_byp_npc_i,
 
     // AXI LITE
     output                                  mst_ar_valid_o,
@@ -114,7 +114,9 @@ module ifu (
     always @(posedge clk_i) begin
         if (rst_i == `ysyx_23060251_rst_enable)
             pc <= `ysyx_23060251_pc'h8000_0000;
-        else
+        else if (d_byp_en_i)
+            pc <= d_byp_npc_i;
+        else if (~stall)
             pc <= pred_pc_o;
     end
 
@@ -127,6 +129,8 @@ module ifu (
             stall <= 1'b0;
         else if (wait_decode_en)
             stall <= 1'b1;
+        else if (d_byp_en_i)
+            stall <= 1'b0;
     end
 
     always @(posedge clk_i) begin

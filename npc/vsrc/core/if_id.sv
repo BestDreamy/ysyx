@@ -4,6 +4,7 @@ module if_id (
     input   [`ysyx_23060251_opinfo_bus]     f_opinfo_i,
     input   [`ysyx_23060251_imm_bus]        f_imm_i,
     input   [`ysyx_23060251_pc_bus]         f_pred_pc_i,
+	input   [`ysyx_23060251_sys_bus]        f_sys_info_i,
 
     input                                   f_valid_i, // from ifu
     output                                  D_ready_o, // to ifu
@@ -12,7 +13,8 @@ module if_id (
 	output	[`ysyx_23060251_pc_bus]			d_pc_o,
     output  [`ysyx_23060251_opinfo_bus]     d_opinfo_o,
     output  [`ysyx_23060251_imm_bus]        d_imm_o,
-    output   [`ysyx_23060251_pc_bus]        d_pred_pc_o,
+    output  [`ysyx_23060251_pc_bus]         d_pred_pc_o,
+	output  [`ysyx_23060251_sys_bus]        d_sys_info_o,
 
     output                                  D_valid_o, // to idu
     input                                   d_ready_i, // from idu

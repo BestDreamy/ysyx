@@ -1,4 +1,7 @@
 module id_ex (
+`ifdef ITRACE
+    input  [`ysyx_23060251_inst_bus]       d_inst_i,
+`endif
     input  [`ysyx_23060251_opinfo_bus]     d_opinfo_i,
     input  [`ysyx_23060251_alu_bus]        d_alu_info_i,
     input  [`ysyx_23060251_branch_bus]     d_branch_info_i,
@@ -15,10 +18,14 @@ module id_ex (
     input                                  d_renMem_i,
     input  [`ysyx_23060251_mask_bus]       d_mask_i,
     input  [`ysyx_23060251_pc_bus]         d_pc_i,
+    input  [`ysyx_23060251_pc_bus]         d_pred_pc_i,
 
     input                                  d_valid_i, // from idu
     output                                 E_ready_o, // to idu
 
+`ifdef ITRACE
+    output [`ysyx_23060251_inst_bus]       e_inst_o,
+`endif
     output [`ysyx_23060251_opinfo_bus]     e_opinfo_o,
     output [`ysyx_23060251_alu_bus]        e_alu_info_o,
     output [`ysyx_23060251_branch_bus]     e_branch_info_o,
@@ -35,6 +42,7 @@ module id_ex (
     output                                 e_renMem_o,
     output [`ysyx_23060251_mask_bus]       e_mask_o,
     output [`ysyx_23060251_pc_bus]         e_pc_o,
+    output [`ysyx_23060251_pc_bus]         e_pred_pc_o,
 
     output                                 E_valid_o, // to exu
     input                                  e_ready_i, // from exu
@@ -111,4 +119,7 @@ module id_ex (
     assign e_renMem_o           = E_renMem;
     assign e_mask_o             = E_mask;
     assign e_pc_o               = E_pc;
+`ifdef ITRACE
+    always @(*) $display("....");
+`endif
 endmodule

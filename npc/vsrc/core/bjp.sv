@@ -22,6 +22,7 @@ module bjp (
                                             opcode
     ****************************************************************************************/
     wire[`ysyx_23060251_opcode_bus] opcode = inst_i[6: 0];
+    wire[`ysyx_23060251_func3_bus]   func3 = inst_i[14: 12];
 
     wire rv32_alu       = (opcode == 7'b01_100_11);
     wire rv32_alui      = (opcode == 7'b00_100_11);

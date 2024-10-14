@@ -46,22 +46,20 @@ module idu (
     /****************************************************************************************
                                             opcode
     ****************************************************************************************/
-    wire rv32_alu       = (opcode == 7'b01_100_11);
-    wire rv32_alui      = (opcode == 7'b00_100_11);
-    wire rv32_aluw      = (opcode == 7'b01_110_11);
-    wire rv32_aluiw     = (opcode == 7'b00_110_11);
-    wire rv32_branch    = (opcode == 7'b11_000_11);
-    wire rv32_jal       = (opcode == 7'b11_011_11);
-    wire rv32_jalr      = (opcode == 7'b11_001_11);
-    wire rv32_load      = (opcode == 7'b00_000_11);
-    wire rv32_store     = (opcode == 7'b01_000_11);
-    wire rv32_lui       = (opcode == 7'b01_101_11);
-    wire rv32_auipc     = (opcode == 7'b00_101_11);
-    wire rv32_sys       = (opcode == 7'b11_100_11);
+    wire rv32_alu       = opinfo_i[`ysyx_23060251_opinfo_alu];
+    wire rv32_alui      = opinfo_i[`ysyx_23060251_opinfo_alui];
+    wire rv32_aluw      = opinfo_i[`ysyx_23060251_opinfo_aluw];
+    wire rv32_aluiw     = opinfo_i[`ysyx_23060251_opinfo_aluiw];
+    wire rv32_branch    = opinfo_i[`ysyx_23060251_opinfo_branch];
+    wire rv32_jal       = opinfo_i[`ysyx_23060251_opinfo_jal];
+    wire rv32_jalr      = opinfo_i[`ysyx_23060251_opinfo_jalr];
+    wire rv32_load      = opinfo_i[`ysyx_23060251_opinfo_load];
+    wire rv32_store     = opinfo_i[`ysyx_23060251_opinfo_store];
+    wire rv32_lui       = opinfo_i[`ysyx_23060251_opinfo_lui];
+    wire rv32_auipc     = opinfo_i[`ysyx_23060251_opinfo_auipc];
+    wire rv32_sys       = opinfo_i[`ysyx_23060251_opinfo_sys];
 
-    assign wenReg_o = ~(opinfo_o[`ysyx_23060251_opinfo_branch]
-                      | opinfo_o[`ysyx_23060251_opinfo_store]
-                        );
+    assign wenReg_o = ~(rv32_branch | rv32_store);
     /****************************************************************************************
                                             optype
     ****************************************************************************************/
@@ -206,6 +204,6 @@ module idu (
                                             byp
     ****************************************************************************************/
     assign byp_en_o    = d_valid_o & (rv32_jalr | rv32_ecall | rv32_mret);
-    assign d_byp_npc_o = rv32_jalr? (src1_i + imm_i): csr_data_i;
+    assign byp_npc_o   = rv32_jalr? (src1_i + imm_i): csr_data_i;
     
 endmodule

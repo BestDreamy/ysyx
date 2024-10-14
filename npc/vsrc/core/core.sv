@@ -43,7 +43,11 @@ module core (
     input clk,
     input rst
 );
-    // wire                                wb_en;
+    // bypass
+    wire                                d_byp_en;
+    wire [`ysyx_23060251_pc_bus]        d_byp_npc;
+
+    // dispatch
     wire [`ysyx_23060251_pc_bus]        w_npc;
     wire                                f_valid;
     wire                                D_ready;
@@ -61,7 +65,7 @@ module core (
     wire [`ysyx_23060251_pc_bus]        f_pred_pc;
     wire [`ysyx_23060251_sys_bus]       f_sys_info;
 
-    // wire 
+    wire                                wb_en;
 
     ifu ysyx_ifu
     (
@@ -76,6 +80,8 @@ module core (
         .sys_info_o     (f_sys_info),
         .imm_o          (f_imm),
         .pred_pc_o      (f_pred_pc),
+        .d_byp_en_i     (d_byp_en),
+        .d_byp_npc_i    (d_byp_npc),
         .mst_ar_valid_o (f_mst_ar_valid),
         .mst_ar_addr_o  (f_mst_ar_addr),
         .mst_ar_ready_i (f_mst_ar_ready),
@@ -98,17 +104,17 @@ module core (
     (
         .f_inst_i    (inst),
         .f_pc_i      (pc),
-        .f_opinfo_i  (f_opinfo_i),
-		.f_imm_i     (f_imm_i),
-		.f_pred_pc_i (f_pred_pc_i),
+        .f_opinfo_i  (f_opinfo),
+		.f_imm_i     (f_imm),
+		.f_pred_pc_i (f_pred_pc),
         .f_sys_info_i(f_sys_info),
         .f_valid_i   (f_valid),
         .D_ready_o   (D_ready),
         .d_inst_o    (d_inst),
         .d_pc_o      (d_pc),
-        .d_opinfo_o  (d_opinfo_o),
-		.d_imm_o     (d_imm_o),
-		.d_pred_pc_o (d_pred_pc_o),
+        .d_opinfo_o  (d_opinfo),
+		.d_imm_o     (d_imm),
+		.d_pred_pc_o (d_pred_pc),
         .d_sys_info_o(d_sys_info),
         .D_valid_o   (D_valid),
         .d_ready_i   (d_ready),
@@ -138,15 +144,13 @@ module core (
     wire                                d_renMem;         // to lsu
     wire [`ysyx_23060251_mask_bus]      d_mask;           // to lsu
     wire [`ysyx_23060251_reg_bus]       d_csr_data;       // to exu
-    wire                                d_byp_en;
-    wire [`ysyx_23060251_pc_bus]        d_byp_npc;
 
     idu ysyx_idu
     (
         .inst_i           (d_inst),
         .opinfo_i         (d_opinfo),
         .imm_i            (d_imm),
-        .sys_info_i       ()
+        .sys_info_i       (d_sys_info),
         .src1_i           (d_src1),
         .csr_data_i       (d_csr_data),
         .byp_en_o         (d_byp_en),
@@ -159,7 +163,7 @@ module core (
         .branch_info_o    (d_branch_info),
         .load_info_o      (),
         .store_info_o     (),
-        .sys_info_o       (d_sys_info),
+        // .sys_info_o       (d_sys_info),
         .wenReg_o         (d_wenReg),
         .wenCsr_o         (d_wenCsr),
         .rd_o             (d_rd),
