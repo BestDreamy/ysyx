@@ -1,4 +1,7 @@
 module ex_ls (
+`ifdef ITRACE
+    input  [`ysyx_23060251_inst_bus]       e_inst_i,
+`endif
     input  [`ysyx_23060251_sys_bus]        e_sys_info_i,
     input                                  e_wenReg_i,
     input                                  e_wenCsr_i,
@@ -17,6 +20,9 @@ module ex_ls (
     input                                  e_valid_i, // from exu
     output                                 M_ready_o, // to exu
 
+`ifdef ITRACE
+    output  [`ysyx_23060251_inst_bus]      m_inst_o,
+`endif
     output  [`ysyx_23060251_sys_bus]       m_sys_info_o,
     output                                 m_wenReg_o,
     output                                 m_wenCsr_o,
@@ -65,6 +71,9 @@ module ex_ls (
     reg  [`ysyx_23060251_pc_bus]        M_npc;
     reg  [`ysyx_23060251_xlen_bus]      M_res;
     reg                                 M_cnd;
+`ifdef ITRACE
+    reg [`ysyx_23060251_inst_bus]       M_inst;
+`endif
 
     assign en = e_valid_i & M_ready_o;
 
@@ -84,6 +93,9 @@ module ex_ls (
             M_npc               <= e_npc_i;
             M_res               <= e_res_i;
             M_cnd               <= e_cnd_i;
+`ifdef ITRACE
+            M_inst              <= e_inst_i;
+`endif
         end
     end
 
@@ -101,5 +113,7 @@ module ex_ls (
     assign m_npc_o               = M_npc;
     assign m_res_o               = M_res;
     assign m_cnd_o               = M_cnd;
-
+`ifdef ITRACE
+    assign m_inst_o              = M_inst;
+`endif
 endmodule

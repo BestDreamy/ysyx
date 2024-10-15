@@ -1,10 +1,10 @@
 module core (
-    output wire[`ysyx_23060251_pc_bus]   pc, // to wb
+    output wire[`ysyx_23060251_pc_bus]   pc,      // to wb
     output wire[`ysyx_23060251_reg_bus]  mstatus, // just for diff
     output wire[`ysyx_23060251_reg_bus]  mtvec,   // just for diff
     output wire[`ysyx_23060251_reg_bus]  mepc,    // just for diff
     output wire[`ysyx_23060251_reg_bus]  mcause,  // just for diff
-    output wire[`ysyx_23060251_inst_bus] inst, // to idu
+    output wire[`ysyx_23060251_inst_bus] w_inst,  // to idu (for itrace)
 
     input          io_master_awready, output          io_slave_awready,
     output         io_master_awvalid, input           io_slave_awvalid,
@@ -60,6 +60,7 @@ module core (
     wire [1:0]                          f_mst_r_resp;
     wire                                f_mst_r_ready;
 
+    wire [`ysyx_23060251_inst_bus]      f_inst;
     wire [`ysyx_23060251_opinfo_bus]    f_opinfo;
     wire [`ysyx_23060251_imm_bus]       f_imm;
     wire [`ysyx_23060251_pc_bus]        f_pred_pc;
@@ -75,7 +76,7 @@ module core (
         .f_valid_o      (f_valid),
         .D_ready_i      (D_ready),
         .pc_o           (pc),
-        .inst_o         (inst),
+        .inst_o         (f_inst),
         .opinfo_o       (f_opinfo),
         .sys_info_o     (f_sys_info),
         .imm_o          (f_imm),
@@ -102,7 +103,7 @@ module core (
 
     if_id ysyx_if_id
     (
-        .f_inst_i    (inst),
+        .f_inst_i    (f_inst),
         .f_pc_i      (pc),
         .f_opinfo_i  (f_opinfo),
 		.f_imm_i     (f_imm),
@@ -224,6 +225,9 @@ module core (
     );
 
 
+`ifdef ITRACE
+    wire [`ysyx_23060251_inst_bus]      e_inst;
+`endif
     wire [`ysyx_23060251_opinfo_bus]    e_opinfo;
     wire [`ysyx_23060251_alu_bus]       e_alu_info;
     wire [`ysyx_23060251_branch_bus]    e_branch_info;
@@ -246,6 +250,9 @@ module core (
 
     id_ex ysyx_id_ex
     (
+`ifdef ITRACE
+        .d_inst_i           (d_inst),
+`endif
         .d_opinfo_i         (d_opinfo),
         .d_alu_info_i       (d_alu_info),
         .d_branch_info_i    (d_branch_info),
@@ -265,6 +272,9 @@ module core (
 		.d_pred_pc_i        (d_pred_pc),
         .d_valid_i          (d_valid),
         .E_ready_o          (E_ready),
+`ifdef ITRACE
+        .e_inst_o           (e_inst),
+`endif
         .e_opinfo_o         (e_opinfo),
         .e_alu_info_o       (e_alu_info),
         .e_branch_info_o    (e_branch_info),
@@ -317,6 +327,9 @@ module core (
         .cnd_o            (e_cnd)
     );
 
+`ifdef ITRACE
+    wire [`ysyx_23060251_inst_bus]      m_inst;
+`endif
     wire                                M_valid;
     wire                                m_ready;
     wire [`ysyx_23060251_sys_bus]       m_sys_info;
@@ -337,6 +350,9 @@ module core (
 
     ex_ls ysyx_ex_ls
     (
+`ifdef ITRACE
+        .e_inst_i           (e_inst),
+`endif
         .e_sys_info_i       (e_sys_info),
         .e_wenReg_i         (e_wenReg),
         .e_wenCsr_i         (e_wenCsr),
@@ -353,6 +369,9 @@ module core (
         .e_cnd_i            (e_cnd),
         .e_valid_i          (e_valid),
         .M_ready_o          (M_ready),
+`ifdef ITRACE
+        .m_inst_o           (m_inst),
+`endif
         .m_sys_info_o       (m_sys_info),
         .m_wenReg_o         (m_wenReg),
         .m_wenCsr_o         (m_wenCsr),
@@ -429,6 +448,9 @@ module core (
         .mst_b_ready_o    (m_mst_b_ready)
     );
 
+`ifdef ITRACE
+    assign w_inst = m_inst;
+`endif
     wbu ysyx_wbu
     (
         .wb_en_i      (wb_en),

@@ -79,6 +79,9 @@ module id_ex (
     reg                                 E_renMem;
     reg [`ysyx_23060251_mask_bus]       E_mask;
     reg [`ysyx_23060251_pc_bus]         E_pc;
+`ifdef ITRACE
+    reg [`ysyx_23060251_inst_bus]       E_inst;
+`endif
 
 	assign en = d_valid_i & E_ready_o;
 
@@ -100,6 +103,9 @@ module id_ex (
             E_renMem            <= d_renMem_i;
             E_mask              <= d_mask_i;
             E_pc                <= d_pc_i;
+`ifdef ITRACE
+            E_inst              <= d_inst_i;
+`endif
 		end
 	end
 
@@ -120,6 +126,6 @@ module id_ex (
     assign e_mask_o             = E_mask;
     assign e_pc_o               = E_pc;
 `ifdef ITRACE
-    always @(*) $display("....");
+    assign e_inst_o             = E_inst;
 `endif
 endmodule

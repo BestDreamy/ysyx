@@ -1,6 +1,8 @@
 `ifndef YSYX_DEFINES_H
 `define YSYX_DEFINES_H
 
+`include "macro"
+
 `define ysyx_23060251_xlen 32
 `define ysyx_23060251_xlen_bus `ysyx_23060251_xlen - 1: 0
 `define ysyx_23060251_rst_enable  1

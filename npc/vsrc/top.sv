@@ -43,7 +43,7 @@ module top (
         .mtvec             (),
         .mepc              (),
         .mcause            (),
-        .inst              (inst),
+        .w_inst            (inst),
         .io_master_awready (io_master_awready),
         .io_slave_awready  (io_slave_awready),
         .io_master_awvalid (io_master_awvalid),

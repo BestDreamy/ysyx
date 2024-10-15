@@ -25,10 +25,8 @@ module wbu (
 
     output                              w_wenReg_o,
     output                              w_wenCsr_o
-
-
-
 );
+
     assign w_wenReg_o = wb_en_i & m_wenReg_i;
     assign w_wenCsr_o = wb_en_i & m_wenCsr_i;
 
@@ -41,5 +39,6 @@ module wbu (
     assign w_src1_o     = m_src1_i;
     assign w_pc_o       = m_pc_i;
     assign w_npc_o      = m_npc_i;
+    
 endmodule
 
