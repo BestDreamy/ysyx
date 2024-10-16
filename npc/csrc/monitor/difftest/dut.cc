@@ -18,6 +18,12 @@ void difftest_skip_ref() {
     is_skip_ref = true;
 }
 
+void syn_difftest() {
+    // Copy the  reg(npc) to  reg(nemu)
+    printf("%x\n", npc_cpu.pc);
+    ref_difftest_regcpy(&npc_cpu, DIFFTEST_TO_REF);
+}
+
 void init_difftest(const char *ref_so_file, long img_size, int port) {
     Assert(ref_so_file != NULL, "Difftest file not found!");
 

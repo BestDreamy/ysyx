@@ -43,7 +43,7 @@ _default:
 
 git:
 	git add .
-	git commit -m "Add diff for 4-pipe npc"
+	git commit -m "Solve ctrl conflict for 4-pipe npc"
 	git push origin pa4
 
 .PHONY: .git_commit .clean_index _default git

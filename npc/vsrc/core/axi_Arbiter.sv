@@ -130,8 +130,11 @@ module axi_Arbiter (
 
 // W Channel 
 // --------------------------------------------------------------------------------
+    // assign mst_aw = m_slv_aw;
     `AXI_ASSIGN_AW(mst_, _, _o, m_slv_, _, _i)
+    // assign mst_w = m_slv_w;
     `AXI_ASSIGN_W(mst_, _, _o, m_slv_, _, _i)
+    // assign m_slv_b = mst_b;
     `AXI_ASSIGN_B(m_slv_, _, _o, mst_, _, _i)
 
 endmodule

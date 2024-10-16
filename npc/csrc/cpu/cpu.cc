@@ -20,7 +20,7 @@ void cpu_init() { // exe the first instruction
 
     // Execute the first instruction
     dut->rst = 0;
-    
+
     IFDEF(CONFIG_ITRACE, itrace(dut->pc, dut->inst));
 
     init_disasm("riscv32-pc-linux-gnu");
@@ -28,6 +28,8 @@ void cpu_init() { // exe the first instruction
     npc_eval();
 
     IFDEF(CONFIG_DIFFTEST, init_difftest(diff_so_file, img_size, difftest_port));
+
+    // difftest_skip_ref();
 
     cpu_exec(-1);
 }
@@ -41,7 +43,8 @@ void exec_once() {
     dut->eval();
     tfp->dump(time_counter ++);
 
-    if (npc_cpu.pc != dut->pc) {
+    // previous inst commit
+    if (dut->npc != npc_cpu.pc) {
         IFDEF(CONFIG_ITRACE, itrace(dut->pc, dut->inst));
 
         npc_eval();
@@ -70,8 +73,6 @@ void cpu_exec(uint64_t n) {
 
     IFDEF(CONFIG_ITRACE, itraceDisplay());
 
-    // cmp_reg();
-
     switch (npc_state.state) {
         case NPC_RUNNING: npc_state.state = NPC_STOP; break;
 
@@ -94,7 +95,7 @@ void ebreak() {
 
 void npc_eval() {
     // 1. In the top's interface
-    npc_cpu.pc = dut->pc;
+    npc_cpu.pc = dut->npc;
     // 2. Use dpic
     for (int i = 0; i < 32; i ++) {
         npc_cpu.gpr[i] = gprs[i];

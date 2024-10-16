@@ -3,12 +3,14 @@
 `include "assigns"
 
 module top (
-    output [`ysyx_23060251_pc_bus]       pc,
+    output [`ysyx_23060251_pc_bus]       npc,     // just for diff
+    output [`ysyx_23060251_pc_bus]       pc,      // just for itrace
     output [`ysyx_23060251_inst_bus]     inst,    // just for itrace
     output wire[`ysyx_23060251_reg_bus]  mstatus, // just for diff
     output wire[`ysyx_23060251_reg_bus]  mtvec,   // just for diff
     output wire[`ysyx_23060251_reg_bus]  mepc,    // just for diff
     output wire[`ysyx_23060251_reg_bus]  mcause,  // just for diff
+    output                               is_commit, // just for diff
 
     input                                clk,
     input                                rst
@@ -38,12 +40,14 @@ module top (
 
     core ysyx_core
     (
-        .pc                (pc),
+        .f_pc              (npc),
+        .w_pc              (pc),
         .mstatus           (),
         .mtvec             (),
         .mepc              (),
         .mcause            (),
         .w_inst            (inst),
+        .is_commit         (is_commit),
         .io_master_awready (io_master_awready),
         .io_slave_awready  (io_slave_awready),
         .io_master_awvalid (io_master_awvalid),

@@ -116,7 +116,7 @@ module ifu (
             pc <= `ysyx_23060251_pc'h8000_0000;
         else if (d_byp_en_i)
             pc <= d_byp_npc_i;
-        else if (~stall)
+        else if (tx_valid)
             pc <= pred_pc_o;
     end
 
@@ -134,7 +134,9 @@ module ifu (
     end
 
     always @(posedge clk_i) begin
-        if (r_hs) begin
+        if (rst_i == `ysyx_23060251_rst_enable)
+            inst <= `ysyx_23060251_inst'h13;
+        else if (r_hs) begin
             inst <= mst_r_data_i;
         end
     end

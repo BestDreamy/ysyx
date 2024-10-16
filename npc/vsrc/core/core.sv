@@ -1,10 +1,12 @@
 module core (
-    output wire[`ysyx_23060251_pc_bus]   pc,      // to wb
+    output wire[`ysyx_23060251_pc_bus]   f_pc,    // to wb
+    output wire[`ysyx_23060251_pc_bus]   w_pc,    // for itrace
     output wire[`ysyx_23060251_reg_bus]  mstatus, // just for diff
     output wire[`ysyx_23060251_reg_bus]  mtvec,   // just for diff
     output wire[`ysyx_23060251_reg_bus]  mepc,    // just for diff
     output wire[`ysyx_23060251_reg_bus]  mcause,  // just for diff
     output wire[`ysyx_23060251_inst_bus] w_inst,  // to idu (for itrace)
+    output                               is_commit, // just for diff
 
     input          io_master_awready, output          io_slave_awready,
     output         io_master_awvalid, input           io_slave_awvalid,
@@ -60,6 +62,7 @@ module core (
     wire [1:0]                          f_mst_r_resp;
     wire                                f_mst_r_ready;
 
+    // wire [`ysyx_23060251_pc_bus]        f_pc;
     wire [`ysyx_23060251_inst_bus]      f_inst;
     wire [`ysyx_23060251_opinfo_bus]    f_opinfo;
     wire [`ysyx_23060251_imm_bus]       f_imm;
@@ -75,7 +78,7 @@ module core (
         .npc_i          (w_npc),
         .f_valid_o      (f_valid),
         .D_ready_i      (D_ready),
-        .pc_o           (pc),
+        .pc_o           (f_pc),
         .inst_o         (f_inst),
         .opinfo_o       (f_opinfo),
         .sys_info_o     (f_sys_info),
@@ -104,7 +107,7 @@ module core (
     if_id ysyx_if_id
     (
         .f_inst_i    (f_inst),
-        .f_pc_i      (pc),
+        .f_pc_i      (f_pc),
         .f_opinfo_i  (f_opinfo),
 		.f_imm_i     (f_imm),
 		.f_pred_pc_i (f_pred_pc),
@@ -188,7 +191,7 @@ module core (
     wire [`ysyx_23060251_sys_bus]       w_sys_info;
     wire [`ysyx_23060251_imm_bus]       w_imm;
     wire [`ysyx_23060251_reg_bus]       w_src1;
-    wire [`ysyx_23060251_pc_bus]        w_pc;
+    // wire [`ysyx_23060251_pc_bus]        w_pc;
     // wire [`ysyx_23060251_reg_bus]       w_csr_data;
 
     regs ysyx_23060251_regs (
@@ -353,6 +356,7 @@ module core (
 `ifdef ITRACE
         .e_inst_i           (e_inst),
 `endif
+        .e_pc_i             (e_pc),
         .e_sys_info_i       (e_sys_info),
         .e_wenReg_i         (e_wenReg),
         .e_wenCsr_i         (e_wenCsr),
@@ -372,6 +376,7 @@ module core (
 `ifdef ITRACE
         .m_inst_o           (m_inst),
 `endif
+        .m_pc_o             (m_pc),
         .m_sys_info_o       (m_sys_info),
         .m_wenReg_o         (m_wenReg),
         .m_wenCsr_o         (m_wenCsr),
@@ -451,6 +456,8 @@ module core (
 `ifdef ITRACE
     assign w_inst = m_inst;
 `endif
+    assign is_commit = wb_en;
+
     wbu ysyx_wbu
     (
         .wb_en_i      (wb_en),
