@@ -2,6 +2,8 @@ module lsu (
     input                                   is_load_signed_i,
     input                                   wenMem_i,
     input                                   renMem_i,
+    input                                   wenReg_i,
+    input                                   wenCsr_i,
     // input  [`ysyx_23060251_store_bus]    store_info_i,
     // input  [`ysyx_23060251_load_bus]     load_info_i,
     input  [`ysyx_23060251_xlen_bus]        addr_i,
@@ -11,7 +13,7 @@ module lsu (
     input                                   M_valid_i,
     output                                  m_ready_o,
 
-    output                                  wb_en,
+    output                                  wb_en_o,
 
     output [`ysyx_23060251_xlen_bus]        rdata_o,
 
@@ -107,7 +109,7 @@ module lsu (
     assign rx_valid = M_valid_i & m_ready_o;
     assign r_en     = rx_valid & renMem_i;
     assign w_en     = rx_valid & wenMem_i;
-    assign mem_dis  = rx_valid & (~renMem_i) & (~wenMem_i);
+    assign mem_dis  = rx_valid & (wenReg_i | wenCsr_i);
 
     // ------------------------------  AXI  -----------------------------------
     assign mst_ar_valid_o = (state == WAIT_AR_REQ);
@@ -136,7 +138,7 @@ module lsu (
     wire                                load_half;
     wire                                load_word;
 
-    assign wb_en = (state == WAIT_WB);
+    assign wb_en_o = (state == WAIT_WB);
 
     assign load_byte = (mask_i == `ysyx_23060251_mask_byte);
     assign load_half = (mask_i == `ysyx_23060251_mask_half);

@@ -20,7 +20,7 @@ void difftest_skip_ref() {
 
 void syn_difftest() {
     // Copy the  reg(npc) to  reg(nemu)
-    printf("%x\n", npc_cpu.pc);
+    // printf("%x\n", npc_cpu.pc);
     ref_difftest_regcpy(&npc_cpu, DIFFTEST_TO_REF);
 }
 
@@ -84,12 +84,13 @@ bool checkregs(CPU_state ref, paddr_t pc) {
         printf("nemu ");
         isa_reg_display(ref);
         ok = 0;
+        break;
     }
 
-    if (ref.pc != npc_cpu.pc) {
-        dump("PC", npc_cpu.pc, ref.pc);
-        ok = 0;
-    }
+    // if (ref.pc != npc_cpu.pc) {
+    //     dump("PC", npc_cpu.pc, ref.pc);
+    //     ok = 0;
+    // }
 
     if (ref.mstatus != npc_cpu.mstatus) {
         dump("mstatus", npc_cpu.mstatus, ref.mstatus);

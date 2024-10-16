@@ -3,7 +3,7 @@
 `include "assigns"
 
 module top (
-    output [`ysyx_23060251_pc_bus]       npc,     // just for diff
+    // output [`ysyx_23060251_pc_bus]       npc,     // just for diff
     output [`ysyx_23060251_pc_bus]       pc,      // just for itrace
     output [`ysyx_23060251_inst_bus]     inst,    // just for itrace
     output wire[`ysyx_23060251_reg_bus]  mstatus, // just for diff
@@ -40,7 +40,7 @@ module top (
 
     core ysyx_core
     (
-        .f_pc              (npc),
+        .f_pc              (),
         .w_pc              (pc),
         .mstatus           (),
         .mtvec             (),

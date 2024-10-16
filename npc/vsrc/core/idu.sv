@@ -59,7 +59,8 @@ module idu (
     wire rv32_auipc     = opinfo_i[`ysyx_23060251_opinfo_auipc];
     wire rv32_sys       = opinfo_i[`ysyx_23060251_opinfo_sys];
 
-    assign wenReg_o = ~(rv32_branch | rv32_store);
+    // assign wenReg_o = ~(rv32_branch | rv32_store);
+    assign wenReg_o     = rv32_alu | rv32_addi | rv32_jal | rv32_jalr | rv32_load | rv32_lui | rv32_auipc | rv32_sys;
     /****************************************************************************************
                                             optype
     ****************************************************************************************/

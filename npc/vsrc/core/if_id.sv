@@ -36,23 +36,32 @@ module if_id (
 
 	wire en; // stall or bubble
 
-	reg [`ysyx_23060251_inst_bus] D_inst;
-	reg [`ysyx_23060251_pc_bus]   D_pc;
+	reg [`ysyx_23060251_inst_bus] 		D_inst;
+	reg [`ysyx_23060251_pc_bus]   		D_pc;
+	reg [`ysyx_23060251_opinfo_bus]		D_opinfo;
+	reg [`ysyx_23060251_imm_bus]		D_imm;
+	reg [`ysyx_23060251_pc_bus]   		D_pred_pc;
+	reg [`ysyx_23060251_sys_bus] 		D_sys_info;
 
 	assign en = f_valid_i & D_ready_o;
 
 	always @(posedge clk_i) begin
 		if (en) begin
-			D_inst <= f_inst_i;
-			D_pc   <= f_pc_i;
+			D_inst 		<= f_inst_i;
+			D_pc   		<= f_pc_i;
+			D_opinfo 	<= f_opinfo_i;
+			D_imm   	<= f_imm_i;
+			D_pred_pc   <= f_pred_pc_i;
+			D_sys_info  <= f_sys_info_i;
 		end
 	end
 
 	assign d_inst_o  		= D_valid_o? D_inst: `ysyx_23060251_inst'h13;
-	assign d_pc_o    		= {`ysyx_23060251_pc{D_valid_o}}   & D_pc;
-	assign d_opinfo_o		= f_opinfo_i;
-	assign d_imm_o			= f_imm_i;
-	assign d_pred_pc_o 		= f_pred_pc_i;
+	assign d_pc_o    		= {`ysyx_23060251_pc{D_valid_o}} & D_pc;
+	assign d_opinfo_o		= D_opinfo;
+	assign d_imm_o			= D_imm;
+	assign d_pred_pc_o 		= D_pred_pc;
+	assign d_sys_info_o     = D_sys_info;
 
 	// pipe #(
 	// 	.DATA_WIDTH(`ysyx_23060251_pc)
