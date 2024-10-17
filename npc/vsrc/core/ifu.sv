@@ -1,7 +1,7 @@
 module ifu (
     input                                   clk_i,
     input                                   rst_i,
-    input   [`ysyx_23060251_pc_bus]         npc_i,
+    // input   [`ysyx_23060251_pc_bus]         npc_i,
 
     output                                  f_valid_o, // to D
     input                                   D_ready_i, // form D

@@ -48,9 +48,11 @@ module core (
     // bypass
     wire                                d_byp_en;
     wire [`ysyx_23060251_pc_bus]        d_byp_npc;
+    wire [`ysyx_23060251_rs_bus]        E_byp_rd;
+    wire [`ysyx_23060251_rs_bus]        M_byp_rd;
 
     // dispatch
-    wire [`ysyx_23060251_pc_bus]        w_npc;
+    // wire [`ysyx_23060251_pc_bus]        w_npc;
     wire                                f_valid;
     wire                                D_ready;
 
@@ -75,7 +77,7 @@ module core (
     (
         .clk_i          (clk),
         .rst_i          (rst),
-        .npc_i          (w_npc),
+        // .npc_i          (w_npc),
         .f_valid_o      (f_valid),
         .D_ready_i      (D_ready),
         .pc_o           (f_pc),
@@ -159,6 +161,8 @@ module core (
         .csr_data_i       (d_csr_data),
         .byp_en_o         (d_byp_en),
         .byp_npc_o        (d_byp_npc),
+        .E_byp_rd_i       (E_byp_rd),
+        .M_byp_rd_i       (M_byp_rd),
         .D_valid_i        (D_valid),
         .d_ready_o        (d_ready),
         .d_valid_o        (d_valid),
@@ -297,6 +301,7 @@ module core (
         .e_pred_pc_o        (e_pred_pc),
         .E_valid_o          (E_valid),
         .e_ready_i          (e_ready),
+        .byp_rd_o           (E_byp_rd),
         .clk_i              (clk),
         .rst_i              (rst)
     );
@@ -325,7 +330,7 @@ module core (
         .e_ready_o        (e_ready),
         .e_valid_o        (e_valid),
         .M_ready_i        (M_ready),
-        .npc_o            (e_npc),
+        // .npc_o            (e_npc),
         .res_o            (e_res),
         .cnd_o            (e_cnd)
     );
@@ -347,7 +352,7 @@ module core (
     wire                                m_renMem;
     wire [`ysyx_23060251_mask_bus]      m_mask;
     wire [`ysyx_23060251_pc_bus]        m_pc;
-    wire [`ysyx_23060251_pc_bus]        m_npc;
+    // wire [`ysyx_23060251_pc_bus]        m_npc;
     wire [`ysyx_23060251_xlen_bus]      m_res;
     wire                                m_cnd;
 
@@ -368,7 +373,7 @@ module core (
         .e_wenMem_i         (e_wenMem),
         .e_renMem_i         (e_renMem),
         .e_mask_i           (e_mask),
-        .e_npc_i            (e_npc),
+        .e_npc_i            (),
         .e_res_i            (e_res),
         .e_cnd_i            (e_cnd),
         .e_valid_i          (e_valid),
@@ -388,11 +393,12 @@ module core (
         .m_wenMem_o         (m_wenMem),
         .m_renMem_o         (m_renMem),
         .m_mask_o           (m_mask),
-        .m_npc_o            (m_npc),
+        .m_npc_o            (),
         .m_res_o            (m_res),
         .m_cnd_o            (m_cnd),
         .M_valid_o          (M_valid),
         .m_ready_i          (m_ready),
+        .byp_rd_o           (M_byp_rd),
         .clk_i              (clk),
         .rst_i              (rst)
     );
@@ -473,7 +479,7 @@ module core (
         .m_imm_i      (m_imm),
         .m_src1_i     (m_src1),
         .m_pc_i       (m_pc),
-        .m_npc_i      (m_npc),
+        .m_npc_i      (),
         .w_rd_o       (w_rd),
         .w_res_o      (w_res),
         .w_renMem_o   (w_renMem),
@@ -482,7 +488,7 @@ module core (
         .w_imm_o      (w_imm),
         .w_src1_o     (w_src1),
         .w_pc_o       (w_pc),
-        .w_npc_o      (w_npc),
+        .w_npc_o      (),
         .w_wenReg_o   (w_wenReg),
         .w_wenCsr_o   (w_wenCsr)
     );

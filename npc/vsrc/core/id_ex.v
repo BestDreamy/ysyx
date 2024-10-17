@@ -47,6 +47,8 @@ module id_ex (
     output                                 E_valid_o, // to exu
     input                                  e_ready_i, // from exu
 
+    output [`ysyx_23060251_rs_bus]         byp_rd_o,
+
     input   							   clk_i,
     input 								   rst_i
 );
@@ -82,6 +84,11 @@ module id_ex (
 `ifdef ITRACE
     reg [`ysyx_23060251_inst_bus]       E_inst;
 `endif
+
+    /****************************************************************************************
+                                            bypass
+    ****************************************************************************************/
+    assign byp_rd_o = E_rd & {`ysyx_23060251_rs{E_valid_o}};
 
 	assign en = d_valid_i & E_ready_o;
 

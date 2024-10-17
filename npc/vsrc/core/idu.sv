@@ -5,10 +5,13 @@ module idu (
     input   [`ysyx_23060251_sys_bus]        sys_info_i,
 
     // bypass
-    input   [`ysyx_23060251_reg_bus]        src1_i,
-    input   [`ysyx_23060251_reg_bus]        csr_data_i,
+    input   [`ysyx_23060251_reg_bus]        src1_i,     // from decode
+    input   [`ysyx_23060251_reg_bus]        csr_data_i, // from decode
     output                                  byp_en_o,
     output  [`ysyx_23060251_pc_bus]         byp_npc_o,
+
+    input   [`ysyx_23060251_rs_bus]         E_byp_rd_i, // from E-pipe
+    input   [`ysyx_23060251_rs_bus]         M_byp_rd_i, // from M-pipe
     // bypass end
 
     input                                   D_valid_i, // from D-pipe
@@ -35,7 +38,12 @@ module idu (
 );
 
     assign d_valid_o = D_valid_i;
-    assign d_ready_o = E_ready_i;
+                        // (rs!=rd) | (rs==0)
+    assign d_ready_o = (|(rs1_o ^ E_byp_rd_i) | ~(|rs1_o))
+                     & (|(rs2_o ^ E_byp_rd_i) | ~(|rs2_o))
+                     & (|(rs1_o ^ M_byp_rd_i) | ~(|rs1_o))
+                     & (|(rs2_o ^ M_byp_rd_i) | ~(|rs2_o))
+                     & E_ready_i;
 
     assign                           rs1_o = inst_i[19: 15];
     assign                           rs2_o = inst_i[24: 20];

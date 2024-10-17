@@ -43,6 +43,8 @@ module ex_ls (
     output                                 M_valid_o,
     input                                  m_ready_i,
 
+    output  [`ysyx_23060251_rs_bus]        byp_rd_o,
+
     input                                  clk_i,
     input                                  rst_i
 );
@@ -77,6 +79,11 @@ module ex_ls (
     reg [`ysyx_23060251_inst_bus]       M_inst;
 `endif
     reg [`ysyx_23060251_pc_bus]         M_pc;
+
+    /****************************************************************************************
+                                            bypass
+    ****************************************************************************************/
+    assign byp_rd_o = M_rd & {`ysyx_23060251_rs{M_valid_o}};
 
     assign en = e_valid_i & M_ready_o;
 

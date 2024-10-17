@@ -15,7 +15,8 @@ module pipe
 
     wire valid_en;
 
-    assign valid_en = (~valid_q & pin_valid) | (valid_q & pout_ready);
+    // assign valid_en = (~valid_q & pin_valid) | (valid_q & pout_ready);
+    assign valid_en = (pin_valid & ~valid_q) | (~pin_valid & valid_q & ~pout_ready); // <=> pin_ready
 
     always @(posedge clk) begin
         if (rst == `ysyx_23060251_rst_enable)
