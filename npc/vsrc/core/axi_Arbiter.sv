@@ -124,7 +124,7 @@ module axi_Arbiter (
 	assign m_slv_r_data_o  = mst_r_data_i;
 	assign m_slv_r_resp_o  = mst_r_resp_i;
 
-	assign ar_hs = mst_ar_valid_o & mst_ar_ready_i;
+	assign ar_hs = mst__valid_o & mst_ar_ready_i;
 	assign r_hs  = mst_r_valid_i  & mst_r_ready_o;
 
 
