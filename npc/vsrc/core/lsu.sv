@@ -105,7 +105,7 @@ module lsu (
     end
     // ---------------------- state machine end -------------------------------
 
-    assign m_ready_o = (state == WAIT_WB) | (state == WAIT_B_RSP & next_state == IDLE);
+    assign m_ready_o = (state == WAIT_WB) | b_hs;
     assign rx_valid = M_valid_i;
     assign r_en     = rx_valid & renMem_i;
     assign w_en     = rx_valid & wenMem_i;

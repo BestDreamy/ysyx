@@ -18,7 +18,7 @@ extern CPU_state npc_cpu;
 
 extern Vtop* dut;
 extern VerilatedFstC* tfp;
-const int FINISH_TIME = 1e7;
+const int FINISH_TIME = 3e3;
 #define TIME_RESET  0 
 extern uint32_t time_counter;
 

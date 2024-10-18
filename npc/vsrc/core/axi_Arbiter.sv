@@ -122,18 +122,38 @@ module axi_Arbiter (
         end
     end
 
-    assign mst_ar_valid_o = (state == RD_REQ)? ((arbiter == 1'b0)? f_slv_ar_valid_i: m_slv_ar_valid_i): 1'b0;
-    assign mst_ar_addr_o  = (arbiter == 1'b0)? f_slv_ar_addr_i : m_slv_ar_addr_i ;
 
-    assign f_slv_ar_ready_o = (state == RD_REQ)? mst_ar_ready_i: 1'b0;
-    assign m_slv_ar_ready_o = (state == RD_REQ)? mst_ar_ready_i: 1'b0;
+    wire rd_req, rd_rsp;
+    wire rd_sel_f, rd_sel_m;
+    wire f_rd_req, f_rd_rsp, m_rd_req, m_rd_rsp;
 
-    assign mst_r_ready_o = (state == RD_RSP)? ((arbiter == 1'b0)? f_slv_r_ready_i: m_slv_r_ready_i): 1'b0;
+    assign rd_req = (state == RD_REQ);
+    assign rd_rsp = (state == RD_RSP);
 
-    assign f_slv_r_valid_o = (state == RD_RSP) & mst_r_valid_i;
+    assign rd_sel_f = (arbiter == 1'b0);
+    assign rd_sel_m = ~rd_sel_f;
+
+    assign f_rd_req = rd_req & rd_sel_f;
+    assign f_rd_rsp = rd_rsp & rd_sel_f;
+    assign m_rd_req = rd_req & rd_sel_m;
+    assign m_rd_rsp = rd_rsp & rd_sel_m;
+
+// R Channel
+// --------------------------------------------------------------------------------
+    assign mst_ar_valid_o = f_rd_req? f_slv_ar_valid_i: 
+                            m_rd_req? m_slv_ar_valid_i: 1'b0;
+    assign mst_ar_addr_o  = rd_sel_f? f_slv_ar_addr_i : m_slv_ar_addr_i ;
+
+    assign f_slv_ar_ready_o = f_rd_req? mst_ar_ready_i: 1'b0;
+    assign m_slv_ar_ready_o = m_rd_req? mst_ar_ready_i: 1'b0;
+
+    assign mst_r_ready_o = f_rd_rsp? f_slv_r_ready_i:
+                           m_rd_rsp? m_slv_r_ready_i: 1'b0;
+
+    assign f_slv_r_valid_o = f_rd_rsp? mst_r_valid_i: 1'b0;
     assign f_slv_r_data_o  = mst_r_data_i;
     assign f_slv_r_resp_o  = mst_r_resp_i;
-    assign m_slv_r_valid_o = (state == RD_RSP) & mst_r_valid_i;
+    assign m_slv_r_valid_o = m_rd_rsp? mst_r_valid_i: 1'b0;
     assign m_slv_r_data_o  = mst_r_data_i;
     assign m_slv_r_resp_o  = mst_r_resp_i;
 
