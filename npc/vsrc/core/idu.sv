@@ -38,6 +38,8 @@ module idu (
 );
 
     assign d_valid_o = D_valid_i;
+    
+    // stall decode-stage
                         // (rs!=rd) | (rs==0)
     assign d_ready_o = (|(rs1_o ^ E_byp_rd_i) | ~(|rs1_o))
                      & (|(rs2_o ^ E_byp_rd_i) | ~(|rs2_o))

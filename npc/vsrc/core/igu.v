@@ -21,7 +21,7 @@ module igu (
                                                  inst_i[31],
                                                  inst_i[7],
                                                  inst_i[30:25],
-                                                 inst_i[11:8 ],
+                                                 inst_i[11: 8],
                                                  1'b0
                                                };
     wire [`ysyx_23060251_imm_bus] rv32_U_imm = { {ext_U_imm{inst_i[31]}},

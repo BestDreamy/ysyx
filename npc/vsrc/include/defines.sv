@@ -67,7 +67,7 @@ parameter half_mask = `ysyx_23060251_xlen - 16;
 // shift
 `define ysyx_23060251_shamt 6
 `define ysyx_23060251_shamt_bus `ysyx_23060251_shamt - 1: 0
-`define ysyx_23060251_imm_field 31: 12
+`define ysyx_23060251_imm_field 31: 7
 
 // 1. alu      (reg op reg)
 // 2. alui     (reg op imm)

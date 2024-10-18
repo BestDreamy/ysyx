@@ -1,7 +1,7 @@
 module axi_Arbiter (
     input                                  f_slv_ar_valid_i,
     input  [`ysyx_23060251_axi_addr_bus]   f_slv_ar_addr_i,
-    // input  axi_id_t						   slv_ar_id_i,
+    // input  axi_id_t                         slv_ar_id_i,
     output                                 f_slv_ar_ready_o,
 
     input                                  m_slv_ar_valid_i,
@@ -55,11 +55,11 @@ module axi_Arbiter (
     input   axi_resp_t                     mst_b_resp_i,
     output                                 mst_b_ready_o,
 
-	input								   clk_i,
-	input 								   rst_i
+    input                                  clk_i,
+    input                                  rst_i
 );
-	localparam AXI_ARBITER_NR = 3;
-	localparam [AXI_ARBITER_NR-1: 0] IDLE = 3'b1, REQ_SEL = 3'b10, RSP_SEL = 3'b100;
+    localparam AXI_ARBITER_NR = 4;
+    localparam [AXI_ARBITER_NR-1: 0] IDLE = 4'b1, CHAN_SEL = 4'b10, RD_REQ = 4'b100, RD_RSP = 4'b1000;
 
     reg [AXI_ARBITER_NR-1: 0] state, next_state;
     wire ar_hs, r_hs;
@@ -75,57 +75,70 @@ module axi_Arbiter (
 
     always_comb begin
         if (state == IDLE) begin
-            if (f_slv_ar_valid_i & m_slv_ar_valid_i)
-                next_state = REQ_SEL;
+            if (f_slv_ar_valid_i | m_slv_ar_valid_i)
+                next_state = CHAN_SEL;
             else
                 next_state = state;
-        end else if (state == REQ_SEL) begin
-            if (ar_hs) 
-                next_state = RSP_SEL;
+        end else if (state == CHAN_SEL) begin
+            next_state = RD_REQ;
+        end else if (state == RD_REQ) begin
+            if (ar_hs)
+                next_state = RD_RSP;
             else 
                 next_state = state;
-        end else begin // state == RSP_SEL
-        	if (r_hs)
-            	next_state = IDLE;
+        end else begin // state == RD_RSP
+            if (r_hs)
+                next_state = IDLE;
             else 
-            	next_state = state;
+                next_state = state;
         end
     end
     // ---------------------- state machine end -------------------------------
 
     // prior
+    // ~(last channel select)
     //     0    priority for ifu
     //     1    priority for lsu
     reg prior;
 
     always @(posedge clk_i) begin
-    	if (rst_i == `ysyx_23060251_rst_enable)
-    		prior <= 1'b0;
-    	else if (state == RSP_SEL & next_state == IDLE)
-    		prior <= ~prior;
+        if (rst_i == `ysyx_23060251_rst_enable)
+            prior <= 1'b0;
+        else if (state == RD_REQ)
+            prior <= ~arbiter;
     end
 
-	wire arbiter;
-	assign arbiter = (f_slv_ar_valid_i & m_slv_ar_valid_i)? prior:
-					 (f_slv_ar_valid_i | f_slv_r_ready_i)? 1'b0: 1'b1;
+    reg arbiter;
+    always @(posedge clk_i) begin
+        if (rst_i == `ysyx_23060251_rst_enable)
+            arbiter <= 1'b0;
+        else if (state == CHAN_SEL) begin
+            if (f_slv_ar_valid_i & m_slv_ar_valid_i)
+                arbiter <= prior;
+            else if (f_slv_ar_valid_i)
+                arbiter <= 1'b0;
+            else 
+                arbiter <= 1'b1;
+        end
+    end
 
-	assign mst_ar_valid_o = (arbiter == 1'b0)? f_slv_ar_valid_i: m_slv_ar_valid_i;
-	assign mst_ar_addr_o  = (arbiter == 1'b0)? f_slv_ar_addr_i : m_slv_ar_addr_i ;
+    assign mst_ar_valid_o = (state == RD_REQ)? ((arbiter == 1'b0)? f_slv_ar_valid_i: m_slv_ar_valid_i): 1'b0;
+    assign mst_ar_addr_o  = (arbiter == 1'b0)? f_slv_ar_addr_i : m_slv_ar_addr_i ;
 
-	assign f_slv_ar_ready_o = (arbiter == 1'b0)? mst_ar_ready_i: 1'b0;
-	assign m_slv_ar_ready_o = (arbiter == 1'b1)? mst_ar_ready_i: 1'b0;
+    assign f_slv_ar_ready_o = (state == RD_REQ)? mst_ar_ready_i: 1'b0;
+    assign m_slv_ar_ready_o = (state == RD_REQ)? mst_ar_ready_i: 1'b0;
 
-	assign mst_r_ready_o = (arbiter == 1'b0)? f_slv_r_ready_i: m_slv_r_ready_i;
+    assign mst_r_ready_o = (state == RD_RSP)? ((arbiter == 1'b0)? f_slv_r_ready_i: m_slv_r_ready_i): 1'b0;
 
-	assign f_slv_r_valid_o = (arbiter == 1'b0) & mst_r_valid_i;
-	assign f_slv_r_data_o  = mst_r_data_i;
-	assign f_slv_r_resp_o  = mst_r_resp_i;
-	assign m_slv_r_valid_o = (arbiter == 1'b1) & mst_r_valid_i;
-	assign m_slv_r_data_o  = mst_r_data_i;
-	assign m_slv_r_resp_o  = mst_r_resp_i;
+    assign f_slv_r_valid_o = (state == RD_RSP) & mst_r_valid_i;
+    assign f_slv_r_data_o  = mst_r_data_i;
+    assign f_slv_r_resp_o  = mst_r_resp_i;
+    assign m_slv_r_valid_o = (state == RD_RSP) & mst_r_valid_i;
+    assign m_slv_r_data_o  = mst_r_data_i;
+    assign m_slv_r_resp_o  = mst_r_resp_i;
 
-	assign ar_hs = mst__valid_o & mst_ar_ready_i;
-	assign r_hs  = mst_r_valid_i  & mst_r_ready_o;
+    assign ar_hs = mst_ar_valid_o & mst_ar_ready_i;
+    assign r_hs  = mst_r_valid_i  & mst_r_ready_o;
 
 
 // W Channel 

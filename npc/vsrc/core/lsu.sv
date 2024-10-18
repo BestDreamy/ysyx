@@ -96,7 +96,7 @@ module lsu (
                 next_state = state;
         end else if (state == WAIT_B_RSP) begin
             if (b_hs)
-                next_state = WAIT_WB; // just for multi-cycle
+                next_state = IDLE;
             else 
                 next_state = state;
         end else begin // state == WAIT_WB
@@ -105,8 +105,8 @@ module lsu (
     end
     // ---------------------- state machine end -------------------------------
 
-    assign m_ready_o = (state == IDLE);
-    assign rx_valid = M_valid_i & m_ready_o;
+    assign m_ready_o = (state == WAIT_WB) | (state == WAIT_B_RSP & next_state == IDLE);
+    assign rx_valid = M_valid_i;
     assign r_en     = rx_valid & renMem_i;
     assign w_en     = rx_valid & wenMem_i;
     assign mem_dis  = rx_valid & (wenReg_i | wenCsr_i);
@@ -133,7 +133,7 @@ module lsu (
     assign b_hs  = mst_b_valid_i  & mst_b_ready_o;  
     // ------------------------------  AXI  -----------------------------------
 
-    wire [`ysyx_23060251_xlen_bus]      load_buf;
+    reg  [`ysyx_23060251_xlen_bus]      load_buf;
     wire                                load_byte;
     wire                                load_half;
     wire                                load_word;
@@ -147,7 +147,12 @@ module lsu (
                        ({`ysyx_23060251_xlen{load_half}} & {{`ysyx_23060251_half_mask{is_load_signed_i}}, load_buf[`ysyx_23060251_half_bus]}) | 
                        ({`ysyx_23060251_xlen{load_word}} & {load_buf[`ysyx_23060251_word_bus]})                                             ;
 
-    assign load_buf = mst_r_data_i; 
+    always @(posedge clk_i) begin
+        if (rst_i == `ysyx_23060251_rst_enable)
+            load_buf <= 0;
+        else if (r_hs)
+            load_buf <= mst_r_data_i;
+    end
 
     // import "DPI-C" function int vaddr_read(
     //     bit is_signed,
