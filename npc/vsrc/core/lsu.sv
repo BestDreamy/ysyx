@@ -51,7 +51,7 @@ module lsu (
 
     reg[6: 0] state, next_state;
 
-    wire rx_valid, r_en, w_en, mem_dis;
+    wire rx_valid, rd_mem_en, wt_mem_en, wb_reg_en; //branch_en;
 
     wire ar_hs, r_hs, aw_hs, w_hs, b_hs;
 
@@ -66,11 +66,11 @@ module lsu (
 
     always_comb begin
         if (state == IDLE) begin
-            if (r_en)
+            if (rd_mem_en)
                 next_state = WAIT_AR_REQ;
-            else if (w_en)
+            else if (wt_mem_en)
                 next_state = WAIT_AW_REQ;
-            else if (mem_dis)
+            else if (wb_reg_en)
                 next_state = WAIT_WB;
             else
                 next_state = state;
@@ -106,10 +106,10 @@ module lsu (
     // ---------------------- state machine end -------------------------------
 
     assign m_ready_o = (state == WAIT_WB) | b_hs;
-    assign rx_valid = M_valid_i;
-    assign r_en     = rx_valid & renMem_i;
-    assign w_en     = rx_valid & wenMem_i;
-    assign mem_dis  = rx_valid & (wenReg_i | wenCsr_i);
+    assign rx_valid  = M_valid_i;
+    assign rd_mem_en = rx_valid & renMem_i;
+    assign wt_mem_en = rx_valid & wenMem_i;
+    assign wb_reg_en = rx_valid & (wenReg_i | wenCsr_i);
 
     // ------------------------------  AXI  -----------------------------------
     assign mst_ar_valid_o = (state == WAIT_AR_REQ);

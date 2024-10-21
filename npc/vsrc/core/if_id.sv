@@ -6,8 +6,11 @@ module if_id (
     input   [`ysyx_23060251_pc_bus]         f_pred_pc_i,
 	input   [`ysyx_23060251_sys_bus]        f_sys_info_i,
 
+	input									e_byp_en_i,
+	input 									e_byp_cnd_i,
+
     input                                   f_valid_i, // from ifu
-    output                                  D_ready_o, // to ifu
+    output                                  D_ready_o, // to if
 
 	output  [`ysyx_23060251_inst_bus]       d_inst_o,
 	output	[`ysyx_23060251_pc_bus]			d_pc_o,
@@ -22,15 +25,17 @@ module if_id (
     input 									clk_i,
     input 									rst_i
 );
+	wire f_valid;
+
+	assign f_valid = f_valid_i & e_byp_en_i & ~e_byp_cnd_i;
+
 	pipe if_id_pipe 
 	(
 		.clk        (clk_i),
 		.rst        (rst_i),
-		.pin_valid  (f_valid_i),
-		// .pin_data   (f_inst_i),
+		.pin_valid  (f_valid), 		// just for branch 
 		.pin_ready  (D_ready_o),
 		.pout_valid (D_valid_o),
-		// .pout_data  (d_inst_o),
 		.pout_ready (d_ready_i)
 	);
 
@@ -43,7 +48,7 @@ module if_id (
 	reg [`ysyx_23060251_pc_bus]   		D_pred_pc;
 	reg [`ysyx_23060251_sys_bus] 		D_sys_info;
 
-	assign en = f_valid_i & D_ready_o;
+	assign en = f_valid & D_ready_o;
 
 	always @(posedge clk_i) begin
 		if (en) begin

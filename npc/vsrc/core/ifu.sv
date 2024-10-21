@@ -15,6 +15,9 @@ module ifu (
 
     input                                   d_byp_en_i,
     input   [`ysyx_23060251_pc_bus]         d_byp_npc_i,
+    input                                   e_byp_en_i,
+    input                                   e_byp_cnd_i,
+    input   [`ysyx_23060251_pc_bus]         e_byp_npc_i,
 
     // AXI LITE
     output                                  mst_ar_valid_o,
@@ -26,7 +29,6 @@ module ifu (
     input   [1:0]                           mst_r_resp_i,
     output                                  mst_r_ready_o
 );
-    wire is_jalr, is_mret, is_ecall;
 
     bjp ysyx_bjp
     (
@@ -38,11 +40,16 @@ module ifu (
         .pc_i      (pc_o)
     );
 
+    // bypass
+    wire is_jalr, is_mret, is_ecall;
+
     assign is_jalr   = opinfo_o[`ysyx_23060251_opinfo_jalr];
     assign is_ecall  = sys_info_o[`ysyx_23060251_sys_ecall];
     assign is_mret   = sys_info_o[`ysyx_23060251_sys_mret];
 
-    wire wait_decode_en;
+    wire wait_decode_en = is_jalr | is_ecall | is_mret;
+
+    wire e_byp_en = e_byp_en_i & ~e_byp_cnd_i;
 
     reg stall;
     reg bubble;
@@ -118,6 +125,8 @@ module ifu (
             pc <= d_byp_npc_i;
         else if (tx_valid)
             pc <= pred_pc_o;
+        else if (e_byp_en)
+            pc <= e_byp_npc_i;
     end
 
     assign f_valid_o = (state == WAIT_ID_HS);
@@ -131,6 +140,15 @@ module ifu (
             stall <= 1'b1;
         else if (d_byp_en_i)
             stall <= 1'b0;
+    end
+
+    always @(posedge clk_i) begin
+        if (rst_i == `ysyx_23060251_rst_enable)
+            bubble <= 1'b0;
+        else if (e_byp_en) 
+            bubble <= 1'b1;
+        else if (ar_hs)
+            bubble <= 1'b0;
     end
 
     always @(posedge clk_i) begin

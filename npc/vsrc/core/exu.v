@@ -17,12 +17,18 @@ module exu (
     output                                  e_valid_o, // to M-pipe
     input                                   M_ready_i, // from M-pipe
 
+    output                                  byp_en_o,
+    output [`ysyx_23060251_pc_bus]          byp_npc_o,
+
     // output [`ysyx_23060251_pc_bus]          npc_o,
     output [`ysyx_23060251_xlen_bus]        res_o,
     output                                  cnd_o
 );
+    wire rv32_branch = opinfo_i[`ysyx_23060251_opinfo_branch];
 
-    assign e_valid_o = E_valid_i;
+    // branch instruction commit in execute unit
+    assign e_valid_o = (E_valid_i & ~rv32_branch);
+
     assign e_ready_o = M_ready_i;
 
     alu ysyx_23060251_alu (
@@ -38,6 +44,9 @@ module exu (
         .res_o          (res_o),
         .cnd_o          (cnd_o)
     );
+
+    assign byp_en_o  = e_ready_o & e_valid_o;
+    assign byp_npc_o = pc_i + 4;
 
     // bru ysyx_23060251_bru (
     //     .is_branch_i    (opinfo_i[`ysyx_23060251_opinfo_branch]),

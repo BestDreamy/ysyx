@@ -41,10 +41,15 @@ module idu (
     
     // stall decode-stage
                         // (rs!=rd) | (rs==0)
-    assign d_ready_o = (|(rs1_o ^ E_byp_rd_i) | ~(|rs1_o))
-                     & (|(rs2_o ^ E_byp_rd_i) | ~(|rs2_o))
-                     & (|(rs1_o ^ M_byp_rd_i) | ~(|rs1_o))
-                     & (|(rs2_o ^ M_byp_rd_i) | ~(|rs2_o))
+    // assign d_ready_o = (|(rs1_o ^ E_byp_rd_i) | ~(|rs1_o))
+    //                  & (|(rs2_o ^ E_byp_rd_i) | ~(|rs2_o))
+    //                  & (|(rs1_o ^ M_byp_rd_i) | ~(|rs1_o))
+    //                  & (|(rs2_o ^ M_byp_rd_i) | ~(|rs2_o))
+    //                  & E_ready_i;
+    assign d_ready_o = ((rs1_o != E_byp_rd_i) | (rs1_o == 0))
+                     & ((rs2_o != E_byp_rd_i) | (rs2_o == 0))
+                     & ((rs1_o != M_byp_rd_i) | (rs2_o == 0))
+                     & ((rs2_o != M_byp_rd_i) | (rs2_o == 0))
                      & E_ready_i;
 
     assign                           rs1_o = inst_i[19: 15];
@@ -70,7 +75,7 @@ module idu (
     wire rv32_sys       = opinfo_i[`ysyx_23060251_opinfo_sys];
 
     // assign wenReg_o = ~(rv32_branch | rv32_store);
-    assign wenReg_o     = rv32_alu | rv32_addi | rv32_jal | rv32_jalr | rv32_load | rv32_lui | rv32_auipc | rv32_sys;
+    assign wenReg_o     = rv32_alu | rv32_alui | rv32_jal | rv32_jalr | rv32_load | rv32_lui | rv32_auipc | rv32_sys;
     /****************************************************************************************
                                             optype
     ****************************************************************************************/
