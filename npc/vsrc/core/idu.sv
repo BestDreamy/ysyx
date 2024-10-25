@@ -46,10 +46,10 @@ module idu (
     //                  & (|(rs1_o ^ M_byp_rd_i) | ~(|rs1_o))
     //                  & (|(rs2_o ^ M_byp_rd_i) | ~(|rs2_o))
     //                  & E_ready_i;
-    assign d_ready_o = ((rs1_o != E_byp_rd_i) | (rs1_o == 0))
-                     & ((rs2_o != E_byp_rd_i) | (rs2_o == 0))
-                     & ((rs1_o != M_byp_rd_i) | (rs2_o == 0))
-                     & ((rs2_o != M_byp_rd_i) | (rs2_o == 0))
+    assign d_ready_o = ((rs1_o != E_byp_rd_i) | (E_byp_rd_i == 0))
+                     & ((rs2_o != E_byp_rd_i) | (E_byp_rd_i == 0))
+                     & ((rs1_o != M_byp_rd_i) | (M_byp_rd_i == 0))
+                     & ((rs2_o != M_byp_rd_i) | (M_byp_rd_i == 0))
                      & E_ready_i;
 
     assign                           rs1_o = inst_i[19: 15];
@@ -219,7 +219,7 @@ module idu (
     /****************************************************************************************
                                             byp
     ****************************************************************************************/
-    assign byp_en_o    = d_valid_o & (rv32_jalr | rv32_ecall | rv32_mret);
+    assign byp_en_o    = (d_valid_o & E_ready_i) & (rv32_jalr | rv32_ecall | rv32_mret);
     assign byp_npc_o   = rv32_jalr? (src1_i + imm_i): csr_data_i;
     
 endmodule

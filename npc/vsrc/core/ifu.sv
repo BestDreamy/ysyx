@@ -49,10 +49,10 @@ module ifu (
 
     wire wait_decode_en = is_jalr | is_ecall | is_mret;
 
-    wire e_byp_en = e_byp_en_i & ~e_byp_cnd_i;
+    wire branch_hazard_en = e_byp_en_i & ~e_byp_cnd_i;
 
     reg stall;
-    reg bubble;
+    // reg bubble;
 
     localparam [3: 0] IDLE = 4'b0001,           WAIT_BUS_REQ = 4'b0010, 
                       WAIT_BUS_RSP = 4'b0100,   WAIT_ID_HS   = 4'b1000;
@@ -121,12 +121,16 @@ module ifu (
     always @(posedge clk_i) begin
         if (rst_i == `ysyx_23060251_rst_enable)
             pc <= `ysyx_23060251_pc'h8000_0000;
+        // arbsel
+        // 1. branch hazard
+        // 2. forward pc
+        // 3. normal
+        else if (branch_hazard_en)
+            pc <= e_byp_npc_i;
         else if (d_byp_en_i)
             pc <= d_byp_npc_i;
         else if (tx_valid)
             pc <= pred_pc_o;
-        else if (e_byp_en)
-            pc <= e_byp_npc_i;
     end
 
     assign f_valid_o = (state == WAIT_ID_HS);
@@ -134,7 +138,7 @@ module ifu (
     assign inst_o    = inst;
 
     always @(posedge clk_i) begin
-        if (rst_i == `ysyx_23060251_rst_enable) 
+        if (rst_i == `ysyx_23060251_rst_enable)
             stall <= 1'b0;
         else if (wait_decode_en)
             stall <= 1'b1;
@@ -142,14 +146,14 @@ module ifu (
             stall <= 1'b0;
     end
 
-    always @(posedge clk_i) begin
-        if (rst_i == `ysyx_23060251_rst_enable)
-            bubble <= 1'b0;
-        else if (e_byp_en) 
-            bubble <= 1'b1;
-        else if (ar_hs)
-            bubble <= 1'b0;
-    end
+    // always @(posedge clk_i) begin
+    //     if (rst_i == `ysyx_23060251_rst_enable)
+    //         bubble <= 1'b0;
+    //     else if (branch_hazard_en)
+    //         bubble <= 1'b1;
+    //     else if (ar_hs)
+    //         bubble <= 1'b0;
+    // end
 
     always @(posedge clk_i) begin
         if (rst_i == `ysyx_23060251_rst_enable)

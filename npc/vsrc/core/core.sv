@@ -48,6 +48,9 @@ module core (
     // bypass
     wire                                d_byp_en;
     wire [`ysyx_23060251_pc_bus]        d_byp_npc;
+    wire                                e_byp_en;
+    wire                                e_cnd;
+    wire [`ysyx_23060251_pc_bus]        e_byp_npc;
     wire [`ysyx_23060251_rs_bus]        E_byp_rd;
     wire [`ysyx_23060251_rs_bus]        M_byp_rd;
 
@@ -88,6 +91,9 @@ module core (
         .pred_pc_o      (f_pred_pc),
         .d_byp_en_i     (d_byp_en),
         .d_byp_npc_i    (d_byp_npc),
+        .e_byp_en_i     (e_byp_en),
+        .e_byp_cnd_i    (e_cnd),
+        .e_byp_npc_i    (e_byp_npc),
         .mst_ar_valid_o (f_mst_ar_valid),
         .mst_ar_addr_o  (f_mst_ar_addr),
         .mst_ar_ready_i (f_mst_ar_ready),
@@ -108,24 +114,26 @@ module core (
 
     if_id ysyx_if_id
     (
-        .f_inst_i    (f_inst),
-        .f_pc_i      (f_pc),
-        .f_opinfo_i  (f_opinfo),
-		.f_imm_i     (f_imm),
-		.f_pred_pc_i (f_pred_pc),
-        .f_sys_info_i(f_sys_info),
-        .f_valid_i   (f_valid),
-        .D_ready_o   (D_ready),
-        .d_inst_o    (d_inst),
-        .d_pc_o      (d_pc),
-        .d_opinfo_o  (d_opinfo),
-		.d_imm_o     (d_imm),
-		.d_pred_pc_o (d_pred_pc),
-        .d_sys_info_o(d_sys_info),
-        .D_valid_o   (D_valid),
-        .d_ready_i   (d_ready),
-        .clk_i       (clk),
-        .rst_i       (rst)
+        .f_inst_i       (f_inst),
+        .f_pc_i         (f_pc),
+        .f_opinfo_i     (f_opinfo),
+		.f_imm_i        (f_imm),
+		.f_pred_pc_i    (f_pred_pc),
+        .f_sys_info_i   (f_sys_info),
+        .e_byp_en_i     (e_byp_en),
+        .e_byp_cnd_i    (e_cnd),
+        .f_valid_i      (f_valid),
+        .D_ready_o      (D_ready),
+        .d_inst_o       (d_inst),
+        .d_pc_o         (d_pc),
+        .d_opinfo_o     (d_opinfo),
+		.d_imm_o        (d_imm),
+		.d_pred_pc_o    (d_pred_pc),
+        .d_sys_info_o   (d_sys_info),
+        .D_valid_o      (D_valid),
+        .d_ready_i      (d_ready),
+        .clk_i          (clk),
+        .rst_i          (rst)
     );
 
 
@@ -277,6 +285,8 @@ module core (
         .d_mask_i           (d_mask),
         .d_pc_i             (d_pc),
 		.d_pred_pc_i        (d_pred_pc),
+        .e_byp_en_i         (e_byp_en),
+        .e_byp_cnd_i        (e_cnd),
         .d_valid_i          (d_valid),
         .E_ready_o          (E_ready),
 `ifdef ITRACE
@@ -313,7 +323,7 @@ module core (
     wire                            M_ready;
     wire [`ysyx_23060251_pc_bus]    e_npc; // wb
     wire [`ysyx_23060251_xlen_bus]  e_res; // wb
-    wire                            e_cnd; // wb
+    // wire                            e_cnd; // wb
 
     exu ysyx_23060251_exu (
         .opinfo_i         (e_opinfo),
@@ -331,6 +341,8 @@ module core (
         .e_valid_o        (e_valid),
         .M_ready_i        (M_ready),
         // .npc_o            (e_npc),
+        .byp_en_o         (e_byp_en),
+        .byp_npc_o        (e_byp_npc),
         .res_o            (e_res),
         .cnd_o            (e_cnd)
     );
