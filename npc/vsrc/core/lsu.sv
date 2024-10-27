@@ -4,6 +4,7 @@ module lsu (
     input                                   renMem_i,
     input                                   wenReg_i,
     input                                   wenCsr_i,
+    input                                   branch_en_i,
     // input  [`ysyx_23060251_store_bus]    store_info_i,
     // input  [`ysyx_23060251_load_bus]     load_info_i,
     input  [`ysyx_23060251_xlen_bus]        addr_i,
@@ -51,7 +52,7 @@ module lsu (
 
     reg[6: 0] state, next_state;
 
-    wire rx_valid, rd_mem_en, wt_mem_en, wb_reg_en; //branch_en;
+    wire rx_valid, rd_mem_en, wt_mem_en, wb_reg_en;
 
     wire ar_hs, r_hs, aw_hs, w_hs, b_hs;
 
@@ -82,7 +83,7 @@ module lsu (
         end else if (state == WAIT_R_RSP) begin
             if (r_hs)
                 next_state = WAIT_WB;
-            else 
+            else
                 next_state = state;
         end else if (state == WAIT_AW_REQ) begin
             if (aw_hs) 
@@ -105,11 +106,11 @@ module lsu (
     end
     // ---------------------- state machine end -------------------------------
 
-    assign m_ready_o = (state == WAIT_WB) | b_hs;
     assign rx_valid  = M_valid_i;
     assign rd_mem_en = rx_valid & renMem_i;
     assign wt_mem_en = rx_valid & wenMem_i;
     assign wb_reg_en = rx_valid & (wenReg_i | wenCsr_i);
+    assign m_ready_o = (state == WAIT_WB) | b_hs | (branch_en_i & rx_valid);
 
     // ------------------------------  AXI  -----------------------------------
     assign mst_ar_valid_o = (state == WAIT_AR_REQ);
@@ -143,8 +144,8 @@ module lsu (
     assign load_byte = (mask_i == `ysyx_23060251_mask_byte);
     assign load_half = (mask_i == `ysyx_23060251_mask_half);
     assign load_word = (mask_i == `ysyx_23060251_mask_word);
-    assign rdata_o   = ({`ysyx_23060251_xlen{load_byte}} & {{`ysyx_23060251_byte_mask{is_load_signed_i}}, load_buf[`ysyx_23060251_byte_bus]}) |
-                       ({`ysyx_23060251_xlen{load_half}} & {{`ysyx_23060251_half_mask{is_load_signed_i}}, load_buf[`ysyx_23060251_half_bus]}) | 
+    assign rdata_o   = ({`ysyx_23060251_xlen{load_byte}} & {{`ysyx_23060251_byte_mask{is_load_signed_i & load_buf[7]}}, load_buf[`ysyx_23060251_byte_bus]}) |
+                       ({`ysyx_23060251_xlen{load_half}} & {{`ysyx_23060251_half_mask{is_load_signed_i & load_buf[15]}}, load_buf[`ysyx_23060251_half_bus]}) | 
                        ({`ysyx_23060251_xlen{load_word}} & {load_buf[`ysyx_23060251_word_bus]})                                             ;
 
     always @(posedge clk_i) begin

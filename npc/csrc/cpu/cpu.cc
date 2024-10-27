@@ -48,8 +48,8 @@ void exec_once() {
         IFDEF(CONFIG_ITRACE, itrace(dut->pc, dut->inst));
 
         if (npc_cpu.pc == 0) {
-            difftest_skip_ref();
-            syn_difftest();
+            IFDEF(CONFIG_DIFFTEST, difftest_skip_ref());
+            IFDEF(CONFIG_DIFFTEST, syn_difftest());
         }
 
         npc_eval();

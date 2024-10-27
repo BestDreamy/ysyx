@@ -36,8 +36,19 @@ module idu (
     output                                  renMem_o,
     output  [`ysyx_23060251_mask_bus]       mask_o
 );
+/*
+    D_valid  |     |  d_valid
+    -------> | idu | -------->
+             |     |
+    <------- |     | <--------
+    d_ready  |     |  E_ready
+*/
+    wire data_hazard = ((rs1_o != E_byp_rd_i) | (E_byp_rd_i == 0))
+                     & ((rs2_o != E_byp_rd_i) | (E_byp_rd_i == 0))
+                     & ((rs1_o != M_byp_rd_i) | (M_byp_rd_i == 0))
+                     & ((rs2_o != M_byp_rd_i) | (M_byp_rd_i == 0));
 
-    assign d_valid_o = D_valid_i;
+    assign d_valid_o = data_hazard & D_valid_i;
     
     // stall decode-stage
                         // (rs!=rd) | (rs==0)
@@ -46,11 +57,7 @@ module idu (
     //                  & (|(rs1_o ^ M_byp_rd_i) | ~(|rs1_o))
     //                  & (|(rs2_o ^ M_byp_rd_i) | ~(|rs2_o))
     //                  & E_ready_i;
-    assign d_ready_o = ((rs1_o != E_byp_rd_i) | (E_byp_rd_i == 0))
-                     & ((rs2_o != E_byp_rd_i) | (E_byp_rd_i == 0))
-                     & ((rs1_o != M_byp_rd_i) | (M_byp_rd_i == 0))
-                     & ((rs2_o != M_byp_rd_i) | (M_byp_rd_i == 0))
-                     & E_ready_i;
+    assign d_ready_o = data_hazard & E_ready_i;
 
     assign                           rs1_o = inst_i[19: 15];
     assign                           rs2_o = inst_i[24: 20];

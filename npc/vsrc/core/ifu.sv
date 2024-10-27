@@ -52,7 +52,7 @@ module ifu (
     wire branch_hazard_en = e_byp_en_i & ~e_byp_cnd_i;
 
     reg stall;
-    // reg bubble;
+    reg bubble;
 
     localparam [3: 0] IDLE = 4'b0001,           WAIT_BUS_REQ = 4'b0010, 
                       WAIT_BUS_RSP = 4'b0100,   WAIT_ID_HS   = 4'b1000;
@@ -140,10 +140,13 @@ module ifu (
     always @(posedge clk_i) begin
         if (rst_i == `ysyx_23060251_rst_enable)
             stall <= 1'b0;
-        else if (wait_decode_en)
-            stall <= 1'b1;
+        // arbsel
+        // 1. bypass
+        // 2. pre-decode for jalr
         else if (d_byp_en_i)
             stall <= 1'b0;
+        else if (wait_decode_en)
+            stall <= 1'b1;
     end
 
     // always @(posedge clk_i) begin
@@ -156,12 +159,16 @@ module ifu (
     // end
 
     always @(posedge clk_i) begin
-        if (rst_i == `ysyx_23060251_rst_enable)
+        if (rst_i == `ysyx_23060251_rst_enable | branch_hazard_en)
             inst <= `ysyx_23060251_inst'h13;
         else if (r_hs) begin
             inst <= mst_r_data_i;
         end
     end
+
+    // always @(posedge clk_i) begin
+    //     if (rst_i == `ysyx_23060251_rst_enable)
+    // end
 
     // rom ysyx_23060251_rom (
     //     .clk_i(clk_i),

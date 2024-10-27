@@ -14,7 +14,8 @@ module ex_ls (
     input                                  e_wenMem_i,
     input                                  e_renMem_i,
     input  [`ysyx_23060251_mask_bus]       e_mask_i,
-    input  [`ysyx_23060251_pc_bus]         e_npc_i,
+    // input  [`ysyx_23060251_pc_bus]         e_npc_i,
+    input                                  e_branch_en_i,
     input  [`ysyx_23060251_xlen_bus]       e_res_i,
     input                                  e_cnd_i,
 
@@ -36,7 +37,8 @@ module ex_ls (
     output                                 m_wenMem_o,
     output                                 m_renMem_o,
     output  [`ysyx_23060251_mask_bus]      m_mask_o,
-    output  [`ysyx_23060251_pc_bus]        m_npc_o,
+    // output  [`ysyx_23060251_pc_bus]        m_npc_o,
+    output                                 m_branch_en_o,
     output  [`ysyx_23060251_xlen_bus]      m_res_o,
     output                                 m_cnd_o,
 
@@ -72,7 +74,8 @@ module ex_ls (
     reg                                 M_wenMem;
     reg                                 M_renMem;
     reg  [`ysyx_23060251_mask_bus]      M_mask;
-    reg  [`ysyx_23060251_pc_bus]        M_npc;
+    // reg  [`ysyx_23060251_pc_bus]        M_npc;
+    reg                                 M_branch_en;
     reg  [`ysyx_23060251_xlen_bus]      M_res;
     reg                                 M_cnd;
 `ifdef ITRACE
@@ -100,7 +103,8 @@ module ex_ls (
             M_wenMem            <= e_wenMem_i;
             M_renMem            <= e_renMem_i;
             M_mask              <= e_mask_i;
-            M_npc               <= e_npc_i;
+            // M_npc               <= e_npc_i;
+            M_branch_en         <= e_branch_en_i;
             M_res               <= e_res_i;
             M_cnd               <= e_cnd_i;
 `ifdef ITRACE
@@ -121,7 +125,8 @@ module ex_ls (
     assign m_wenMem_o            = M_wenMem;
     assign m_renMem_o            = M_renMem;
     assign m_mask_o              = M_mask;
-    assign m_npc_o               = M_npc;
+    // assign m_npc_o               = M_npc;
+    assign m_branch_en_o         = M_branch_en;
     assign m_res_o               = M_res;
     assign m_cnd_o               = M_cnd;
 `ifdef ITRACE

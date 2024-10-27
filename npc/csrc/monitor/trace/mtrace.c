@@ -1,5 +1,5 @@
 #include <trace.h>
-#define MRINGBUF 16
+#define MRINGBUF 64
 
 static uint32_t p = 0;
 static int32_t  cursor = -1; 

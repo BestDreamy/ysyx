@@ -20,8 +20,8 @@ module id_ex (
     input  [`ysyx_23060251_pc_bus]         d_pc_i,
     input  [`ysyx_23060251_pc_bus]         d_pred_pc_i,
 
-    input									e_byp_en_i,
-	input 									e_byp_cnd_i,
+    input								   e_byp_en_i,
+	input 								   e_byp_cnd_i,
 
     input                                  d_valid_i, // from idu
     output                                 E_ready_o, // to idu

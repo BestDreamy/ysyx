@@ -21,6 +21,7 @@ module exu (
     output [`ysyx_23060251_pc_bus]          byp_npc_o,
 
     // output [`ysyx_23060251_pc_bus]          npc_o,
+    output                                  branch_en_o,
     output [`ysyx_23060251_xlen_bus]        res_o,
     output                                  cnd_o
 );
@@ -31,10 +32,10 @@ module exu (
     <------- |     | <--------
     e_ready  |     |  M_ready
 */
-    wire rv32_branch = opinfo_i[`ysyx_23060251_opinfo_branch];
+    assign branch_en_o = opinfo_i[`ysyx_23060251_opinfo_branch];
 
     // branch instruction commit in execute unit
-    assign e_valid_o = (E_valid_i & ~rv32_branch);
+    assign e_valid_o = E_valid_i;
 
     assign e_ready_o = M_ready_i;
 
@@ -52,7 +53,7 @@ module exu (
         .cnd_o          (cnd_o)
     );
 
-    assign byp_en_o  = (M_ready_i & e_valid_o) & rv32_branch;
+    assign byp_en_o  = (M_ready_i & e_valid_o) & branch_en_o;
     assign byp_npc_o = pc_i + 4;
 
     // bru ysyx_23060251_bru (

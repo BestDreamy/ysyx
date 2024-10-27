@@ -321,7 +321,8 @@ module core (
 
     wire                            e_valid;
     wire                            M_ready;
-    wire [`ysyx_23060251_pc_bus]    e_npc; // wb
+    // wire [`ysyx_23060251_pc_bus]    e_npc; // wb
+    wire                            e_branch_en;
     wire [`ysyx_23060251_xlen_bus]  e_res; // wb
     // wire                            e_cnd; // wb
 
@@ -343,6 +344,7 @@ module core (
         // .npc_o            (e_npc),
         .byp_en_o         (e_byp_en),
         .byp_npc_o        (e_byp_npc),
+        .branch_en_o      (e_branch_en),
         .res_o            (e_res),
         .cnd_o            (e_cnd)
     );
@@ -365,6 +367,7 @@ module core (
     wire [`ysyx_23060251_mask_bus]      m_mask;
     wire [`ysyx_23060251_pc_bus]        m_pc;
     // wire [`ysyx_23060251_pc_bus]        m_npc;
+    wire                                m_branch_en;
     wire [`ysyx_23060251_xlen_bus]      m_res;
     wire                                m_cnd;
 
@@ -385,7 +388,8 @@ module core (
         .e_wenMem_i         (e_wenMem),
         .e_renMem_i         (e_renMem),
         .e_mask_i           (e_mask),
-        .e_npc_i            (),
+        // .e_npc_i            (),
+        .e_branch_en_i      (e_branch_en),
         .e_res_i            (e_res),
         .e_cnd_i            (e_cnd),
         .e_valid_i          (e_valid),
@@ -405,7 +409,8 @@ module core (
         .m_wenMem_o         (m_wenMem),
         .m_renMem_o         (m_renMem),
         .m_mask_o           (m_mask),
-        .m_npc_o            (),
+        // .m_npc_o            (),
+        .m_branch_en_o      (m_branch_en),        
         .m_res_o            (m_res),
         .m_cnd_o            (m_cnd),
         .M_valid_o          (M_valid),
@@ -447,6 +452,7 @@ module core (
         .renMem_i         (m_renMem),
         .wenReg_i         (m_wenReg),      
         .wenCsr_i         (m_wenCsr),
+        .branch_en_i      (m_branch_en),
         .addr_i           (m_res),
         .mask_i           (m_mask),
         .wdata_i          (m_src2),
