@@ -45,6 +45,8 @@ module core (
     input clk,
     input rst
 );
+    wire [`ysyx_23060251_pipe_bus]      core_pipe_en;
+
     // bypass
     wire                                d_byp_en;
     wire [`ysyx_23060251_pc_bus]        d_byp_npc;
@@ -83,6 +85,7 @@ module core (
         // .npc_i          (w_npc),
         .f_valid_o      (f_valid),
         .D_ready_i      (D_ready),
+        .ifu2Dpipe_en_i (core_pipe_en[`ysyx_23060251_ifu2Dpipe]),
         .pc_o           (f_pc),
         .inst_o         (f_inst),
         .opinfo_o       (f_opinfo),
@@ -442,7 +445,6 @@ module core (
     wire [1:0]                          m_mst_b_resp;
     wire                                m_mst_b_ready;
 
-
     lsu ysyx_lsu
     (
         .clk_i            (clk),
@@ -558,5 +560,13 @@ module core (
         .rst_i            (rst)
     );
 
+    assign core_pipe_en = {
+        M_valid & m_ready,
+        e_valid & M_ready,
+        E_valid & e_ready,
+        d_valid & E_ready,
+        D_valid & d_ready,
+        f_valid & D_ready
+    }
 
 endmodule

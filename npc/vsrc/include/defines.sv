@@ -212,4 +212,12 @@ localparam axi_strb = `ysyx_23060251_axi_data >> 3;
 `define ysyx_23060251_axi_data_bus `ysyx_23060251_axi_data - 1: 0
 `define ysyx_23060251_axi_strb_bus `ysyx_23060251_axi_strb - 1: 0
 
+`define ysyx_23060251_pipe_bus 5: 0
+`define ysyx_23060251_ifu2Dpipe 0
+`define ysyx_23060251_Dpipe2idu 1
+`define ysyx_23060251_idu2Epipe 2
+`define ysyx_23060251_Epipe2exu 3
+`define ysyx_23060251_exu2Mpipe 4
+`define ysyx_23060251_Mpipe2lsu 5
+
 `endif

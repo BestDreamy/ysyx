@@ -5,6 +5,7 @@ module ifu (
 
     output                                  f_valid_o, // to D
     input                                   D_ready_i, // form D
+    input   [`ysyx_23060251_pipe_bus]       ifu2Dpipe_en_i,
 
     output  [`ysyx_23060251_pc_bus]         pc_o,
     output  [`ysyx_23060251_inst_bus]       inst_o,
@@ -14,10 +15,10 @@ module ifu (
     output  [`ysyx_23060251_pc_bus]         pred_pc_o,
 
     input                                   d_byp_en_i,
-    input   [`ysyx_23060251_pc_bus]         d_byp_npc_i,
+    input   [`ysyx_23060251_pc_bus]         d_byp_npc_i, // jalr
     input                                   e_byp_en_i,
     input                                   e_byp_cnd_i,
-    input   [`ysyx_23060251_pc_bus]         e_byp_npc_i,
+    input   [`ysyx_23060251_pc_bus]         e_byp_npc_i, // branch
 
     // AXI LITE
     output                                  mst_ar_valid_o,
@@ -30,6 +31,7 @@ module ifu (
     output                                  mst_r_ready_o
 );
 
+    // jal branch
     bjp ysyx_bjp
     (
         .opinfo_o  (opinfo_o),
@@ -54,67 +56,8 @@ module ifu (
     reg stall;
     reg bubble;
 
-    localparam [3: 0] IDLE = 4'b0001,           WAIT_BUS_REQ = 4'b0010, 
-                      WAIT_BUS_RSP = 4'b0100,   WAIT_ID_HS   = 4'b1000;
-    reg[3: 0] state, next_state;
-
     reg[`ysyx_23060251_pc_bus]   pc;
     reg[`ysyx_23060251_inst_bus] inst;
-
-    wire tx_valid; // ifu --> idu
-
-    wire ar_hs, r_hs;
-
-    // ---------------------- read state machine ----------------------------
-    always @(posedge clk_i) begin
-        if (rst_i == `ysyx_23060251_rst_enable) begin
-            state <= IDLE;
-        end else begin
-            state <= next_state;
-        end
-    end
-
-    always_comb begin
-        if (state == IDLE) begin
-            if (stall)
-                next_state = state; // IDLE
-            else
-                next_state = WAIT_BUS_REQ;
-        end else if (state == WAIT_BUS_REQ) begin
-            if (ar_hs)
-                next_state = WAIT_BUS_RSP;
-            else
-                next_state = state;
-        end else if (state == WAIT_BUS_RSP) begin
-            if (r_hs)
-                next_state = WAIT_ID_HS;
-            else
-                next_state = state;
-        end else begin // state == WAIT_ID_HS
-            if (tx_valid)
-                // 1. jalr     (IDLE) wait decode bypass for one cycle   [need stall]
-                // 2. csr      (IDLE) wait decode bypass for one cycle   [need stall]
-                // 3. branch   (WAIT_BUS_REQ) check condition in execute [need bubble maybe]
-                // 4. other    (WAIT_BUS_REQ) accept
-                if (wait_decode_en)
-                    next_state = IDLE;
-                else
-                    next_state = WAIT_BUS_REQ;
-            else
-                next_state = state;
-        end
-    end
-    // ---------------------- state machine end -------------------------------
-
-    // ------------------------------  AXI  -----------------------------------
-    assign ar_hs = mst_ar_valid_o & mst_ar_ready_i;
-    assign r_hs  = mst_r_valid_i  & mst_r_ready_o ;
-
-    assign mst_ar_valid_o = (state == WAIT_BUS_REQ);
-    assign mst_ar_addr_o  = pc_o;
-
-    assign mst_r_ready_o  = (state == WAIT_BUS_RSP);
-    // ------------------------------  AXI  -----------------------------------
 
     assign pc_o = pc;
 
@@ -129,12 +72,11 @@ module ifu (
             pc <= e_byp_npc_i;
         else if (d_byp_en_i)
             pc <= d_byp_npc_i;
-        else if (tx_valid)
+        else if (ifu2Dpipe_en_i)
             pc <= pred_pc_o;
     end
 
     assign f_valid_o = (state == WAIT_ID_HS);
-    assign tx_valid  = f_valid_o & D_ready_i;
     assign inst_o    = inst;
 
     always @(posedge clk_i) begin
