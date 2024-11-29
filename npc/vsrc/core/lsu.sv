@@ -20,21 +20,21 @@ module lsu (
 
     // AXI LITE
     output                                  mst_ar_valid_o,
-    output  [`ysyx_23060251_axi_addr_bus]   mst_ar_addr_o,
+    output  axi_ar_addr_t                   mst_ar_addr_o,
     input                                   mst_ar_ready_i,
 
     input                                   mst_r_valid_i,
-    input   [`ysyx_23060251_axi_data_bus]   mst_r_data_i,
+    input   axi_r_data_t                    mst_r_data_i,
     input   axi_resp_t                      mst_r_resp_i,
     output                                  mst_r_ready_o,
 
     output                                  mst_aw_valid_o,
-    output  [`ysyx_23060251_axi_addr_bus]   mst_aw_addr_o,
+    output  axi_aw_addr_t                   mst_aw_addr_o,
     input                                   mst_aw_ready_i,
 
     output                                  mst_w_valid_o,
-    output  [`ysyx_23060251_axi_data_bus]   mst_w_data_o,
-    output  [`ysyx_23060251_axi_strb_bus]   mst_w_strb_o,
+    output  axi_w_data_t                    mst_w_data_o,
+    output  axi_w_strb_t                    mst_w_strb_o,
     input                                   mst_w_ready_i,
 
     input                                   mst_b_valid_i,

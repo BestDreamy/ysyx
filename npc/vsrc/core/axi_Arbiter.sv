@@ -1,41 +1,41 @@
 module axi_Arbiter (
     input                                  f_slv_ar_valid_i,
-    input  [`ysyx_23060251_axi_addr_bus]   f_slv_ar_addr_i,
+    input  axi_ar_addr_t                   f_slv_ar_addr_i,
     // input  axi_id_t                         slv_ar_id_i,
     output                                 f_slv_ar_ready_o,
 
     input                                  m_slv_ar_valid_i,
-    input  [`ysyx_23060251_axi_addr_bus]   m_slv_ar_addr_i,
+    input  axi_ar_addr_t                   m_slv_ar_addr_i,
     output                                 m_slv_ar_ready_o,
 
     output                                 f_slv_r_valid_o,
-    output [`ysyx_23060251_axi_data_bus]   f_slv_r_data_o,
+    output axi_r_data_t                    f_slv_r_data_o,
     output axi_resp_t                      f_slv_r_resp_o,
     input                                  f_slv_r_ready_i,
 
     output                                 m_slv_r_valid_o,
-    output [`ysyx_23060251_axi_data_bus]   m_slv_r_data_o,
+    output axi_r_data_t                    m_slv_r_data_o,
     output axi_resp_t                      m_slv_r_resp_o,
     input                                  m_slv_r_ready_i,
 
     output                                 mst_ar_valid_o,
-    output  [`ysyx_23060251_axi_addr_bus]  mst_ar_addr_o,
+    output axi_ar_addr_t                   mst_ar_addr_o,
     input                                  mst_ar_ready_i,
 
     input                                  mst_r_valid_i,
-    input   [`ysyx_23060251_axi_data_bus]  mst_r_data_i,
-    input   axi_resp_t                     mst_r_resp_i,
+    input  axi_r_data_t                    mst_r_data_i,
+    input  axi_resp_t                      mst_r_resp_i,
     output                                 mst_r_ready_o,
 
 // W Channel
 // -----------------------------------------------------------------------
     input                                  m_slv_aw_valid_i,
-    input  [`ysyx_23060251_axi_addr_bus]   m_slv_aw_addr_i,
+    input  axi_aw_addr_t                   m_slv_aw_addr_i,
     output                                 m_slv_aw_ready_o,
 
     input                                  m_slv_w_valid_i,
-    input  [`ysyx_23060251_axi_data_bus]   m_slv_w_data_i,
-    input  [`ysyx_23060251_axi_strb_bus]   m_slv_w_strb_i,
+    input  axi_w_data_t                    m_slv_w_data_i,
+    input  axi_w_strb_t                    m_slv_w_strb_i,
     output                                 m_slv_w_ready_o,
 
     output                                 m_slv_b_valid_o,
@@ -43,16 +43,16 @@ module axi_Arbiter (
     input                                  m_slv_b_ready_i,
 
     output                                 mst_aw_valid_o,
-    output  [`ysyx_23060251_axi_addr_bus]  mst_aw_addr_o,
+    output axi_aw_addr_t                   mst_aw_addr_o,
     input                                  mst_aw_ready_i,
 
     output                                 mst_w_valid_o,
-    output  [`ysyx_23060251_axi_data_bus]  mst_w_data_o,
-    output  [`ysyx_23060251_axi_strb_bus]  mst_w_strb_o,
+    output axi_w_data_t                    mst_w_data_o,
+    output axi_w_strb_t                    mst_w_strb_o,
     input                                  mst_w_ready_i,
 
     input                                  mst_b_valid_i,
-    input   axi_resp_t                     mst_b_resp_i,
+    input  axi_resp_t                      mst_b_resp_i,
     output                                 mst_b_ready_o,
 
     input                                  clk_i,

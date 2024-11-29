@@ -1,21 +1,21 @@
 module axi_slave (
     // AXI LITE
     input                                  slv_ar_valid_i,
-    input  [`ysyx_23060251_axi_addr_bus]   slv_ar_addr_i,
+    input  axi_ar_addr_t                   slv_ar_addr_i,
     output                                 slv_ar_ready_o,
 
     output                                 slv_r_valid_o,
-    output [`ysyx_23060251_axi_data_bus]   slv_r_data_o,
+    output axi_r_data_t                    slv_r_data_o,
     output axi_resp_t                      slv_r_resp_o,
     input                                  slv_r_ready_i,
 
     input                                  slv_aw_valid_i,
-    input  [`ysyx_23060251_axi_addr_bus]   slv_aw_addr_i,
+    input  axi_aw_addr_t                   slv_aw_addr_i,
     output                                 slv_aw_ready_o,
 
     input                                  slv_w_valid_i,
-    input  [`ysyx_23060251_axi_data_bus]   slv_w_data_i,
-    input  [`ysyx_23060251_axi_strb_bus]   slv_w_strb_i,
+    input  axi_w_data_t                    slv_w_data_i,
+    input  axi_w_strb_t                    slv_w_strb_i,
     output                                 slv_w_ready_o,
 
     output                                 slv_b_valid_o,
@@ -40,12 +40,12 @@ module axi_slave (
 
     wire ar_hs, r_hs, aw_hs, w_hs, b_hs;
 
-    reg [`ysyx_23060251_axi_addr_bus] rd_addr_buf;
-    reg [`ysyx_23060251_axi_data_bus] rd_data_buf;
+    axi_ar_addr_t rd_addr_buf;
+    axi_r_data_t  rd_data_buf;
 
-    reg [`ysyx_23060251_axi_addr_bus] wt_addr_buf;
-    reg [`ysyx_23060251_axi_data_bus] wt_data_buf;
-    reg [`ysyx_23060251_axi_strb_bus] wt_strb_buf;
+    axi_aw_addr_t wt_addr_buf;
+    axi_w_data_t  wt_data_buf;
+    axi_w_strb_t  wt_strb_buf;
 
     reg [3: 0] rd_count, wt_count;
 

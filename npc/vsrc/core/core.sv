@@ -8,37 +8,37 @@ module core (
     output wire[`ysyx_23060251_inst_bus] w_inst,  // to idu (for itrace)
     output                               is_commit, // just for diff
 
-    input          io_master_awready, output          io_slave_awready,
-    output         io_master_awvalid, input           io_slave_awvalid,
-    output[31:0]   io_master_awaddr , input[31:0]     io_slave_awaddr,
+    input                   io_master_awready, output                   io_slave_awready,
+    output                  io_master_awvalid, input                    io_slave_awvalid,
+    output axi_aw_addr_t    io_master_awaddr , input axi_aw_addr_t      io_slave_awaddr,
     // output[3:0]    io_master_awid   , input[3:0]      io_slave_awid,
     // output[7:0]    io_master_awlen  , input[7:0]      io_slave_awlen,
     // output[2:0]    io_master_awsize , input[2:0]      io_slave_awsize,
     // output[1:0]    io_master_awburst, input[1:0]      io_slave_awburst,
 
-    input          io_master_wready , output          io_slave_wready,
-    output         io_master_wvalid , input           io_slave_wvalid,
-    output[31:0]   io_master_wdata  , input[31:0]     io_slave_wdata,
-    output[3:0]    io_master_wstrb  , input[3:0]      io_slave_wstrb,
+    input                   io_master_wready , output                   io_slave_wready,
+    output                  io_master_wvalid , input                    io_slave_wvalid,
+    output axi_w_data_t     io_master_wdata  , input axi_w_data_t       io_slave_wdata,
+    output axi_w_strb_t     io_master_wstrb  , input axi_w_strb_t       io_slave_wstrb,
     // output         io_master_wlast  , input           io_slave_wlast,
 
-    output         io_master_bready , input           io_slave_bready,
-    input          io_master_bvalid , output          io_slave_bvalid,
-    input[1:0]     io_master_bresp  , output[1:0]     io_slave_bresp,
+    output                  io_master_bready , input                    io_slave_bready,
+    input                   io_master_bvalid , output                   io_slave_bvalid,
+    input axi_resp_t        io_master_bresp  , output axi_resp_t        io_slave_bresp,
     // input[3:0]     io_master_bid    , output[3:0]     io_slave_bid,
 
-    input          io_master_arready, output          io_slave_arready,
-    output         io_master_arvalid, input           io_slave_arvalid,
-    output[31:0]   io_master_araddr , input[31:0]     io_slave_araddr,
+    input                   io_master_arready, output                   io_slave_arready,
+    output                  io_master_arvalid, input                    io_slave_arvalid,
+    output axi_ar_addr_t    io_master_araddr , input axi_ar_addr_t      io_slave_araddr,
     // output[3:0]    io_master_arid   , input[3:0]      io_slave_arid,
     // output[7:0]    io_master_arlen  , input[7:0]      io_slave_arlen,
     // output[2:0]    io_master_arsize , input[2:0]      io_slave_arsize,
     // output[1:0]    io_master_arburst, input[1:0]      io_slave_arburst,
 
-    output         io_master_rready , input           io_slave_rready,
-    input          io_master_rvalid , output          io_slave_rvalid,
-    input[1:0]     io_master_rresp  , output[1:0]     io_slave_rresp,
-    input[31:0]    io_master_rdata  , output[31:0]    io_slave_rdata,
+    output                  io_master_rready , input                    io_slave_rready,
+    input                   io_master_rvalid , output                   io_slave_rvalid,
+    input axi_resp_t        io_master_rresp  , output axi_resp_t        io_slave_rresp,
+    input axi_r_data_t      io_master_rdata  , output axi_r_data_t      io_slave_rdata,
     // input          io_master_rlast  , output          io_slave_rlast,
     // input[3:0]     io_master_rid    , output[3:0]     io_slave_rid,
 
@@ -60,14 +60,19 @@ module core (
     // wire [`ysyx_23060251_pc_bus]        w_npc;
     wire                                f_valid;
     wire                                D_ready;
+    wire                                f_stall;
+    wire                                f_sleep; // the enable signal of f_stall
 
-    wire                                f_mst_ar_valid;
-    wire [31:0]                         f_mst_ar_addr;
-    wire                                f_mst_ar_ready;
-    wire                                f_mst_r_valid;
-    wire [31:0]                         f_mst_r_data;
-    wire [1:0]                          f_mst_r_resp;
-    wire                                f_mst_r_ready;
+    // wire                                f_mst_ar_valid;
+    // wire [31:0]                         f_mst_ar_addr;
+    // wire                                f_mst_ar_ready;
+    // wire                                f_mst_r_valid;
+    // wire [31:0]                         f_mst_r_data;
+    // wire [1:0]                          f_mst_r_resp;
+    // wire                                f_mst_r_ready;
+    axi_ar_if #(32)                     f_mst_ar;
+    axi_r_if  #(32)                     f_mst_r;
+    
 
     // wire [`ysyx_23060251_pc_bus]        f_pc;
     wire [`ysyx_23060251_inst_bus]      f_inst;
@@ -80,14 +85,14 @@ module core (
 
     ifu ysyx_ifu
     (
-        .clk_i          (clk),
-        .rst_i          (rst),
         // .npc_i          (w_npc),
-        .f_valid_o      (f_valid),
-        .D_ready_i      (D_ready),
+        // .f_valid_o      (f_valid),
+        // .D_ready_i      (D_ready),
         .ifu2Dpipe_en_i (core_pipe_en[`ysyx_23060251_ifu2Dpipe]),
+        .stall_o        (f_stall),
+        .sleep_o        (f_sleep),
+        .inst_i         (f_inst),
         .pc_o           (f_pc),
-        .inst_o         (f_inst),
         .opinfo_o       (f_opinfo),
         .sys_info_o     (f_sys_info),
         .imm_o          (f_imm),
@@ -97,13 +102,22 @@ module core (
         .e_byp_en_i     (e_byp_en),
         .e_byp_cnd_i    (e_cnd),
         .e_byp_npc_i    (e_byp_npc),
-        .mst_ar_valid_o (f_mst_ar_valid),
-        .mst_ar_addr_o  (f_mst_ar_addr),
-        .mst_ar_ready_i (f_mst_ar_ready),
-        .mst_r_valid_i  (f_mst_r_valid),
-        .mst_r_data_i   (f_mst_r_data),
-        .mst_r_resp_i   (f_mst_r_resp),
-        .mst_r_ready_o  (f_mst_r_ready)
+        .clk_i          (clk),
+        .rst_i          (rst)
+    );
+
+    icache ysyx_icache
+    (
+        .axi_mst_ar     (f_mst_ar),
+        .axi_mst_r      (f_mst_r),
+        .pc_i           (f_pc),
+        .ifu2Dpipe_en_i (core_pipe_en[`ysyx_23060251_ifu2Dpipe]),
+        .f_stall_i      (f_stall),
+        .ifu_sleep_i    (f_sleep),
+        .inst_o         (f_inst),
+        .f_valid_o      (f_valid),
+        .clk_i          (clk),
+        .rst_i          (rst)
     );
 
     wire                                D_valid;
@@ -515,16 +529,16 @@ module core (
 
     axi_Arbiter ysyx_axi_Arbiter
     (
-        .f_slv_ar_valid_i (f_mst_ar_valid),
-        .f_slv_ar_addr_i  (f_mst_ar_addr),
-        .f_slv_ar_ready_o (f_mst_ar_ready),
+        .f_slv_ar_valid_i (f_mst_ar.ar_valid),
+        .f_slv_ar_addr_i  (f_mst_ar.ar_addr),
+        .f_slv_ar_ready_o (f_mst_ar.ar_ready),
         .m_slv_ar_valid_i (m_mst_ar_valid),
         .m_slv_ar_addr_i  (m_mst_ar_addr),
         .m_slv_ar_ready_o (m_mst_ar_ready),
-        .f_slv_r_valid_o  (f_mst_r_valid),
-        .f_slv_r_data_o   (f_mst_r_data),
-        .f_slv_r_resp_o   (f_mst_r_resp),
-        .f_slv_r_ready_i  (f_mst_r_ready),
+        .f_slv_r_valid_o  (f_mst_r.r_valid),
+        .f_slv_r_data_o   (f_mst_r.r_data),
+        .f_slv_r_resp_o   (f_mst_r.r_resp),
+        .f_slv_r_ready_i  (f_mst_r.r_ready),
         .m_slv_r_valid_o  (m_mst_r_valid),
         .m_slv_r_data_o   (m_mst_r_data),
         .m_slv_r_resp_o   (m_mst_r_resp),
@@ -567,6 +581,6 @@ module core (
         d_valid & E_ready,
         D_valid & d_ready,
         f_valid & D_ready
-    }
+    };
 
 endmodule
