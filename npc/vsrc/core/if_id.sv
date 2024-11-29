@@ -6,9 +6,6 @@ module if_id (
     input   [`ysyx_23060251_pc_bus]         f_pred_pc_i,
 	input   [`ysyx_23060251_sys_bus]        f_sys_info_i,
 
-	input									e_byp_en_i,
-	input 									e_byp_cnd_i,
-
     input                                   f_valid_i, // from ifu
     output                                  D_ready_o, // to if
 
@@ -22,10 +19,13 @@ module if_id (
     output                                  D_valid_o, // to idu
     input                                   d_ready_i, // from idu
 
+	input 									e_byp_en_i,
+	input									e_branch_hazard_i,
+
     input 									clk_i,
     input 									rst_i
 );
-	wire branch_hazard = e_byp_en_i & ~e_byp_cnd_i;
+	wire branch_hazard = e_byp_en_i & e_branch_hazard_i;
 	wire pipe_rst = rst_i | branch_hazard;
 
 	pipe if_id_pipe 

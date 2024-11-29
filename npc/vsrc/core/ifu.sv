@@ -3,7 +3,7 @@ module ifu (
     // input                                   D_ready_i, // form D
     input   [`ysyx_23060251_pipe_bus]       ifu2Dpipe_en_i,
     output                                  stall_o,
-    output                                  sleep_o,
+    output                                  stall_en_o,
 
     input   [`ysyx_23060251_inst_bus]       inst_i,
 
@@ -18,7 +18,7 @@ module ifu (
     input                                   d_byp_en_i,
     input   [`ysyx_23060251_pc_bus]         d_byp_npc_i, // jalr
     input                                   e_byp_en_i,
-    input                                   e_byp_cnd_i,
+    input                                   e_branch_hazard_i,
     input   [`ysyx_23060251_pc_bus]         e_byp_npc_i, // branch
 
     input                                   clk_i,
@@ -44,9 +44,9 @@ module ifu (
     assign is_ecall  = sys_info_o[`ysyx_23060251_sys_ecall];
     assign is_mret   = sys_info_o[`ysyx_23060251_sys_mret];
 
-    assign sleep_o = is_jalr | is_ecall | is_mret;
+    assign stall_en_o = is_jalr | is_ecall | is_mret;
 
-    wire branch_hazard_en = e_byp_en_i & ~e_byp_cnd_i;
+    wire branch_hazard_en = e_byp_en_i & e_branch_hazard_i;
 
     reg stall;
     // reg bubble;
@@ -80,7 +80,7 @@ module ifu (
         // 2. pre-decode for jalr
         else if (d_byp_en_i)
             stall <= 1'b0;
-        else if (sleep_o)
+        else if (stall_en_o)
             stall <= 1'b1;
     end
 

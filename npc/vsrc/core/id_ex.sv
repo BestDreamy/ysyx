@@ -20,9 +20,6 @@ module id_ex (
     input  [`ysyx_23060251_pc_bus]         d_pc_i,
     input  [`ysyx_23060251_pc_bus]         d_pred_pc_i,
 
-    input								   e_byp_en_i,
-	input 								   e_byp_cnd_i,
-
     input                                  d_valid_i, // from idu
     output                                 E_ready_o, // to idu
 
@@ -50,12 +47,15 @@ module id_ex (
     output                                 E_valid_o, // to exu
     input                                  e_ready_i, // from exu
 
+    input								   e_byp_en_i,
+	input 								   e_branch_hazard_i,
+
     output [`ysyx_23060251_rs_bus]         byp_rd_o,
 
     input   							   clk_i,
     input 								   rst_i
 );
-	wire branch_hazard = e_byp_en_i & ~e_byp_cnd_i;
+	wire branch_hazard = e_byp_en_i & e_branch_hazard_i;
 	wire pipe_rst = rst_i | branch_hazard;
 
     pipe id_ex_pipe 

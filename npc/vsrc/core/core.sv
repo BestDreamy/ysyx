@@ -61,7 +61,7 @@ module core (
     wire                                f_valid;
     wire                                D_ready;
     wire                                f_stall;
-    wire                                f_sleep; // the enable signal of f_stall
+    wire                                f_stall_en; // the enable signal of f_stall
 
     // wire                                f_mst_ar_valid;
     // wire [31:0]                         f_mst_ar_addr;
@@ -88,36 +88,38 @@ module core (
         // .npc_i          (w_npc),
         // .f_valid_o      (f_valid),
         // .D_ready_i      (D_ready),
-        .ifu2Dpipe_en_i (core_pipe_en[`ysyx_23060251_ifu2Dpipe]),
-        .stall_o        (f_stall),
-        .sleep_o        (f_sleep),
-        .inst_i         (f_inst),
-        .pc_o           (f_pc),
-        .opinfo_o       (f_opinfo),
-        .sys_info_o     (f_sys_info),
-        .imm_o          (f_imm),
-        .pred_pc_o      (f_pred_pc),
-        .d_byp_en_i     (d_byp_en),
-        .d_byp_npc_i    (d_byp_npc),
-        .e_byp_en_i     (e_byp_en),
-        .e_byp_cnd_i    (e_cnd),
-        .e_byp_npc_i    (e_byp_npc),
-        .clk_i          (clk),
-        .rst_i          (rst)
+        .ifu2Dpipe_en_i     (core_pipe_en[`ysyx_23060251_ifu2Dpipe]),
+        .stall_o            (f_stall),
+        .stall_en_o         (f_stall_en),
+        .inst_i             (f_inst),
+        .pc_o               (f_pc),
+        .opinfo_o           (f_opinfo),
+        .sys_info_o         (f_sys_info),
+        .imm_o              (f_imm),
+        .pred_pc_o          (f_pred_pc),
+        .d_byp_en_i         (d_byp_en),
+        .d_byp_npc_i        (d_byp_npc),
+        .e_byp_en_i         (e_byp_en),
+        .e_branch_hazard_i  (e_branch_hazard),
+        .e_byp_npc_i        (e_byp_npc),
+        .clk_i              (clk),
+        .rst_i              (rst)
     );
 
     icache ysyx_icache
     (
-        .axi_mst_ar     (f_mst_ar),
-        .axi_mst_r      (f_mst_r),
-        .pc_i           (f_pc),
-        .ifu2Dpipe_en_i (core_pipe_en[`ysyx_23060251_ifu2Dpipe]),
-        .f_stall_i      (f_stall),
-        .ifu_sleep_i    (f_sleep),
-        .inst_o         (f_inst),
-        .f_valid_o      (f_valid),
-        .clk_i          (clk),
-        .rst_i          (rst)
+        .axi_mst_ar         (f_mst_ar),
+        .axi_mst_r          (f_mst_r),
+        .pc_i               (f_pc),
+        .ifu2Dpipe_en_i     (core_pipe_en[`ysyx_23060251_ifu2Dpipe]),
+        .f_stall_i          (f_stall),
+        .f_stall_en_i       (f_stall_en),
+        .e_byp_en_i         (e_byp_en),
+        .e_branch_hazard_i  (e_branch_hazard),
+        .inst_o             (f_inst),
+        .f_valid_o          (f_valid),
+        .clk_i              (clk),
+        .rst_i              (rst)
     );
 
     wire                                D_valid;
@@ -131,26 +133,26 @@ module core (
 
     if_id ysyx_if_id
     (
-        .f_inst_i       (f_inst),
-        .f_pc_i         (f_pc),
-        .f_opinfo_i     (f_opinfo),
-		.f_imm_i        (f_imm),
-		.f_pred_pc_i    (f_pred_pc),
-        .f_sys_info_i   (f_sys_info),
-        .e_byp_en_i     (e_byp_en),
-        .e_byp_cnd_i    (e_cnd),
-        .f_valid_i      (f_valid),
-        .D_ready_o      (D_ready),
-        .d_inst_o       (d_inst),
-        .d_pc_o         (d_pc),
-        .d_opinfo_o     (d_opinfo),
-		.d_imm_o        (d_imm),
-		.d_pred_pc_o    (d_pred_pc),
-        .d_sys_info_o   (d_sys_info),
-        .D_valid_o      (D_valid),
-        .d_ready_i      (d_ready),
-        .clk_i          (clk),
-        .rst_i          (rst)
+        .f_inst_i           (f_inst),
+        .f_pc_i             (f_pc),
+        .f_opinfo_i         (f_opinfo),
+		.f_imm_i            (f_imm),
+		.f_pred_pc_i        (f_pred_pc),
+        .f_sys_info_i       (f_sys_info),
+        .e_byp_en_i         (e_byp_en),
+        .e_branch_hazard_i  (e_branch_hazard),
+        .f_valid_i          (f_valid),
+        .D_ready_o          (D_ready),
+        .d_inst_o           (d_inst),
+        .d_pc_o             (d_pc),
+        .d_opinfo_o         (d_opinfo),
+		.d_imm_o            (d_imm),
+		.d_pred_pc_o        (d_pred_pc),
+        .d_sys_info_o       (d_sys_info),
+        .D_valid_o          (D_valid),
+        .d_ready_i          (d_ready),
+        .clk_i              (clk),
+        .rst_i              (rst)
     );
 
 
@@ -303,7 +305,7 @@ module core (
         .d_pc_i             (d_pc),
 		.d_pred_pc_i        (d_pred_pc),
         .e_byp_en_i         (e_byp_en),
-        .e_byp_cnd_i        (e_cnd),
+        .e_branch_hazard_i  (e_branch_hazard),
         .d_valid_i          (d_valid),
         .E_ready_o          (E_ready),
 `ifdef ITRACE
@@ -340,6 +342,7 @@ module core (
     wire                            M_ready;
     // wire [`ysyx_23060251_pc_bus]    e_npc; // wb
     wire                            e_branch_en;
+    wire                            e_branch_hazard;
     wire [`ysyx_23060251_xlen_bus]  e_res; // wb
     // wire                            e_cnd; // wb
 
@@ -354,6 +357,7 @@ module core (
         .imm_i            (e_imm),
         .csr_data_i       (e_csr_data),
         .pred_pc_i        (e_pred_pc),
+        .Epipe2exu_en_i   (core_pipe_en[`ysyx_23060251_Epipe2exu]),
         .E_valid_i        (E_valid),
         .e_ready_o        (e_ready),
         .e_valid_o        (e_valid),
@@ -362,6 +366,7 @@ module core (
         .byp_en_o         (e_byp_en),
         .byp_npc_o        (e_byp_npc),
         .branch_en_o      (e_branch_en),
+        .branch_hazard_o  (e_branch_hazard),
         .res_o            (e_res),
         .cnd_o            (e_cnd)
     );
@@ -498,7 +503,7 @@ module core (
 `ifdef ITRACE
     assign w_inst = m_inst;
 `endif
-    assign is_commit = wb_en;
+    assign is_commit = wb_en | (e_branch_en & e_byp_en);
 
     wbu ysyx_wbu
     (

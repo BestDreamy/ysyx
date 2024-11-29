@@ -4,7 +4,9 @@ module icache (
     input [`ysyx_23060251_pc_bus]       pc_i,
     input                               ifu2Dpipe_en_i,
     input                               f_stall_i,
-    input                               ifu_sleep_i,
+    input                               f_stall_en_i,
+    input                               e_byp_en_i,
+    input                               e_branch_hazard_i,
 
     output [`ysyx_23060251_inst_bus]    inst_o,
     output                              f_valid_o,
@@ -38,6 +40,8 @@ module icache (
     wire [TAG_W-1: 0]               tag_in;
 
     wire axi_ar_hs, axi_r_hs;
+    reg  axi_r_cancel;
+    wire axi_r_fill;
 
     localparam [4: 0] IDLE = 5'b1, WAIT_BUS_REQ = 5'b10, WAIT_BUS_RSP = 5'b100, 
                       WAIT_ID_HS = 5'b1000, READ_CACHE = 5'b1_0000;
@@ -59,12 +63,13 @@ module icache (
             if (f_stall_i)
                 next_state = state; // IDLE
             else
-                next_state = READ_CACHE;
-        end else if (state == READ_CACHE) begin
-            if (cache_hit)
-                next_state = WAIT_ID_HS;
-            else 
+                // next_state = READ_CACHE;
                 next_state = WAIT_BUS_REQ;
+        // end else if (state == READ_CACHE) begin
+        //     if (cache_hit)
+        //         next_state = WAIT_ID_HS;
+        //     else 
+        //         next_state = WAIT_BUS_REQ;
         end else if (state == WAIT_BUS_REQ) begin
             if (axi_ar_hs)
                 next_state = WAIT_BUS_RSP;
@@ -81,10 +86,11 @@ module icache (
                 // 2. csr      (IDLE) wait decode bypass for one cycle   [need stall]
                 // 3. branch   (READ INST) check condition in execute [need bubble maybe]
                 // 4. other    (READ INST) accept
-                if (ifu_sleep_i)
+                if (f_stall_en_i)
                     next_state = IDLE;
                 else
-                    next_state = READ_CACHE;
+                    // next_state = READ_CACHE;
+                    next_state = WAIT_BUS_REQ;
             else
                 next_state = state;
         end
@@ -92,6 +98,22 @@ module icache (
     // ---------------------- state machine end -------------------------------
 
     // ------------------------------  AXI  -----------------------------------
+    wire branch_hazard_en = e_byp_en_i & e_branch_hazard_i;
+    wire axi_r_cancel_en  = branch_hazard_en & ((state == WAIT_BUS_RSP) | axi_ar_hs) & ~axi_r_hs;
+
+    always @(posedge clk_i) begin
+        if (rst_i) begin
+            axi_r_cancel <= 1'b0;
+        end else if (axi_r_cancel_en) begin
+            axi_r_cancel <= 1'b1;
+        end else if (axi_r_hs) begin
+            axi_r_cancel <= 1'b0;
+        end
+    end
+
+    // accept the data from R Channel 
+    assign axi_r_fill = axi_r_hs & ~axi_r_cancel & ~branch_hazard_en;
+
     assign axi_ar_hs = axi_mst_ar.ar_valid & axi_mst_ar.ar_ready;
     assign axi_r_hs  = axi_mst_r.r_valid  & axi_mst_r.r_ready;
 
@@ -121,13 +143,13 @@ module icache (
     always @(posedge clk_i) begin
         if (rst_i) begin
             valarray <= 0;
-        end else if (axi_r_hs) begin
+        end else if (axi_r_fill) begin
             valarray[set_addr] <= 1'b1;
         end
     end
 
     always @(posedge clk_i) begin
-        if (axi_r_hs) begin
+        if (axi_r_fill) begin
             tagarray[set_addr] <= tag_in;
         end
     end
@@ -136,7 +158,7 @@ module icache (
     generate
         for (i = 0; i < OFFSET_NUM; i = i + 1) begin 
             always @(posedge clk_i) begin
-                if (axi_r_hs) begin
+                if (axi_r_fill) begin
                     dataarray[set_addr][i] <= axi_mst_r.r_data[(i + 1) * 8 - 1: i * 8];
                 end
             end
@@ -150,9 +172,9 @@ module icache (
     always @(posedge clk_i) begin
         if (rst_i) begin
             inst <= `ysyx_23060251_inst'h13;
-        end else if (axi_r_hs) begin
+        end else if (axi_r_fill) begin
             inst <= axi_mst_r.r_data[`ysyx_23060251_inst_bus];
-        end else if (cache_hit) begin
+        end else if (cache_hit) begin // error
             inst <= data_qw;
         end
     end
