@@ -38,7 +38,7 @@ module exu (
     assign branch_hazard_o = branch_en_o & ~cnd_o;
 
     // branch instruction commit in execute unit
-    assign e_valid_o = E_valid_i & ~branch_en_o;
+    assign e_valid_o = E_valid_i;
 
     assign e_ready_o = M_ready_i;
 

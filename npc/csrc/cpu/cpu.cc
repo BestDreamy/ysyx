@@ -45,6 +45,7 @@ void exec_once() {
 
     // previous inst commit
     if (dut->pc != npc_cpu.pc) {
+        printf("%x %x\n", dut->pc, npc_cpu.pc);
         IFDEF(CONFIG_ITRACE, itrace(dut->pc, dut->inst));
 
         if (npc_cpu.pc == 0) {

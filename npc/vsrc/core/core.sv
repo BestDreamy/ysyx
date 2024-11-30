@@ -6,7 +6,7 @@ module core (
     output wire[`ysyx_23060251_reg_bus]  mepc,    // just for diff
     output wire[`ysyx_23060251_reg_bus]  mcause,  // just for diff
     output wire[`ysyx_23060251_inst_bus] w_inst,  // to idu (for itrace)
-    output                               is_commit, // just for diff
+    output                               is_commit, // just for diff(branch)
 
     input                   io_master_awready, output                   io_slave_awready,
     output                  io_master_awvalid, input                    io_slave_awvalid,
@@ -503,7 +503,7 @@ module core (
 `ifdef ITRACE
     assign w_inst = m_inst;
 `endif
-    assign is_commit = wb_en | (e_branch_en & e_byp_en);
+    assign is_commit = (e_branch_en & e_byp_en);
 
     wbu ysyx_wbu
     (
