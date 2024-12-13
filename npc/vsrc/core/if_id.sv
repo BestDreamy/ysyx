@@ -25,14 +25,14 @@ module if_id (
     input 									clk_i,
     input 									rst_i
 );
-	wire branch_hazard = e_byp_en_i & e_branch_hazard_i;
-	wire pipe_rst = rst_i | branch_hazard;
+	wire pipe_flush = e_byp_en_i & e_branch_hazard_i;
 
 	pipe if_id_pipe 
 	(
 		.clk        (clk_i),
-		.rst        (pipe_rst),
-		.pin_valid  (f_valid_i), 		// just for branch 
+		.rst        (rst_i),
+		.flush      (pipe_flush),
+		.pin_valid  (f_valid_i), 
 		.pin_ready  (D_ready_o),
 		.pout_valid (D_valid_o),
 		.pout_ready (d_ready_i)

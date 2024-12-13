@@ -111,8 +111,8 @@ module axi_slave (
 
     always @(posedge clk_i) begin
         if (r_state == IDLE & r_next_state == READ_MEM)
-            // rd_count <= $random;
-            rd_count <= 4'd3;
+            rd_count <= $random;
+            // rd_count <= 4'd0;
         else if (r_state == READ_MEM)
             rd_count <= rd_count - 1;
     end
@@ -134,8 +134,8 @@ module axi_slave (
 
     always @(posedge clk_i) begin
         if (w_state == WRITE_REQ & w_next_state == WRITE_MEM)
-            // wt_count <= $random;
-            wt_count <= 4'd3;
+            wt_count <= $random;
+            // wt_count <= 4'd0;
         else if (w_state == WRITE_MEM)
             wt_count <= wt_count - 1;
     end

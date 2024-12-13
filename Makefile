@@ -43,7 +43,7 @@ _default:
 
 git:
 	git add .
-	git commit -m "Add icache"
+	git commit -m "Finish 5-pipe"
 	git push origin pa4
 
 .PHONY: .git_commit .clean_index _default git

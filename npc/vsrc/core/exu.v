@@ -35,7 +35,7 @@ module exu (
     e_ready  |     |  M_ready
 */
     assign branch_en_o     = opinfo_i[`ysyx_23060251_opinfo_branch]; 
-    assign branch_hazard_o = branch_en_o & ~cnd_o;
+    assign branch_hazard_o = (branch_en_o & ~cnd_o) | opinfo_i[`ysyx_23060251_opinfo_jalr];
 
     // branch instruction commit in execute unit
     assign e_valid_o = E_valid_i;
@@ -57,7 +57,7 @@ module exu (
     );
 
     assign byp_en_o  = Epipe2exu_en_i;
-    assign byp_npc_o = pc_i + 4;
+    assign byp_npc_o = branch_en_o? pc_i + 4: src1_i + imm_i;
 
     // bru ysyx_23060251_bru (
     //     .is_branch_i    (opinfo_i[`ysyx_23060251_opinfo_branch]),

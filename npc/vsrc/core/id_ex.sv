@@ -55,13 +55,13 @@ module id_ex (
     input   							   clk_i,
     input 								   rst_i
 );
-	wire branch_hazard = e_byp_en_i & e_branch_hazard_i;
-	wire pipe_rst = rst_i | branch_hazard;
+	wire pipe_flush = e_byp_en_i & e_branch_hazard_i;
 
     pipe id_ex_pipe 
 	(
 		.clk        (clk_i),
-		.rst        (pipe_rst),
+		.rst        (rst_i),
+        .flush      (1'b0),
 		.pin_valid  (d_valid_i),
 		.pin_ready  (E_ready_o),
 		.pout_valid (E_valid_o),

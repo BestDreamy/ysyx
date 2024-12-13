@@ -55,6 +55,7 @@ module ex_ls (
 	(
 		.clk        (clk_i),
 		.rst        (rst_i),
+        .flush      (1'b0),
 		.pin_valid  (e_valid_i),
 		.pin_ready  (M_ready_o),
 		.pout_valid (M_valid_o),

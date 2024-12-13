@@ -3,7 +3,7 @@ VERILATOR = verilator
 VERILATOR_INC_PATH = $(addprefix -I, $(abspath ./vsrc/core) $(abspath ./vsrc/perip) $(abspath ./vsrc/include) $(abspath ./vsrc))
 VERILATOR_FLAGS = -cc --exe --build --trace-fst
 VERILATOR_FLAGS += $(VERILATOR_INC_PATH)
-VERILATOR_FLAGS += -Wno-WIDTHEXPAND -Wno-WIDTHTRUNC
+VERILATOR_FLAGS += -Wno-WIDTHEXPAND -Wno-WIDTHTRUNC -Wno-UNOPTFLAT
 VERILATOR_FLAGS += --timescale "1ns/1ns" --no-timing
 
 WORK_DIR = $(shell pwd)

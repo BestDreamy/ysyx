@@ -85,39 +85,25 @@ module core (
 
     ifu ysyx_ifu
     (
+        .f_mst_ar           (f_mst_ar),
+        .f_mst_r            (f_mst_r),
         // .npc_i          (w_npc),
-        // .f_valid_o      (f_valid),
+        .f_valid_o          (f_valid),
         // .D_ready_i      (D_ready),
         .ifu2Dpipe_en_i     (core_pipe_en[`ysyx_23060251_ifu2Dpipe]),
-        .stall_o            (f_stall),
-        .stall_en_o         (f_stall_en),
-        .inst_i             (f_inst),
+        // .stall_o            (f_stall),
+        // .stall_en_o         (f_stall_en),
+        .inst_o             (f_inst),
         .pc_o               (f_pc),
         .opinfo_o           (f_opinfo),
         .sys_info_o         (f_sys_info),
         .imm_o              (f_imm),
         .pred_pc_o          (f_pred_pc),
-        .d_byp_en_i         (d_byp_en),
-        .d_byp_npc_i        (d_byp_npc),
+        // .d_byp_en_i         (d_byp_en),
+        // .d_byp_npc_i        (d_byp_npc),
         .e_byp_en_i         (e_byp_en),
         .e_branch_hazard_i  (e_branch_hazard),
         .e_byp_npc_i        (e_byp_npc),
-        .clk_i              (clk),
-        .rst_i              (rst)
-    );
-
-    icache ysyx_icache
-    (
-        .axi_mst_ar         (f_mst_ar),
-        .axi_mst_r          (f_mst_r),
-        .pc_i               (f_pc),
-        .ifu2Dpipe_en_i     (core_pipe_en[`ysyx_23060251_ifu2Dpipe]),
-        .f_stall_i          (f_stall),
-        .f_stall_en_i       (f_stall_en),
-        .e_byp_en_i         (e_byp_en),
-        .e_branch_hazard_i  (e_branch_hazard),
-        .inst_o             (f_inst),
-        .f_valid_o          (f_valid),
         .clk_i              (clk),
         .rst_i              (rst)
     );
