@@ -44,7 +44,7 @@ module ifu (
 
     always @(posedge clk_i) begin
         if (rst_i == `ysyx_23060251_rst_enable)
-            pc_q <= `ysyx_23060251_pc'h8000_0000;
+            pc_q <= `ysyx_23060251_pc'h2000_0000;
         // arbsel
         // 1. branch hazard
         // 2. forward pc

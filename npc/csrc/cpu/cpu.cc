@@ -11,15 +11,15 @@
 CPU_state npc_cpu;
 
 void cpu_init() { // exe the first instruction
-    dut->clk = 0; dut->rst = 1; dut->eval();
+    dut->clock = 0; dut->reset = 1; dut->eval();
     tfp->dump(time_counter ++);
-    dut->clk = 1; dut->rst = 1; dut->eval(); // pc -> 0x0000_0000
+    dut->clock = 1; dut->reset = 1; dut->eval(); // pc -> 0x0000_0000
     tfp->dump(time_counter ++);
 
     // npc_cpu.pc = dut->pc;
 
     // Execute the first instruction
-    dut->rst = 0;
+    dut->reset = 0;
 
     // IFDEF(CONFIG_ITRACE, itrace(dut->pc, dut->inst));
 
@@ -35,29 +35,29 @@ void cpu_init() { // exe the first instruction
 }
 
 void exec_once() {
-    dut->clk = 1 - dut->clk; // 0
+    dut->clock = 1 - dut->clock; // 0
     dut->eval();
     tfp->dump(time_counter ++);
     
-    dut->clk = 1 - dut->clk; // 1
+    dut->clock = 1 - dut->clock; // 1
     dut->eval();
     tfp->dump(time_counter ++);
 
-    // previous inst commit
-    if (dut->pc != npc_cpu.pc) {
-        // printf("%x %x\n", dut->pc, npc_cpu.pc);
-        IFDEF(CONFIG_ITRACE, itrace(dut->pc, dut->inst));
 
-        if (npc_cpu.pc == 0) {
-            IFDEF(CONFIG_DIFFTEST, difftest_skip_ref());
-            IFDEF(CONFIG_DIFFTEST, syn_difftest());
-        }
+    // if (dut->pc != npc_cpu.pc) {
+    //     // printf("%x %x\n", dut->pc, npc_cpu.pc);
+    //     IFDEF(CONFIG_ITRACE, itrace(dut->pc, dut->inst));
 
-        npc_eval();
+    //     if (npc_cpu.pc == 0) {
+    //         IFDEF(CONFIG_DIFFTEST, difftest_skip_ref());
+    //         IFDEF(CONFIG_DIFFTEST, syn_difftest());
+    //     }
 
-        IFDEF(CONFIG_DIFFTEST, difftest_step(npc_cpu.pc, npc_cpu.pc + 4));
+    //     npc_eval();
 
-    }
+    //     IFDEF(CONFIG_DIFFTEST, difftest_step(npc_cpu.pc, npc_cpu.pc + 4));
+
+//     }
 }
 
 void cpu_exec(uint64_t n) {
@@ -102,13 +102,13 @@ void ebreak() {
 
 void npc_eval() {
     // 1. In the top's interface
-    npc_cpu.pc = dut->pc;
+    // npc_cpu.pc = dut->pc;
     // 2. Use dpic
     for (int i = 0; i < 32; i ++) {
         npc_cpu.gpr[i] = gprs[i];
     }
-    npc_cpu.mstatus = dut->mstatus;
-    npc_cpu.mtvec = dut->mtvec;
-    npc_cpu.mepc = dut->mepc;
-    npc_cpu.mcause = dut->mcause;
+    // npc_cpu.mstatus = dut->mstatus;
+    // npc_cpu.mtvec = dut->mtvec;
+    // npc_cpu.mepc = dut->mepc;
+    // npc_cpu.mcause = dut->mcause;
 }

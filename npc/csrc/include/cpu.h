@@ -1,7 +1,7 @@
 #ifndef CPU_H
 #define CPU_H
 #include "verilated_fst_c.h"
-#include "Vtop.h"
+#include "VysyxSoCFull.h"
 #include "paddr.h"
 #include "isa.h"
 typedef struct {
@@ -16,7 +16,7 @@ typedef struct {
 extern word_t* gprs;
 extern CPU_state npc_cpu;
 
-extern Vtop* dut;
+extern VysyxSoCFull* dut;
 extern VerilatedFstC* tfp;
 const int FINISH_TIME = 1e8;
 #define TIME_RESET  0 

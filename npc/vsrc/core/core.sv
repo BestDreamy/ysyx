@@ -1,49 +1,55 @@
+`include "defines"
+`include "typedefs"
+`include "assigns"
+
 module core (
-    output wire[`ysyx_23060251_pc_bus]   f_pc,    // to wb
-    output wire[`ysyx_23060251_pc_bus]   w_pc,    // for itrace
-    output wire[`ysyx_23060251_reg_bus]  mstatus, // just for diff
-    output wire[`ysyx_23060251_reg_bus]  mtvec,   // just for diff
-    output wire[`ysyx_23060251_reg_bus]  mepc,    // just for diff
-    output wire[`ysyx_23060251_reg_bus]  mcause,  // just for diff
-    output wire[`ysyx_23060251_inst_bus] w_inst,  // to idu (for itrace)
-    output                               is_commit, // just for diff(branch)
+    // output wire[`ysyx_23060251_pc_bus]   f_pc,    // to wb
+    // output wire[`ysyx_23060251_pc_bus]   w_pc,    // for itrace
+    // output wire[`ysyx_23060251_reg_bus]  mstatus, // just for diff
+    // output wire[`ysyx_23060251_reg_bus]  mtvec,   // just for diff
+    // output wire[`ysyx_23060251_reg_bus]  mepc,    // just for diff
+    // output wire[`ysyx_23060251_reg_bus]  mcause,  // just for diff
+    // output wire[`ysyx_23060251_inst_bus] w_inst,  // to idu (for itrace)
+    // output                               is_commit, // just for diff(branch)
 
     input                   io_master_awready, output                   io_slave_awready,
     output                  io_master_awvalid, input                    io_slave_awvalid,
     output axi_aw_addr_t    io_master_awaddr , input axi_aw_addr_t      io_slave_awaddr,
-    // output[3:0]    io_master_awid   , input[3:0]      io_slave_awid,
-    // output[7:0]    io_master_awlen  , input[7:0]      io_slave_awlen,
-    // output[2:0]    io_master_awsize , input[2:0]      io_slave_awsize,
-    // output[1:0]    io_master_awburst, input[1:0]      io_slave_awburst,
+    output[3:0]             io_master_awid   , input[3:0]               io_slave_awid,
+    output[7:0]             io_master_awlen  , input[7:0]               io_slave_awlen,
+    output[2:0]             io_master_awsize , input[2:0]               io_slave_awsize,
+    output[1:0]             io_master_awburst, input[1:0]               io_slave_awburst,
 
     input                   io_master_wready , output                   io_slave_wready,
     output                  io_master_wvalid , input                    io_slave_wvalid,
     output axi_w_data_t     io_master_wdata  , input axi_w_data_t       io_slave_wdata,
     output axi_w_strb_t     io_master_wstrb  , input axi_w_strb_t       io_slave_wstrb,
-    // output         io_master_wlast  , input           io_slave_wlast,
+    output                  io_master_wlast  , input                    io_slave_wlast,
 
     output                  io_master_bready , input                    io_slave_bready,
     input                   io_master_bvalid , output                   io_slave_bvalid,
     input axi_resp_t        io_master_bresp  , output axi_resp_t        io_slave_bresp,
-    // input[3:0]     io_master_bid    , output[3:0]     io_slave_bid,
+    input[3:0]              io_master_bid    , output[3:0]              io_slave_bid,
 
     input                   io_master_arready, output                   io_slave_arready,
     output                  io_master_arvalid, input                    io_slave_arvalid,
     output axi_ar_addr_t    io_master_araddr , input axi_ar_addr_t      io_slave_araddr,
-    // output[3:0]    io_master_arid   , input[3:0]      io_slave_arid,
-    // output[7:0]    io_master_arlen  , input[7:0]      io_slave_arlen,
-    // output[2:0]    io_master_arsize , input[2:0]      io_slave_arsize,
-    // output[1:0]    io_master_arburst, input[1:0]      io_slave_arburst,
+    output[3:0]             io_master_arid   , input[3:0]               io_slave_arid,
+    output[7:0]             io_master_arlen  , input[7:0]               io_slave_arlen,
+    output[2:0]             io_master_arsize , input[2:0]               io_slave_arsize,
+    output[1:0]             io_master_arburst, input[1:0]               io_slave_arburst,
 
     output                  io_master_rready , input                    io_slave_rready,
     input                   io_master_rvalid , output                   io_slave_rvalid,
     input axi_resp_t        io_master_rresp  , output axi_resp_t        io_slave_rresp,
     input axi_r_data_t      io_master_rdata  , output axi_r_data_t      io_slave_rdata,
-    // input          io_master_rlast  , output          io_slave_rlast,
-    // input[3:0]     io_master_rid    , output[3:0]     io_slave_rid,
+    input                   io_master_rlast  , output                   io_slave_rlast,
+    input[3:0]              io_master_rid    , output[3:0]              io_slave_rid,
 
-    input clk,
-    input rst
+    input                   io_interrupt,
+
+    input                   clock,
+    input                   reset
 );
     wire [`ysyx_23060251_pipe_bus]      core_pipe_en;
 
@@ -74,7 +80,7 @@ module core (
     axi_r_if  #(32)                     f_mst_r;
     
 
-    // wire [`ysyx_23060251_pc_bus]        f_pc;
+    wire [`ysyx_23060251_pc_bus]        f_pc;
     wire [`ysyx_23060251_inst_bus]      f_inst;
     wire [`ysyx_23060251_opinfo_bus]    f_opinfo;
     wire [`ysyx_23060251_imm_bus]       f_imm;
@@ -104,8 +110,8 @@ module core (
         .e_byp_en_i         (e_byp_en),
         .e_branch_hazard_i  (e_branch_hazard),
         .e_byp_npc_i        (e_byp_npc),
-        .clk_i              (clk),
-        .rst_i              (rst)
+        .clk_i              (clock),
+        .rst_i              (reset)
     );
 
     wire                                D_valid;
@@ -137,8 +143,8 @@ module core (
         .d_sys_info_o       (d_sys_info),
         .D_valid_o          (D_valid),
         .d_ready_i          (d_ready),
-        .clk_i              (clk),
-        .rst_i              (rst)
+        .clk_i              (clock),
+        .rst_i              (reset)
     );
 
 
@@ -199,6 +205,11 @@ module core (
     /****************************************************************************************
                                           src && csr && wb
     ****************************************************************************************/
+    wire[`ysyx_23060251_reg_bus]  mstatus; // just for diff
+    wire[`ysyx_23060251_reg_bus]  mtvec;   // just for diff
+    wire[`ysyx_23060251_reg_bus]  mepc;    // just for diff
+    wire[`ysyx_23060251_reg_bus]  mcause;  // just for diff
+
     wire                                w_wenReg;
     wire [`ysyx_23060251_rs_bus]        w_rd;
     wire[`ysyx_23060251_xlen_bus]       w_res;
@@ -208,12 +219,12 @@ module core (
     wire [`ysyx_23060251_sys_bus]       w_sys_info;
     wire [`ysyx_23060251_imm_bus]       w_imm;
     wire [`ysyx_23060251_reg_bus]       w_src1;
-    // wire [`ysyx_23060251_pc_bus]        w_pc;
+    wire [`ysyx_23060251_pc_bus]        w_pc;
     // wire [`ysyx_23060251_reg_bus]       w_csr_data;
 
     regs ysyx_23060251_regs (
-        .clk_i      (clk),
-        .rst_i      (rst),
+        .clk_i      (clock),
+        .rst_i      (reset),
         .wen_i      (w_wenReg),
         .rd_i       (w_rd),
         .e_wdata_i  (w_res),
@@ -227,8 +238,8 @@ module core (
     );
 
     csr ysyx_23060251_csr (
-        .clk_i      (clk),
-        .rst_i      (rst),
+        .clk_i      (clock),
+        .rst_i      (reset),
         .wenCsr_i   (w_wenCsr),
         .is_ecall_i (w_sys_info[`ysyx_23060251_sys_ecall]),
         .is_mret_i  (w_sys_info[`ysyx_23060251_sys_mret]),
@@ -317,8 +328,8 @@ module core (
         .E_valid_o          (E_valid),
         .e_ready_i          (e_ready),
         .byp_rd_o           (E_byp_rd),
-        .clk_i              (clk),
-        .rst_i              (rst)
+        .clk_i              (clock),
+        .rst_i              (reset)
     );
     /****************************************************************************************
                                           src && csr && wb
@@ -424,8 +435,8 @@ module core (
         .M_valid_o          (M_valid),
         .m_ready_i          (m_ready),
         .byp_rd_o           (M_byp_rd),
-        .clk_i              (clk),
-        .rst_i              (rst)
+        .clk_i              (clock),
+        .rst_i              (reset)
     );
 
 // wire lsu_ready;
@@ -452,8 +463,8 @@ module core (
 
     lsu ysyx_lsu
     (
-        .clk_i            (clk),
-        .rst_i            (rst),
+        .clk_i            (clock),
+        .rst_i            (reset),
         .is_load_signed_i (m_is_load_signed),
         .wenMem_i         (m_wenMem),
         .renMem_i         (m_renMem),
@@ -486,10 +497,10 @@ module core (
         .mst_b_ready_o    (m_mst_b_ready)
     );
 
-`ifdef ITRACE
-    assign w_inst = m_inst;
-`endif
-    assign is_commit = (e_branch_en & e_byp_en);
+// `ifdef ITRACE
+//     assign w_inst = m_inst;
+// `endif
+    // assign is_commit = (e_branch_en & e_byp_en);
 
     wbu ysyx_wbu
     (
@@ -561,8 +572,8 @@ module core (
         .mst_b_valid_i    (io_master_bvalid),
         .mst_b_resp_i     (io_master_bresp),
         .mst_b_ready_o    (io_master_bready),
-        .clk_i            (clk),
-        .rst_i            (rst)
+        .clk_i            (clock),
+        .rst_i            (reset)
     );
 
     assign core_pipe_en = {
