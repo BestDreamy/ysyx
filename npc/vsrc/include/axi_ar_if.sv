@@ -2,39 +2,22 @@ interface axi_ar_if #(parameter int ADDR_W = 32);
     logic               ar_valid;
     logic               ar_ready;
     logic [ADDR_W-1:0]  ar_addr;
-    // axi_id_t            ar_id;
+    axi_id_t            ar_id;
     axi_len_t           ar_len;
-    // axi_size_t          ar_size;
+    axi_size_t          ar_size;
     axi_burst_t         ar_burst;
+
+    modport Master (
+        output ar_valid, ar_addr, input ar_ready,
+        output ar_id, ar_len, ar_size, ar_burst
+    );
+
+    modport Slave (
+        input ar_valid, ar_addr, input ar_ready,
+        output ar_id, ar_len, ar_size, ar_burst
+    );    
 endinterface
 
-// interface axi_r_if #(parameter int DATA_W = 32);
-//     logic               r_valid;
-//     logic               r_ready;
-//     logic [DATA_W-1:0]  r_data;
-//     axi_resp_t          r_resp;
-// endinterface
-
-// interface axi_aw_if #(parameter int ADDR_W = 32);
-//     logic               aw_valid;
-//     logic               aw_ready;
-//     logic [ADDR_W-1:0]  aw_addr;
-// endinterface
-
-// interface axi_w_if #(parameter int DATA_W = 32);
-//     localparam int STRB_W = DATA_W / 8;
-
-//     logic                 w_valid;
-//     logic                 w_ready;
-//     logic [DATA_W-1:0]    w_data;
-//     logic [STRB_W-1:0]    w_strb;
-// endinterface
-
-// interface axi_b_if;
-//     logic                 b_valid;
-//     logic                 b_ready;
-//     axi_resp_t            b_resp;
-// endinterface
 
 // interface axi_if #(parameter int ADDR_W = 32, parameter int DATA_W = 32);
 //     axi_ar_if #(ADDR_W) ar;

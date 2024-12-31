@@ -57,4 +57,8 @@ void vaddr_write(paddr_t addr, uint8_t mask, word_t data) {
 
 extern "C" void flash_read(int32_t addr, int32_t *data) { assert(0); }
 
-extern "C" void mrom_read(int32_t addr, int32_t *data) { assert(0); }
+extern "C" void mrom_read(int32_t addr, int32_t *data) {
+    printf("fetch addr is 0x%x\n", addr);
+    *data = paddr_read(addr, 4);
+    printf("fetch inst is 0x%x\n", *data);
+}

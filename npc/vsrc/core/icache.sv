@@ -1,6 +1,6 @@
 module icache ( 
-    axi_ar_if                           axi_mst_ar,
-    axi_r_if                            axi_mst_r,
+    axi_ar_if.Master                    axi_mst_ar,
+    axi_r_if.Master                     axi_mst_r,
     input [`ysyx_23060251_pc_bus]       pc_i,
     input                               ifu2Dpipe_en_i,
     input                               e_byp_en_i,

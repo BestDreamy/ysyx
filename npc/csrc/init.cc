@@ -39,6 +39,11 @@ void welcome(int argc, char *argv[]) {
 
     parse_args(argc, argv);
     img_size = load_image();
+    // show img
+    printf("img_size: %d\n", img_size);
+    for (int i = 0; i < img_size; i ++) {
+        printf("%c", img_file[i]);
+    }
 
     IFDEF(CONFIG_DEVICE, init_device());
 

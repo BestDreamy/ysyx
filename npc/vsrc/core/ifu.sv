@@ -1,6 +1,6 @@
 module ifu (
-    axi_ar_if                               f_mst_ar,
-    axi_r_if                                f_mst_r,
+    axi_ar_if.Master                        f_mst_ar,
+    axi_r_if.Master                         f_mst_r,
 
     input   [`ysyx_23060251_pipe_bus]       ifu2Dpipe_en_i, // pulse
     output                                  f_valid_o, // to D

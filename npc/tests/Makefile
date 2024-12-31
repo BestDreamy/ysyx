@@ -8,8 +8,9 @@ gcc:
 # gcc: a.out 
 # bin: a.bin
 bin: gcc
-	riscv64-unknown-elf-objcopy --change-section-lma .text=0x20000000 -O binary a.out a.bin
-	riscv64-unknown-elf-objdump -b binary -D -m riscv a.bin --adjust-vma=0x20000000 > a.elf
+	riscv64-unknown-elf-objcopy -O binary --set-start=0x20000000 a.out a.bin
+# riscv64-unknown-elf-objdump -d a.out
+	xxd a.bin | head
 
 clean:
 	rm -rf *.bin *.out *.txt *.elf

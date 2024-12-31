@@ -8,7 +8,7 @@ VERILATOR_INC_PATH += $(shell find $(YSYXSOC_PATH)/perip -type d | sed 's/^/-I/'
 VERILATOR_INC_PATH += $(addprefix -I, $(YSYXSOC_PATH)/build)
 VERILATOR_FLAGS = -cc --exe --build --trace-fst --top-module $(TOP_MODULE)
 VERILATOR_FLAGS += $(VERILATOR_INC_PATH)
-VERILATOR_FLAGS += -Wno-WIDTHEXPAND -Wno-WIDTHTRUNC -Wno-UNOPTFLAT # TODO
+VERILATOR_FLAGS += -Wno-WIDTHEXPAND -Wno-WIDTHTRUNC # TODO
 VERILATOR_FLAGS += --timescale "1ns/1ns" --no-timing
 
 WORK_DIR = $(shell pwd)
@@ -38,8 +38,9 @@ default: run
 
 OBJ_DIR = obj_dir
 BIN = $(OBJ_DIR)/V$(TOP_MODULE)
-IMG ?= inst.txt
-LOAD_IMG = $(abspath ./bin/$(notdir $(IMG)))
+IMG ?= a.bin
+# LOAD_IMG = $(abspath ./bin/$(notdir $(IMG)))
+LOAD_IMG = $(abspath ./tests/$(notdir $(IMG)))
 ARGS += $(LOAD_IMG)
 
 run: $(CSRC)
