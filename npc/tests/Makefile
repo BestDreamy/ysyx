@@ -8,8 +8,8 @@ gcc:
 # gcc: a.out 
 # bin: a.bin
 bin: gcc
-	riscv64-unknown-elf-objcopy -O binary --set-start=0x20000000 a.out a.bin
-# riscv64-unknown-elf-objdump -d a.out
+	riscv64-unknown-elf-objcopy -O binary a.out a.bin
+	riscv64-unknown-elf-objdump -d a.out > a.txt
 	xxd a.bin | head
 
 clean:

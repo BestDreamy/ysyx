@@ -1,0 +1,17 @@
+
+a.out:     file format elf64-littleriscv
+
+
+Disassembly of section .text:
+
+0000000000010078 <_start>:
+   10078:	ff010113          	addi	sp,sp,-16
+   1007c:	00813423          	sd	s0,8(sp)
+   10080:	01010413          	addi	s0,sp,16
+   10084:	100007b7          	lui	a5,0x10000
+   10088:	04100713          	li	a4,65
+   1008c:	00e78023          	sb	a4,0(a5) # 10000000 <__global_pointer$+0xffee760>
+   10090:	100007b7          	lui	a5,0x10000
+   10094:	00a00713          	li	a4,10
+   10098:	00e78023          	sb	a4,0(a5) # 10000000 <__global_pointer$+0xffee760>
+   1009c:	0000006f          	j	1009c <_start+0x24>
